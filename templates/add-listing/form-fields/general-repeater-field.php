@@ -18,15 +18,15 @@ $files = [];
 
 if ( $uploaded_files ) {
 	foreach ( $uploaded_files as $index => $value ) {
-		if ( ! isset( $value['mylisting_accordion_photo'] ) ) {
+		if ( ! isset( $value['item_photo'] ) ) {
 			continue;
 		}
 
-		if ( ! empty( $value['mylisting_accordion_photo'] ) ) {
-			$files[ $index ] = $value['mylisting_accordion_photo'];
+		if ( ! empty( $value['item_photo'] ) ) {
+			$files[ $index ] = $value['item_photo'];
 		}
 		
-		unset( $uploaded_files[ $index ]['mylisting_accordion_photo'] );
+		unset( $uploaded_files[ $index ]['item_photo'] );
 	}
 }
 
@@ -50,7 +50,7 @@ if ( $uploaded_files ) {
 			<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
 				<textarea
 				cols="20" rows="2" class="input-text"
-				name="menu-description"
+				name="item_description"
 				placeholder="<?php echo esc_attr_x( 'Description', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
 			<?php endif ?>
 
@@ -60,11 +60,11 @@ if ( $uploaded_files ) {
 						<?php if ( is_admin() ) : ?>
 							<div class="file-upload-field single-upload form-group-review-gallery">
 								<div class="uploaded-files-list review-gallery-images">
-									<div class="upload-file review-gallery-add listing-file-upload-input" data-name="mylisting_accordion_photo" data-multiple="">
+									<div class="upload-file review-gallery-add listing-file-upload-input" data-name="item_photo" data-multiple="">
 										<i class="mi file_upload"></i>
 										<div class="content"></div>
 									</div>
-									<input type="hidden" class="input-text outer-photo" name="mylisting_accordion_photo">
+									<input type="hidden" class="input-text outer-item_photo" name="item_photo">
 									<div class="job-manager-uploaded-files">
 									</div>
 								</div>
@@ -78,12 +78,12 @@ if ( $uploaded_files ) {
 								type="file"
 								class="input-text review-gallery-input wp-job-manager-file-upload"
 								data-file_types="jpg|jpeg|jpe|gif|png|bmp|tiff|tif|webp|ico|heic"
-								name="mylisting_accordion_photo"
-								id="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>_mylisting_accordion_photo"
+								name="item_photo"
+								id="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>_photo"
 								style="display: none;"
 								>
 								<div class="uploaded-files-list review-gallery-images">
-									<label class="upload-file review-gallery-add" for="mylisting_accordion_photo">
+									<label class="upload-file review-gallery-add" for="item_photo">
 										<i class="mi file_upload"></i>
 										<div class="content"></div>
 									</label>

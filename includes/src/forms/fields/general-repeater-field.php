@@ -18,15 +18,15 @@ class General_Repeater_Field extends Base_Field {
 
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $key => $url ) {
-				if ( ! isset( $url['mylisting_accordion_photo'] ) ) {
+				if ( ! isset( $url['item_photo'] ) ) {
 					continue;
 				}
 
-				if ( is_array( $url['mylisting_accordion_photo'] ) ) {
-					$url['mylisting_accordion_photo'] = reset($url['mylisting_accordion_photo']);
+				if ( is_array( $url['item_photo'] ) ) {
+					$url['item_photo'] = reset($url['item_photo']);
 				}
 
-				$prepared_files[ $key ] = $url['mylisting_accordion_photo'];
+				$prepared_files[ $key ] = $url['item_photo'];
 			}
 		}
 		
@@ -42,7 +42,7 @@ class General_Repeater_Field extends Base_Field {
 					$file = reset( $file );
 				}
 
-				$file_value['mylisting_accordion_photo'] = $file;
+				$file_value['item_photo'] = $file;
 				}
 
 				$links[] = $file_value;
