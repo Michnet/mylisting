@@ -861,6 +861,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     
     $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
     $_data['food_menu'] = $food_menu   ?? null;
+    $_data['marketing']['punch_lines'] = $meta['_punch_lines'][0]   ?? null; 
     $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
     $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
     $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 

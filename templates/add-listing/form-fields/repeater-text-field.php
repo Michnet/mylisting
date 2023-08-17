@@ -38,7 +38,7 @@ if ( $uploaded_files ) {
 
 			<div class="fields-box row mx-0">
 
-				<div class="form-group w50 col-md-6 col-12">
+				<div class="form-group w100 col-12">
 					<input type="text" name="text" placeholder="<?php esc_attr_e( 'Text', 'my-listing' ) ?>">
 				</div>
 			</div>
