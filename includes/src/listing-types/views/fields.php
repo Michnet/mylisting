@@ -80,6 +80,8 @@
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('file')">File Upload</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('general-repeater')">General Repeater</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('team-members')">Team Members</div>
+			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('features')">Features</div>
+			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('repeater-text')">Repeater Text</div>
 		</div>
 
 		<div v-if="state.custom_field_category === 'all' || state.custom_field_category === 'choice'">

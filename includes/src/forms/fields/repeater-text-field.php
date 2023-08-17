@@ -57,7 +57,7 @@ class Repeater_Text_Field extends Base_Field {
 
 	public function field_props() {
 		// for backwards compatibility
-		$this->props['type'] = 'team-members';
+		$this->props['type'] = 'repeater-text';
 		
 	}
 
