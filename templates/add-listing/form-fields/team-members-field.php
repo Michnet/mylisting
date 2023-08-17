@@ -18,15 +18,15 @@ $files = [];
 
 if ( $uploaded_files ) {
 	foreach ( $uploaded_files as $index => $value ) {
-		if ( ! isset( $value['item_photo'] ) ) {
+		if ( ! isset( $value['mylisting_accordion_photo'] ) ) {
 			continue;
 		}
 
-		if ( ! empty( $value['item_photo'] ) ) {
-			$files[ $index ] = $value['item_photo'];
+		if ( ! empty( $value['mylisting_accordion_photo'] ) ) {
+			$files[ $index ] = $value['mylisting_accordion_photo'];
 		}
 		
-		unset( $uploaded_files[ $index ]['item_photo'] );
+		unset( $uploaded_files[ $index ]['mylisting_accordion_photo'] );
 	}
 }
 
@@ -36,82 +36,16 @@ if ( $uploaded_files ) {
 	<div data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
 		<div data-repeater-item class="repeater-field-wrapper">
 
-		
-				<div class="field-type-file form-group">
-					<div class="field ">	
-						<label>item_photo</label>
-						<?php if ( is_admin() ) : ?>
-							<div class="file-upload-field single-upload form-group-review-gallery">
-								<div class="uploaded-files-list review-gallery-images">
-									<div class="upload-file review-gallery-add listing-file-upload-input" data-name="item_photo" data-multiple="">
-										<i class="mi file_upload"></i>
-										<div class="content"></div>
-									</div>
-									<input type="hidden" class="input-text outer-photo" name="item_photo">
-									<div class="job-manager-uploaded-files">
-									</div>
-								</div>
-								<small class="description">
-									<?php printf( _x( 'Maximum file size: %s.', 'Add listing form', 'my-listing' ), size_format( wp_max_upload_size() ) ); ?>
-								</small>
-							</div>
-						<?php else : ?>
-							<div class="file-upload-field single-upload form-group-review-gallery ajax-upload">
-								<input
-								type="file"
-								class="input-text review-gallery-input wp-job-manager-file-upload"
-								data-file_types="jpg|jpeg|jpe|gif|png|bmp|tiff|tif|webp|ico|heic"
-								name="item_photo"
-								id="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>_photo"
-								style="display: none;"
-								>
-								<div class="uploaded-files-list review-gallery-images">
-									<label class="upload-file review-gallery-add" for="item_photo">
-										<i class="mi file_upload"></i>
-										<div class="content"></div>
-									</label>
-
-									<div class="job-manager-uploaded-files">
-									</div>
-								</div>
-
-								<small class="description">
-									<?php printf( _x( 'Maximum file size: %s.', 'Add listing form', 'my-listing' ), size_format( wp_max_upload_size() ) ); ?>
-								</small>
-							</div>
-						<?php endif; ?>
-					</div>
-				</div>
-
-
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="last_name" placeholder="<?php esc_attr_e( 'Last Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="job_title" placeholder="<?php esc_attr_e( 'Job Title', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications', 'my-listing' ) ?>">
+					<input type="text" name="text" placeholder="<?php esc_attr_e( 'Text', 'my-listing' ) ?>">
 				</div>
 			</div>
-
-				<textarea
-					cols="20" rows="2" class="input-text"
-					name="short_intro"
-					placeholder="<?php echo esc_attr_x( 'Brief Intro', 'General Repeater Description', 'my-listing' ) ?>">
-				</textarea>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>
 		</div>
 	</div>
-	<input data-repeater-create type="button" value="Add a team member" id="add-menu-links-field">
+	<input data-repeater-create type="button" value="Add" id="add-menu-links-field">
 </div>

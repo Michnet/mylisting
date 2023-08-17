@@ -6,7 +6,7 @@ if ( ! defined('ABSPATH') ) {
 	exit;
 }
 
-class Team_Members_Field extends Base_Field {
+class Repeater_Text_Field extends Base_Field {
 
 	public function get_posted_value() {
 

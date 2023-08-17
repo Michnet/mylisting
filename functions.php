@@ -56,6 +56,16 @@ function addOrderbySupportRest(){
 	);
 }
 
+
+//Limit relationship posts to author
+add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
+function my_acf_fields_relationship_query( $args, $field, $post_id ) {
+   
+    $args['author'] = get_current_user_id();
+
+    return $args;
+}
+
 //Edit listing fields
 function add_listing_fields($post_id) {
   // If this is a revision, get real post ID
@@ -64,6 +74,9 @@ function add_listing_fields($post_id) {
       
    $excer = get_post_meta($post_id, '_short-description', true);
    $featImg = get_post_meta($post_id, '_featured-image', true)[0];
+   $tickets = get_post_meta($post_id, '_tickets', true)[0] ?? null;
+
+   $listing_meta = get_post_meta($post_id);
 
    $imId = attachment_url_to_postid( $featImg);
 
@@ -115,8 +128,20 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
  if($request['name']){
    $user_name = $request['name'];
    $user_obj = get_user_by('login', $user_name);
-
-   $response['user'] = $user_obj;
+   $user_meta = [];
+   $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true );
+   $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true );
+   //$avatar = get_avatar_url($user_obj->ID);
+   //$user_obj->avatar = $avatar;
+   $request['id'] = $user_obj->ID;
+   $request['context'] = 'edit';
+   $rest_request = new WP_REST_Request();
+    $rest_request->set_query_params($request);
+   $local_controller = new WP_REST_Users_Controller();
+   //var_dump($rest_request);
+   $returnable_user = $local_controller->get_item($rest_request);
+   $response['user'] = $returnable_user->data;
+   $response['user']['user_meta'] = $user_meta;
  }
  return $response;
 }, 10, 2);
@@ -338,8 +363,6 @@ function directory_query($request) {
 
     }
 
-
-    
   	$directoryList = array();
   
   	foreach($listings as $listing){
@@ -365,12 +388,33 @@ function all_items_ids($request) {
   
 	$params = $request->get_params();
     $type  = $params['type'];
+    $pdt_type  = $params['product_type'];
+    $l_type  = $params['listing_type'] ?? null;
 
-  $args = array(
+    $args = array(
         'post_type'  => $type,
         'posts_per_page' => -1,
-        'status'    => 'publish',
+        'status'    => 'publish'
+    );
+
+    if($pdt_type){
+     $args['tax_query'][] = array(
+        array(
+            'taxonomy' => 'product_type',
+            'field'    => 'slug',
+            'terms'    => $pdt_type, 
+        ),
       );
+    }
+
+    if($l_type){
+
+        $args['meta_query'][] = array(
+            'key' => '_case27_listing_type',
+            'value' => $l_type,
+            'compare' => '=',
+        );
+    }
  	
 	$query = new WP_Query($args);
     $posts = $query->get_posts();
@@ -396,20 +440,132 @@ function all_items_ids($request) {
     return $response;
 }
 
+function get_google_calendar_link( $start_date, $end_date = '', $listing ) {
+    // &dates=20170101T180000Z/20170101T190000Z
+    $template = 'https://calendar.google.com/calendar/render?action=TEMPLATE&';
+    $template .= 'text={title}&dates={dates}&details={description}&location={location}&trp=true&ctz={timezone}';
+
+    // generate a description
+    if ( $tagline = $listing->get_field( 'tagline' ) ) {
+        $description = wp_kses( $tagline, [] );
+    } else {
+        $description = wp_kses( $listing->get_field( 'description' ), [] );
+        $description = mb_strimwidth( $description, 0, 150, '...' );
+    }
+
+    if ( ! empty( $description ) ) {
+        $description .= ' ';
+    }
+
+    // append listing link to the description
+    $description .= $listing->get_link();
+
+    // generate date string
+    $dates = date( 'Ymd\THis', strtotime( $start_date ) );
+    if ( ! empty( $end_date ) ) {
+        $dates .= date( '/Ymd\THis', strtotime( $end_date ) );
+    } else {
+        // if no end date, just duplicate the start date as the link
+        // doesn't work with just a start date
+        $dates .= date( '/Ymd\THis', strtotime( $start_date ) );
+    }
+
+    $location = $listing->get_field('location', true)
+        ? $listing->get_field('location', true)->string_value('address')
+        : null;
+
+    $values = [
+        '{title}' => $listing->get_title(),
+        '{description}' => $description,
+        '{location}' => $location,
+        '{dates}' => $dates,
+        '{timezone}' => c27()->get_timezone_string(),
+    ];
+
+    return str_replace( array_keys( $values ), array_values( $values ), $template );
+}
+
+function get_event_dates($request){
+    $params = $request->get_params();
+    $event_id  = $params['event_id'];
+    $field_key  = $params['f_key'];
+    $upcoming_inst = $params['upcoming_instances'] ?? null;
+    $past_inst = $params['past_instances'] ?? null;
+    $listing = \MyListing\Src\Listing::get( $event_id);
+
+    $dates = [];
+    $now = date_create('now');
+    $field = $listing->get_field_object($field_key);
+    if ( ! $field ) {
+        return $dates;
+    }
+
+    if ( $field->get_type() === 'date' ) {
+        $date = $field->get_value();
+        if ( ! empty( $date ) && strtotime( $date ) ) {
+            $dates[] = [
+                'start' => $date,
+                'end' => '',
+                'gcal_link' => get_google_calendar_link( $date, '', $listing ),
+                'is_over' => $now->getTimestamp() > strtotime( $date, $now->getTimestamp() ),
+            ];
+        }
+    }
+
+    if ( $field->get_type() === 'recurring-date' ) {
+        $dates = array_merge(
+            \MyListing\Src\Recurring_Dates\get_previous_instances( $field->get_value(), $past_inst ?? 0 ),
+            \MyListing\Src\Recurring_Dates\get_upcoming_instances( $field->get_value(), $upcoming_inst ?? 3 )
+        );
+
+        foreach ( $dates as $key => $date ) {
+            $dates[$key]['gcal_link'] = get_google_calendar_link( $date['start'], $date['end'], $listing);
+            $dates[$key]['is_over'] = $now->getTimestamp() > strtotime( $date['end'], $now->getTimestamp() );
+        }
+    }
+
+    return $dates;
+}
+
 
  //$customName = "m-api/v1";
 add_action('rest_api_init', function () {
-  register_rest_route('m-api/v1', 'places(?:/(?P<id>\d+))?',array(
-                'methods'  => 'GET',
-                'callback' => 'directory_query',
-    			'permission_callback' => '__return_true',
+    
+    register_rest_route('m-api/v1', 'places(?:/(?P<id>\d+))?',array(
+        'methods'  => 'GET',
+        'callback' => 'directory_query',
+        'permission_callback' => '__return_true',
+    ));
+
+    register_rest_route('m-api/v1', 'event-dates(?:/(?P<id>\d+))?',array(
+    'methods'  => 'GET',
+    'callback' => 'get_event_dates',
+    'permission_callback' => '__return_true',
+    ));
+
+    register_rest_route('m-api/v1', 'create_booking(?:/(?P<id>\d+))?',array(
+      'methods'  => 'POST',
+      'callback' => 'create_slot_booking',
+      'permission_callback' => '__return_true',
       ));
 
-    register_rest_route( 'user-actions/v1', 'edit-user(?:/(?P<id>\d+))?', array(
+    register_rest_route('m-api/v1', 'check_slot(?:/(?P<id>\d+))?',array(
+      'methods'  => 'GET',
+      'callback' => 'check_slot_availability',
+      'permission_callback' => '__return_true',
+      ));
+
+    register_rest_route( 'user-actions/v1', 'user-picks(?:/(?P<id>\d+))?', array(
         'methods' => 'POST',
         'callback' => 'listing_user_actions',
         'permission_callback' => '__return_true',
     ));
+
+    register_rest_route( 'user-actions/v1', 'edit-user(?:/(?P<id>\d+))?', array(
+      'methods' => 'POST',
+      'callback' => 'update_user_info',
+      'permission_callback' => '__return_true',
+  ));
 
     register_rest_route('m-api/v1', 'ids(?:/(?P<id>\d+))?',array(
       'methods'  => 'GET',
@@ -429,6 +585,12 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 
+    register_rest_route('m-api/v1', 'listings(?:/(?P<id>\d+))?',array(
+        'methods'  => 'GET',
+        'callback' => 'get_listings_query',
+        'permission_callback' => '__return_true',
+    ));
+
     register_rest_route('m-api/v1', 'product-attribute-taxonomy(?:/(?P<id>\d+))?',array(
       'methods'  => 'GET',
       'callback' => 'get_pdt_attribute_tax',
@@ -443,7 +605,120 @@ add_action('rest_api_init', function () {
         'callback' => 'vendor_info',
         'permission_callback' => '__return_true',
     ));
+
+    $controller = new Bookings_REST_Booking_Controller();
+		$controller->register_routes();
 });
+
+
+function check_slot_availability($request){
+  $params = $request->get_params();
+  $product_id = $params['product_id'] ?? null;
+  $start_date = $params['start_date'] ?? null;
+  $max_slots = $params['occurrence_slots'] ?? null;
+
+  $pdt_bookings = get_post_meta( $product_id, 'booking_schedule', true );
+
+  if(metadata_exists('post', $product_id, 'booking_schedule')){
+    $filteredItems = array_filter($pdt_bookings, function($occ) use($start_date){
+      return $occ['start_date'] == $start_date;
+    });
+    if($filteredItems){
+      foreach($filteredItems as $the_occurrence){
+         if($the_occurrence['booked_slots'] < intval($max_slots)){
+          return "Available";
+         }else{
+          return "Occurence full";
+         }
+      }
+    }else{
+      return "no_occurence";
+      //foreach($pdt_bookings as $thething){
+       //return $thething['start_date'];
+      //}
+    }
+  }else{
+    return "no_data";
+  }
+}
+
+
+function create_slot_booking($request){
+  $params = $request->get_params();
+  $product_id = $params['product_id'] ?? null;
+  $start_date = $params['start_date'] ?? null;
+  $meta_start_date = $params['meta_start_date'] ?? null;
+  $end_date = $params['end_date'] ?? null;
+  $max_slots = $params['occurrence_slots'] ?? null; 
+  $cost = $params['cost'] ?? null;
+  $user_id = $params['user_id'] ?? null;
+
+  $args = array(
+    'product_id'  => $product_id,
+    'start_date'  => $start_date,
+    'user_id' => $user_id,
+    'persons' => 1,
+    'end_date'    => $end_date,
+    'cost' => $cost
+  );
+
+  $booking_obj = new stdClass();
+  if(metadata_exists('post', $product_id, 'booking_schedule')){
+    $pdt_bookings = get_post_meta( $product_id, 'booking_schedule', true );
+
+    $filteredItems = array_filter($pdt_bookings, function($occ) use($meta_start_date){
+      return $occ['start_date'] == $meta_start_date;
+    });
+
+    if($filteredItems){
+      foreach($filteredItems as $key => $the_occurrence){
+         $taken_slots = $the_occurrence['booked_slots'];
+         if($taken_slots < $max_slots){
+          
+          $booking = create_wc_booking( $product_id, $args, 'unpaid', false );
+          if($booking){
+            $the_occurrence['booked_slots'] = $taken_slots + 1;
+            $pdt_bookings[$key] = $the_occurrence;
+            update_post_meta( $product_id, 'booking_schedule', $pdt_bookings);
+            $booking_obj->status = "occ_increased";
+            $booking_obj->booking = $booking;
+          }
+         }else{
+          $booking_obj->status = "occ_full";
+         }
+      }
+    }else{
+      $booking = create_wc_booking( $product_id, $args, 'unpaid', false );
+        if($booking){
+          $meta_arr = array();
+          $slot_arr = array();
+
+          $slot_arr['start_date'] = $meta_start_date;
+          $slot_arr['booked_slots'] = 1; 
+
+          $pdt_bookings[] = $slot_arr;
+          update_post_meta( $product_id, 'booking_schedule', $pdt_bookings);
+          $booking_obj->status = "occ_added";
+          $booking_obj->booking = $booking;
+        }
+    }
+  }else{
+    $booking = create_wc_booking( $product_id, $args, 'unpaid', false );
+    if($booking){
+      $meta_arr = array();
+      $slot_arr = array();
+
+      $slot_arr['start_date'] = $meta_start_date;
+      $slot_arr['booked_slots'] = 1; 
+
+      $meta_arr[] = $slot_arr;
+      add_post_meta( $product_id, 'booking_schedule', $meta_arr);
+      $booking_obj->status = "occ_created";
+      $booking_obj->booking = $booking;
+    }
+  }
+  return $booking_obj;
+}
 
 
 function get_pdt_attribute_tax($request){
@@ -513,7 +788,28 @@ function listing_user_actions( $request ) {
     $showObj->user = $userId; 
     $showObj->field = $baseArr;
     return $showObj;
-    }
+}
+
+function update_user_info( $request ) {
+  $parameters = $request->get_params();
+  $display_name = $parameters['display_name'] ?? null;
+  $userId = $parameters['user_id'] ?? 0;
+
+  $baseArr = new stdClass();
+  $baseArr -> ID = $userId;
+  if($display_name){
+    $baseArr->display_name = $display_name;
+  }
+
+  $user_data = wp_update_user($baseArr);
+
+  if ( is_wp_error( $user_data ) ) {
+    // There was an error; possibly this user doesn't exist.
+    echo 'Error.';
+  } else {
+    return get_userdata( $userId);
+  }
+}
 
 function my_rest_prepare_listing( $data, $post, $request ) {
     $_data = $data->data;
@@ -522,6 +818,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
   	$acf_data = get_fields($post->ID);
     $thumbnail = get_the_post_thumbnail_url( $post->ID, 'thumbnail' );
     $large_thumbnail = get_the_post_thumbnail_url( $post->ID, 'medium' );
+	  $xlarge_thumb = get_the_post_thumbnail_url( $post->ID, 'medium_large' );
   	$cats = get_the_terms( $post->ID, 'job_listing_category' );
     $locs = get_the_terms( $post->ID, 'region' );
     
@@ -556,9 +853,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $author = get_the_author_meta('ID');
     $comment_num = get_comments_number($post->ID);
     $team = get_post_meta($post->ID, '_team', true);
-    //$cover = get_post_meta($post->ID, 'listing_cover', true);
-    //$logo = get_post_meta($post->ID, 'listing_logo', true);
-
+    $special_guests = get_post_meta( $post->ID, '_special-guests', true);
+    $performers = get_post_meta( $post->ID, '_performers', true);
+    $tickets = get_post_meta( $post->ID, '_tickets', true);
+    $gen_merch = get_post_meta( $post->ID, '_general_merchandise', true);
    
     
     $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
@@ -566,7 +864,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
     $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
     $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
-    $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;  
+    $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
+    $_data['listing_store']['tickets'] =  $tickets  ?? null;  
+    $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
+    $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;  
     $_data['author_id'] = $author;
     $_data['comment_num'] = $comment_num;
     $_data['tagline'] = $tagline   ?? null; 
@@ -576,6 +877,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['page_views'] = $views  ?? null;
     $_data['content'] = $the_content ?? null;
     $_data['team'] = $team ?? null;
+    $_data['special_guests'] = $special_guests ?? null;
+    $_data['performers'] = $performers ?? null;
     $_data['short_desc'] = $excerpt;
     $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
     $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
@@ -592,6 +895,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['acf'] = $acf_data ?? null;
     $_data['thumbnail'] = $thumbnail   ?? null;
     $_data['large_thumb'] = $large_thumbnail   ?? null;
+	  $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
   	$_data['categories'] = $cats   ?? null;
     $_data['locations'] = $locs   ?? null;
 
@@ -600,17 +904,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 }
 add_filter( 'rest_prepare_job_listing', 'my_rest_prepare_listing', 10, 3 );
 
-//Rest prepare listing category
-
-function filter_listing_category( $response, $item, $request ) { 
-  // make filter magic happen here...
-  if (empty($response->data))
-        return $response; 
-
-  return $response; 
-}; 
-       
-add_filter( "rest_prepare_job_listing_category", 'filter_listing_category', 10, 3 ); 
 
 
 //Post thumbanil in rest
@@ -788,6 +1081,33 @@ function my_rest_prepare_comment($response, $comment, $request){
 } 
 
 //Custom woo product query
+$tax_arr = array('job_listing_category', 'case27_job_listing_tags', 'region');
+
+function custom_taxonomy_rest($args, $request)
+{
+    $params = $request->get_query_params();
+    $tax_name = $args['taxonomy'] ?? null;
+    $taxonomy = get_taxonomy( $tax_name );
+    $query_parent =  $params['parent'] ?? null;
+    $parent_slug =  $params['parent_slug'] ?? null;
+
+    if ( $query_parent ){
+      if(is_numeric( $query_parent )){
+          $parent_id = $query_parent;
+      }elseif($parent_slug && ( $parent = get_term_by( 'slug', $parent_slug, $taxonomy->name ) ) && ! is_wp_error( $parent )){
+          $parent_id = absint( $parent->term_id );
+      }
+     // $args['taxonomy'] = $taxonomy->name;
+      $args['parent'] = $parent_id;
+  }
+    return $args;
+}
+
+foreach ($tax_arr as &$taxonomy) {
+    add_filter("rest_{$taxonomy}_query", 'custom_taxonomy_rest', 10, 2);
+}
+
+//Custom woo product query
 function modified_woo_rest($args, $request)
 {
     $params = $request->get_query_params();
@@ -868,11 +1188,15 @@ function custom_product_rest($response, $object, $request) {
         //$attributes = get_attributes($object);
     
         $pdt_discount = get_post_meta( $id, '_discount_percentage', true );
-    
+        $slots = get_post_meta( $id, 'occurance_slots', true );
+
         //$response->data['attributes'] = $attributes;
         $response->data['discount_rate'] = intval($pdt_discount);
  
     $listing_data = get_post_meta($id, 'listing_data', true);
+    if($slots){
+      $response->data['occurrence_slots'] = intval($slots);
+    }
 
     $response->data['listing'] = $listing_data;
     return $response;
@@ -931,7 +1255,8 @@ add_action( 'rest_api_init', 'add_term_meta_rest' );
     function term_meta_callback( $term, $field_name, $request) {
         $meta_0bj = new stdClass();
         $meta = get_term_meta( $term['id'] );
-        $meta_0bj->image_url = $meta['icon_image'] ? wp_get_attachment_url(number_format($meta['icon_image'][0])) : null;
+        $meta_0bj->icon_image_url = $meta['icon_image'][0] ? wp_get_attachment_url(number_format($meta['icon_image'][0])) : null;
+        $meta_0bj->image_url = $meta['image'][0] ? wp_get_attachment_url(number_format($meta['image'][0])) : null;
         $meta_0bj->color = $meta['color'][0]  ?? null;
       	$meta_0bj->icon = $meta['icon'][0]  ?? null;
         $meta_0bj->rl_awesome = $meta['rl_awesome'][0]  ?? null;
@@ -1020,7 +1345,327 @@ function filter_woocommerce_rest_prepare_taxonomy( $response, $item, $request ) 
        
 add_filter( "woocommerce_rest_prepare_product_cat", 'filter_woocommerce_rest_prepare_taxonomy', 10, 3 );    
 
-//places in posts rest
+//Rest directory query
+
+function location_address_where( $where, $query ) {
+    global $wpdb;
+    $location = $GLOBALS['mylisting_search_location'];
+    $where .= $wpdb->prepare( " AND mylisting_locations.address LIKE %s ", '%'.$wpdb->esc_like( $location ).'%' );
+
+    return $where;
+}
+
+function location_address_join( $join, $query ) {
+    global $wpdb;
+    $join .= <<<SQL
+        INNER JOIN {$wpdb->prefix}mylisting_locations AS mylisting_locations
+            ON {$wpdb->posts}.ID = mylisting_locations.listing_id
+    SQL;
+
+    return $join;
+}
+function directory_query_args( $args = [] ) {
+    global $wpdb;
+    $query_base_class = new \MyListing\Src\Queries\Query();
+    $rest_control = new WP_REST_Posts_Controller('job_listing');
+
+    add_filter( 'posts_join', [ $query_base_class, 'priority_field_join' ], 30, 2 );
+    add_filter( 'posts_orderby', [ $query_base_class, 'priority_field_orderby' ], 40, 2 );
+    add_filter( 'posts_distinct', [ $query_base_class, 'prevent_duplicates' ], 30, 2 );
+
+    $args = wp_parse_args( $args, [
+        'search_location'   => '',
+        'search_keywords'   => '',
+        'offset'            => 0,
+        'posts_per_page'    => 20,
+        'orderby'           => 'date',
+        'order'             => 'DESC',
+        'fields'            => 'all',
+        'post__in'          => [],
+        'post__not_in'      => [],
+        'meta_key'          => null,
+        'meta_query'        => [],
+        'tax_query'         => [],
+        'author'            => null,
+        'ignore_sticky_posts' => true,
+        'mylisting_orderby_rating' => false,
+        'mylisting_ignore_priority' => false,
+        'recurring_dates' => [],
+        'title_search' => '',
+        'description_search' => '',
+    ] );
+
+    do_action( 'get_job_listings_init', $args );
+
+    $query_args = array(
+        'post_type'              => 'job_listing',
+        'post_status'            => 'publish',
+        'ignore_sticky_posts'    => $args['ignore_sticky_posts'],
+        'offset'                 => absint( $args['offset'] ),
+        'posts_per_page'         => intval( $args['posts_per_page'] ),
+        'orderby'                => $args['orderby'],
+        'order'                  => $args['order'],
+        'tax_query'              => $args['tax_query'],
+        'meta_query'             => $args['meta_query'],
+        'update_post_term_cache' => false,
+        'update_post_meta_cache' => false,
+        'cache_results'          => false,
+        'fields'                 => $args['fields'],
+        'author'                 => $args['author'],
+        'mylisting_orderby_rating' => $args['mylisting_orderby_rating'],
+        'mylisting_ignore_priority' => $args['mylisting_ignore_priority'],
+        'mylisting_prevent_duplicates' => true,
+    );
+
+    if ( $args['posts_per_page'] < 0 ) {
+        $query_args['no_found_rows'] = true;
+    }
+
+    if ( ! empty( $args['search_location'] ) ) {
+        $GLOBALS['mylisting_search_location'] = sanitize_text_field( $args['search_location'] );
+        add_filter( 'posts_join', 'location_address_join', 30, 2 );
+        add_filter( 'posts_where', 'location_address_where', 30, 2 );
+    }
+
+    if (!empty($args['post__in'])) {
+        $query_args['post__in'] = $args['post__in'];
+    }
+
+    if (!empty($args['post__not_in'])) {
+        $query_args['post__not_in'] = $args['post__not_in'];
+    }
+
+    if ( ! empty( $args['search_keywords'] ) ) {
+        $query_args['s'] = $GLOBALS['mylisting_search_keywords'] = sanitize_text_field( $args['search_keywords'] );
+        add_filter( 'posts_search', [ $query_base_class, 'keyword_search' ] );
+    }
+
+    $query_args = apply_filters( 'job_manager_get_listings', $query_args, $args );
+
+    if ( empty( $query_args['meta_query'] ) ) {
+        unset( $query_args['meta_query'] );
+    }
+
+    if ( empty( $query_args['tax_query'] ) ) {
+        unset( $query_args['tax_query'] );
+    }
+
+    if ( ! $query_args['author'] ) {
+        unset( $query_args['author'] );
+    }
+
+    if ( $args['meta_key'] !== null ) {
+        $query_args['meta_key'] = $args['meta_key'];
+    }
+
+    if ( ! empty( $args['recurring_dates'] ) ) {
+        $query_args['recurring_dates'] = $args['recurring_dates'];
+        add_filter( 'posts_join', [ $query_base_class, 'events_field_join' ], 30, 2 );
+        add_filter( 'posts_where', [ $query_base_class, 'events_field_where' ], 30, 2 );
+        add_filter( 'posts_orderby', [ $query_base_class, 'events_field_orderby' ], 30, 2 );
+    }
+
+    if ( ! empty( $args['title_search'] ) ) {
+        $query_args['title_search'] = $args['title_search'];
+        add_filter( 'posts_where', [ $query_base_class, 'title_search' ], 30, 2 );
+    }
+
+    if ( ! empty( $args['description_search'] ) ) {
+        $query_args['description_search'] = $args['description_search'];
+        add_filter( 'posts_where', [ $query_base_class, 'description_search' ], 30, 2 );
+    }
+
+    // Filter args
+    $query_args = apply_filters( 'get_job_listings_query_args', $query_args, $args );
+    $query_args = apply_filters( 'mylisting/explore/args', $query_args, $args );
+
+    do_action( 'before_get_job_listings', $query_args, $args );
+
+    //$result = $query_args;
+    $ids_result = new \WP_Query( $query_args );
+    $rest_request = new WP_REST_Request();
+    if($ids_result->posts && !empty($ids_result->posts)){
+        $rest_request->set_query_params(
+            array(
+                'include'	=> $ids_result->posts,
+            )
+        );
+    }else{
+        return [];
+    }
+    
+    $result = $rest_control->get_items( $rest_request );
+
+    do_action( 'mylisting/explore/after-query' );
+
+    remove_filter( 'posts_join', [ $query_base_class, 'priority_field_join' ], 30 );
+    remove_filter( 'posts_orderby', [ $query_base_class, 'priority_field_orderby' ], 40 );
+    remove_filter( 'posts_distinct', [ $query_base_class, 'prevent_duplicates' ], 30 );
+    remove_filter( 'posts_search', [ $query_base_class, 'keyword_search' ] );
+    remove_filter( 'posts_join', [ $query_base_class, 'events_field_join' ], 30 );
+    remove_filter( 'posts_where', [ $query_base_class, 'events_field_where' ], 30 );
+    remove_filter( 'posts_orderby', [ $query_base_class, 'events_field_orderby' ], 30 );
+
+    // Remove rating field filter if used.
+    remove_filter( 'posts_join', [ $query_base_class, 'rating_field_join' ], 35 );
+    remove_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby' ], 35 );
+
+    return $result;
+}
+
+// Extend the `WP_REST_Posts_Controller` class
+class Custom_Terms_Controller extends WP_REST_Terms_Controller
+{
+
+  public function register_routes() {
+    register_rest_route(
+      $this->namespace,  $this->taxonomy, [
+        [
+            'methods' => WP_REST_Server::READABLE,
+            'callback' => [$this, 'get_items'],
+            'permission_callback' => [$this, 'get_items_permissions_check'],
+            'args' => $this->get_collection_params(),
+        ],
+        'schema' => [$this, 'get_public_item_schema'],
+    ]);
+  }
+   
+  public function get_items( $request ) {
+
+    $query_parent =  $request['parent'] ?? null;
+    $parent_slug =  $request['parent_slug'] ?? null;
+
+    // Retrieve the list of registered collection query parameters.
+    $registered = $this->get_collection_params();
+
+    $parameter_mappings = array(
+      'exclude'    => 'exclude',
+      'include'    => 'include',
+      'order'      => 'order',
+      'orderby'    => 'orderby',
+      'post'       => 'post',
+      'hide_empty' => 'hide_empty',
+      'per_page'   => 'number',
+      'search'     => 'search',
+      'slug'       => 'slug',
+    );
+  
+    $prepared_args = array( 'taxonomy' => $this->taxonomy );
+  
+    foreach ( $parameter_mappings as $api_param => $wp_param ) {
+      if ( isset( $registered[ $api_param ], $request[ $api_param ] ) ) {
+        $prepared_args[ $wp_param ] = $request[ $api_param ];
+      }
+    }
+  
+    if ( isset( $prepared_args['orderby'] ) && isset( $request['orderby'] ) ) {
+      $orderby_mappings = array(
+        'include_slugs' => 'slug__in',
+      );
+  
+      if ( isset( $orderby_mappings[ $request['orderby'] ] ) ) {
+        $prepared_args['orderby'] = $orderby_mappings[ $request['orderby'] ];
+      }
+    }
+  
+    if ( isset( $registered['offset'] ) && ! empty( $request['offset'] ) ) {
+      $prepared_args['offset'] = $request['offset'];
+    } else {
+      $prepared_args['offset'] = ( $request['page'] - 1 ) * $prepared_args['number'];
+    }
+  
+    $taxonomy_obj = get_taxonomy( $this->taxonomy );
+  
+    if ( $taxonomy_obj->hierarchical ) {
+     if($query_parent){
+        if ( 0 === $request['parent'] ) {
+        // Only query top-level terms.
+        $prepared_args['parent'] = 0;
+        } else {
+          if ( $request['parent'] ) {
+            $prepared_args['parent'] = $request['parent'];
+          }
+        }
+      }elseif($parent_slug && ( $parent = get_term_by( 'slug', $parent_slug, $taxonomy_obj->name ) ) && ! is_wp_error( $parent )){
+        $prepared_args['parent'] = absint( $parent->term_id );
+      }
+
+      }
+  
+    /**
+     * @since 4.7.0
+     *
+     * @link https://developer.wordpress.org/reference/functions/get_terms/
+     *
+     * @param array           $prepared_args Array of arguments for get_terms().
+     * @param WP_REST_Request $request       The REST API request.
+     */
+    $prepared_args = apply_filters( "rest_{$this->taxonomy}_query", $prepared_args, $request );
+  
+    if ( ! empty( $prepared_args['post'] ) ) {
+      $query_result = wp_get_object_terms( $prepared_args['post'], $this->taxonomy, $prepared_args );
+  
+      // Used when calling wp_count_terms() below.
+      $prepared_args['object_ids'] = $prepared_args['post'];
+    } else {
+      $query_result = get_terms( $prepared_args );
+    }
+  
+    $count_args = $prepared_args;
+  
+    unset( $count_args['number'], $count_args['offset'] );
+  
+    $total_terms = wp_count_terms( $count_args );
+  
+    // wp_count_terms() can return a falsey value when the term has no children.
+    if ( ! $total_terms ) {
+      $total_terms = 0;
+    }
+  
+    $response = array();
+  
+    foreach ( $query_result as $term ) {
+      $data       = $this->prepare_item_for_response( $term, $request );
+      $response[] = $this->prepare_response_for_collection( $data );
+    }
+  
+    $response = rest_ensure_response( $response );
+  
+    // Store pagination values for headers.
+    $per_page = (int) $prepared_args['number'];
+    $page     = ceil( ( ( (int) $prepared_args['offset'] ) / $per_page ) + 1 );
+  
+    $response->header( 'X-WP-Total', (int) $total_terms );
+  
+    $max_pages = ceil( $total_terms / $per_page );
+  
+    $response->header( 'X-WP-TotalPages', (int) $max_pages );
+  
+    $request_params = $request->get_query_params();
+    $collection_url = rest_url( rest_get_route_for_taxonomy_items( $this->taxonomy ) );
+    $base           = add_query_arg( urlencode_deep( $request_params ), $collection_url );
+  
+    if ( $page > 1 ) {
+      $prev_page = $page - 1;
+  
+      if ( $prev_page > $max_pages ) {
+        $prev_page = $max_pages;
+      }
+  
+      $prev_link = add_query_arg( 'page', $prev_page, $base );
+      $response->link_header( 'prev', $prev_link );
+    }
+    if ( $max_pages > $page ) {
+      $next_page = $page + 1;
+      $next_link = add_query_arg( 'page', $next_page, $base );
+  
+      $response->link_header( 'next', $next_link );
+    }
+  
+    return $response;
+  }
+  
+}
 
 // Extend the `WP_REST_Posts_Controller` class
 class Custom_Posts_Controller extends WP_REST_Posts_Controller
@@ -1096,6 +1741,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
         $orderby = $params['order_by']  ?? null;
         $meta_key = $params['meta_key']  ?? null;
         $tag  = $params['tag']  ?? null;
+        $author  = $params['author']  ?? null;
         $filters  = $params['filter']  ?? null;
         $page  = $params['page']  ?? null;
         $per_page  = $params['per_page']  ?? null;
@@ -1107,7 +1753,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
             'post_type'  => array('job_listing'),
             'paged'		=> $page,
             'posts_per_page' => $per_page,
-            //'orderby' => $orderby,
+            //'author' => $author,
             'meta_key' => $meta_key,
             //'order'   => $order,
             's'     =>  $keyword ? $keyword : ''
@@ -1127,6 +1773,11 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
               'terms'    => [ $category ],
             ];
           }
+
+          //Keyword search
+          if ( ! empty( $author ) ) {
+            $custom_args['author'] = $author;
+        }
           
           // Location filter.
           if ( ! empty($params['location'] ) ) {
@@ -1208,6 +1859,13 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
 
 // Create an instance of `Custom_Posts_Controller` and call register_routes() methods
 add_action('rest_api_init', function () {
+  
+  $tax_arr = array('job_listing_category', 'case27_job_listing_tags', 'region');
+
+    foreach ($tax_arr as &$taxonomy) {
+      $controller_instance = new Custom_Terms_Controller($taxonomy);
+      $controller_instance->register_routes();
+    }
     $listingsController = new Custom_Posts_Controller('job_listing');
     $listingsController->register_routes();
 });
@@ -1222,7 +1880,6 @@ add_filter( 'acf/rest/get_fields', function ( $fields, $resource, $http_method )
       return array_filter( $fields, function ( $field ) {
             return ! in_array( $field['key'], [
                 'field_5feee4b968b63',
-               
             ] );
         } );
     }
@@ -1307,7 +1964,8 @@ function add_visit( $args ) {
 //Get Visits
 
 function get_views($request ) {
-    
+    $visits_class_base = new \MyListing\Ext\Visits\Visits();
+
     $parameters = $request->get_params();
     $post_id = $parameters['listing_id'];
 
@@ -1331,7 +1989,7 @@ function get_views($request ) {
     $sql[] = "INNER JOIN {$wpdb->posts} ON ( {$wpdb->posts}.ID = {$wpdb->prefix}mylisting_visits.listing_id )";
     $sql[] = "WHERE {$wpdb->posts}.post_status = 'publish'";
 
-    $sql = $this->_apply_query_rules( $sql, $args );
+    $sql = $visits_class_base->_apply_query_rules($sql, $args);
     $sql = join( "\n", $sql );
 
     $query = $wpdb->get_row( $sql, OBJECT );
@@ -1347,6 +2005,7 @@ function get_views($request ) {
 function get_visits($post_id ) {
     
     global $wpdb;
+    $visits_class_base = new \MyListing\Ext\Visits\Visits();
 
     $args = [
         'listing_id' => $post_id,
@@ -1366,39 +2025,13 @@ function get_visits($post_id ) {
     $sql[] = "INNER JOIN {$wpdb->posts} ON ( {$wpdb->posts}.ID = {$wpdb->prefix}mylisting_visits.listing_id )";
     $sql[] = "WHERE {$wpdb->posts}.post_status = 'publish'";
 
-    $sql = _apply_query_rules( $sql, $args );
+    $sql = $visits_class_base-> _apply_query_rules( $sql, $args );
     $sql = join( "\n", $sql );
 
     $query = $wpdb->get_row( $sql, OBJECT );
 
     return is_object( $query ) && ! empty( $query->count ) ? (int) $query->count : 0;
     //$response = rest_ensure_response( $data );
-}
-
-
-function _apply_query_rules( $sql, $args ) {
-    global $wpdb;
-
-    // Get stats for a single author.
-    if ( ! empty( $args['user_id'] ) ) {
-        $sql[] = sprintf( " AND {$wpdb->posts}.post_author = %d ", $args['user_id'] );
-    }
-
-    // Get stats for a single listing.
-    if ( ! empty( $args['listing_id'] ) ) {
-        $sql[] = sprintf( " AND {$wpdb->prefix}mylisting_visits.listing_id = %d ", $args['listing_id'] );
-    }
-
-    // Limit visit timeframe.
-    if ( ! empty( $args['time'] ) && in_array( $args['time'], ['lastday', 'lastweek', 'lastmonth', 'lasthalfyear', 'lastyear'] ) ) {
-        $time_modifiers = [ 'lastday' => '-1 day', 'lastweek' => '-7 days', 'lastmonth' => '-30 days', 'lasthalfyear' => '-182 days', 'lastyear' => '-365 days' ];
-        $sql[] = sprintf(
-            " AND {$wpdb->prefix}mylisting_visits.time >= '%s' ",
-            c27()->utc()->modify( $time_modifiers[ $args['time'] ] )->format('Y-m-d H:i:s')
-        );
-    }
-
-    return $sql;
 }
 
 
@@ -1684,6 +2317,7 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
       $meta_arr['cover'] = $listing_meta['listing_cover'][0];
       $meta_arr['logo'] = $listing_meta['listing_logo'][0];
       $meta_arr['whatsapp'] = $listing_meta['_whatsapp-number'][0];
+      $meta_arr['type'] = $listing_meta['_case27_listing_type'][0]; 
   
       update_post_meta( $pdt_id, 'listing_data', $meta_arr);
     }
@@ -1731,7 +2365,8 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
     
 }
 
-add_filter('acf/update_value/key=field_618be43e2b26b', 'listing_pdts_edit', 10, 3);
+add_filter('acf/update_value/key=field_64cbdd20462a9', 'listing_pdts_edit', 10, 3);
+add_filter('acf/update_value/key=field_64cbcdca213b0', 'listing_pdts_edit', 10, 3);
 
 add_filter( 'mylisting\links-list', function( $links ) {
   // Add new link
@@ -1772,8 +2407,11 @@ function woo_calc_my_discount( $product_id ) {
 
     $sale = (float) $_product->get_sale_price();
     
-    if($sale > 0){
-        $discount = round( 100 - ( $sale / $regular * 100));
+    var_dump($sale, $regular);
+    if($sale > 0 ){
+        if($regular > 0){
+             $discount = round( 100 - ( $sale / $regular * 100));
+        }
     }
 
     update_post_meta( $product_id, '_discount_percentage', intval($discount));
@@ -1888,4 +2526,331 @@ function vendor_info($request)
     $response->set_status(200);
 
     return $response;
+}
+
+//Theme rest query
+
+
+function get_ordering_clauses( &$args, $type, $form_data ) {
+    $query_base_class = new \MyListing\Src\Queries\Query();
+
+    $options = $type ? (array) $type->get_ordering_options() : [];
+    $sortby  = ! empty( $form_data['sort'] ) ? sanitize_text_field( $form_data['sort'] ) : false;
+    if ( empty( $options ) ) {
+        return false;
+    }
+
+    // default to the first ordering option
+    if ( empty( $sortby ) ) {
+        $sortby = $options[0]['key'];
+    }
+
+    if ( ( $key = array_search( $sortby, array_column( $options, 'key' ) ) ) === false ) {
+        return false;
+    }
+
+    $option  = $options[$key];
+    $clauses = $option['clauses'];
+    $orderby = [];
+
+    foreach ( $clauses as $clause ) {
+        if ( empty( $clause['context'] ) || empty( $clause['orderby'] ) || empty( $clause['order'] ) || empty( $clause['type'] ) ) {
+            continue;
+        }
+
+        $clause_hash = substr( md5( json_encode( $clause ) ), 0, 16 );
+        $clause_id = sprintf( 'clause-%s-%s', $option['key'], $clause_hash );
+
+        if ( $clause['context'] === 'option' ) {
+            if ( $clause['orderby'] === 'rand' ) {
+                // Randomize every 3 hours.
+                $seed = apply_filters( 'mylisting/explore/rand/seed', floor( time() / 10800 ) );
+                $orderby[ "RAND({$seed})" ] = $clause['order'];
+            } elseif ( $clause['orderby'] === 'rating' ) {
+                add_filter( 'posts_join', [ $query_base_class, 'rating_field_join'], 35, 2 );
+                add_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby'], 35, 2 );
+                $args['mylisting_orderby_rating'] = $clause['order']; // Note the custom order to $args, so it's cached properly.
+                $orderby[ $clause_id ] = []; // Add a dummy orderby, to override the default one.
+            } elseif ( $clause['orderby'] === 'proximity' ) {
+                $orderby = 'post__in';
+
+                add_filter( 'mylisting/explore/args', function( $args ) use ( $clause ) {
+                    // Support descending order for distance/proximity.
+                    if ( $clause['order'] === 'DESC' && ! empty( $args['post__in'] ) ) {
+                        $args['post__in'] = array_reverse( $args['post__in'] );
+                    }
+
+                    return $args;
+                } );
+            } elseif ( $clause['orderby'] === 'relevance' ) {
+                // order by relevance only works when there's a single 'orderby' clause,
+                // and if that's passed as a string instead of an array
+                $orderby = 'relevance';
+            } else {
+                $orderby[ $clause['orderby'] ] = $clause['order'];
+            }
+        }
+
+        if ( $clause['context'] === 'meta_key' ) {
+            $field = $type->get_field( $clause['orderby'] );
+
+            if ( $field && $field->get_type() === 'recurring-date' ) {
+
+                // if a recurring date filter isn't present, join the events table
+                // and filter listings with the start date set to the current date
+                // so that only future events are shown by default
+                $args['recurring_dates'][ $field->get_key() ] = [
+                    'start' => date('Y-m-d H:i:s', current_time('timestamp')),
+                    'end' => '',
+                    'orderby' => true,
+                    'order' => $clause['order'],
+                    'where_clause' => false,
+                ];
+
+                $orderby[ $clause_id ] = []; // Add a dummy orderby, to override the default one.
+            } else {
+                $args['meta_query'][ $clause_id ] = [
+                    'key' => '_' . $clause['orderby'],
+                    'compare' => 'EXISTS',
+                    'type' => $clause['type'],
+                ];
+
+                $orderby[ $clause_id ] = $clause['order'];
+            }
+        }
+
+        if ( $clause['context'] === 'raw_meta_key' ) {
+            $args['meta_query'][ $clause_id ] = [
+                'key' => $clause['orderby'],
+                'compare' => 'EXISTS',
+                'type' => $clause['type'],
+            ];
+
+            $orderby[ $clause_id ] = $clause['order'];
+        }
+    }
+
+    if ( ! empty( $orderby ) ) {
+        $args['orderby'] = $orderby;
+
+        if ( isset( $args['order'] ) ) {
+            unset( $args['order'] );
+        }
+
+        // Ignore order by priority if set.
+        if ( ! empty( $option['ignore_priority'] ) ) {
+            $args['mylisting_ignore_priority'] = true;
+            add_filter( 'mylisting/explore/listing-wrap', function( $wrap ) {
+                $wrap .= ' hide-priority';
+                return $wrap;
+            } );
+        }
+    }
+
+    // dd($clauses, $option);
+    // dd($args, $orderby);
+}
+
+
+function get_listings_query($request) {
+    global $wpdb;
+    // handle find listings using explore page query url
+        $params = $request->get_params();
+
+        $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
+        $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
+        $page = absint( isset($params['page']) ? $params['page'] : 0 );
+
+
+		$per_page = absint( isset($params['per_page']) ? $params['per_page'] : c27()->get_setting('general_explore_listings_per_page', 9));
+		$orderby = sanitize_text_field( isset($params['orderby']) ? $params['orderby'] : 'date' );
+		$context = sanitize_text_field( isset( $params['context'] ) ? $params['context'] : 'advanced-search' );
+		$args = [
+			'order' => sanitize_text_field( isset($params['order']) ? $params['order'] : 'DESC' ),
+			'offset' => $page * $per_page,
+			'orderby' => $orderby,
+			'posts_per_page' => $per_page,
+			'tax_query' => [],
+			'meta_query' => [],
+			//'fields' =>  $params['ids'] ? 'ids' : 'all',
+            'fields' =>  'ids',
+			'recurring_dates' => [],
+		];
+
+		get_ordering_clauses( $args, $type, $params );
+
+		// Make sure we're only querying listings of the requested listing type.
+		if ($type && ! $type->is_global() ) {
+			$args['meta_query']['listing_type_query'] = [
+				'key'     => '_case27_listing_type',
+				'value'   =>  $type->get_slug(),
+				'compare' => '='
+			];
+		}
+
+		if ( $context === 'term-search' ) {
+			$taxonomy = ! empty( $params['taxonomy'] ) ? sanitize_text_field( $params['taxonomy'] ) : false;
+			$term = ! empty( $params['term'] ) ? sanitize_text_field( $params['term'] ) : false;
+
+			if ( ! $taxonomy || ! $term || ! taxonomy_exists( $taxonomy ) ) {
+				return false;
+			}
+
+			$tax_query_operator = apply_filters( 'mylisting/explore/match-all-terms', false ) === true ? 'AND' : 'IN';
+			$args['tax_query'][] = [
+				'taxonomy' => $taxonomy,
+				'field' => 'term_id',
+				'terms' => $term,
+				'operator' => $tax_query_operator,
+				'include_children' => $tax_query_operator !== 'AND',
+			];
+
+			// add support for nearby order in single term page
+			if ( isset( $params['proximity'], $params['lat'], $params['lng'] ) ) {
+				$proximity = absint( $params['proximity'] );
+				$location = isset( $params['search_location'] ) ? sanitize_text_field( stripslashes( $params['search_location'] ) ) : false;
+				$lat = (float) $params['lat'];
+				$lng = (float) $params['lng'];
+				$units = isset($params['proximity_units']) && $params['proximity_units'] == 'mi' ? 'mi' : 'km';
+				if ( $lat && $lng && $proximity && $location ) {
+					$earth_radius = $units == 'mi' ? 3959 : 6371;
+					$sql = $wpdb->prepare( \MyListing\Helpers::get_proximity_sql(), $earth_radius, $lat, $lng, $lat, $proximity );
+					$post_ids = (array) $wpdb->get_results( $sql, OBJECT_K );
+					if ( empty( $post_ids ) ) { $post_ids = ['none']; }
+					$args['post__in'] = array_keys( (array) $post_ids );
+					$args['search_location'] = '';
+				}
+			}
+		} else {
+            if($type){
+			foreach ( (array) $type->get_advanced_filters() as $filter ) {
+				$args = $filter->apply_to_query( $args, $params );
+			}
+        }
+		}
+
+		$result = [];
+		$listing_wrap = ! empty( $params['listing_wrap'] ) ? sanitize_text_field( $params['listing_wrap'] ) : '';
+		$listing_wrap = apply_filters( 'mylisting/explore/listing-wrap', $listing_wrap );
+
+		/**
+		 * Hook after the search args have been set, but before the query is executed.
+		 *
+		 * @since 1.7.0
+		 */
+		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
+
+    $listings = directory_query_args($args);
+
+		return $listings;
+}
+
+//WC Bookings Rest api
+class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controller {
+
+	/**
+	 * Route base.
+	 *
+	 * @var string
+	 */
+	protected $rest_base = 'rest_bookings';
+
+	/**
+	 * Post type.
+	 *
+	 * @var string
+	 */
+	protected $post_type = 'wc_booking';
+  
+
+  /**
+	 * Prepare objects query.
+	 *
+	 * @since  3.0.0
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return array
+	 */
+	protected function prepare_objects_query( $request ) {
+		$args                        = array();
+		$args['offset']              = $request['offset'];
+		$args['order']               = $request['order'];
+		$args['orderby']             = $request['orderby'];
+		$args['paged']               = $request['page'];
+		$args['post__in']            = $request['include'];
+		$args['post__not_in']        = $request['exclude'];
+		$args['posts_per_page']      = $request['per_page'];
+		$args['name']                = $request['slug'];
+		$args['post_parent__in']     = $request['parent'];
+		$args['post_parent__not_in'] = $request['parent_exclude'];
+		$args['s']                   = $request['search'];
+		$args['fields']              = $this->get_fields_for_response( $request );
+
+		if ( 'date' === $args['orderby'] ) {
+			$args['orderby'] = 'date ID';
+		}
+
+		$date_query = array();
+		$use_gmt    = $request['dates_are_gmt'];
+
+    if (isset($request['customer_id'] )) {
+      $cus_id = $request['customer_id'];
+			$args['meta_query'] = array(
+        array(
+        'key' => '_booking_customer_id',
+        'value' => $cus_id,
+        'compare' => '=',
+        ),
+      );
+		}
+
+		if ( isset( $request['before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'before' => $request['before'],
+			);
+		}
+
+		if ( isset( $request['after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'after'  => $request['after'],
+			);
+		}
+
+		if ( isset( $request['modified_before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'before' => $request['modified_before'],
+			);
+		}
+
+		if ( isset( $request['modified_after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'after'  => $request['modified_after'],
+			);
+		}
+
+		if ( ! empty( $date_query ) ) {
+			$date_query['relation'] = 'AND';
+			$args['date_query']     = $date_query;
+		}
+
+		// Force the post_type argument, since it's not a user input variable.
+		$args['post_type'] = $this->post_type;
+
+		/**
+		 * Filter the query arguments for a request.
+		 *
+		 * Enables adding extra arguments or setting defaults for a post
+		 * collection request.
+		 *
+		 * @param array           $args    Key value array of query var to query value.
+		 * @param WP_REST_Request $request The request used.
+		 */
+		$args = apply_filters( "woocommerce_rest_{$this->post_type}_object_query", $args, $request );
+
+		return $this->prepare_items_query( $args, $request );
+	}
+
 }

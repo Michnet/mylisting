@@ -36,11 +36,11 @@ if ( $gap ) {
             <div class="single-menu-item element mt-30">
             	<div class="gr-content">
                 <?php 
-                if ( isset( $row['item_photo'] ) && ! empty( $row['item_photo'] ) ) : ?>
+                if ( isset( $row['mylisting_accordion_photo'] ) && ! empty( $row['mylisting_accordion_photo'] ) ) : ?>
                     <div class="menu-thumb photoswipe-gallery">
                         <?php 
-                        $image_url = c27()->get_resized_image( $row['item_photo'], 'full' );
-                        $attachment_id = c27()->get_attachment_by_guid( $row['item_photo'] );
+                        $image_url = c27()->get_resized_image( $row['mylisting_accordion_photo'], 'full' );
+                        $attachment_id = c27()->get_attachment_by_guid( $row['mylisting_accordion_photo'] );
                         ?>
 
                         <a
@@ -54,8 +54,8 @@ if ( $gap ) {
                 endif; ?>
                 <div class="menu-content ml-30">
                     <span class="menu-item-title"><?php echo esc_html( $row['menu-label'] ); ?></span>
-                    <?php if ( isset( $row['item_description'] ) ) : ?>
-                    	<?php echo wpautop( $row['item_description'] ); ?>
+                    <?php if ( isset( $row['menu-description'] ) ) : ?>
+                    	<?php echo wpautop( $row['menu-description'] ); ?>
                     <?php endif; ?>
 
                     <?php if ( isset( $row['menu-url'] ) && isset( $row['link-label'] ) ) : ?>

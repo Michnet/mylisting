@@ -35,28 +35,11 @@ if ( $uploaded_files ) {
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 	<div data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
 		<div data-repeater-item class="repeater-field-wrapper">
-			<div class="item-head">
-				<input type="text" name="menu-label" placeholder="<?php esc_attr_e( 'Label', 'my-listing' ) ?>">
-				<?php if ( isset( $field['allow_price'] ) && $field['allow_price'] === true ): ?>
-				<input type="text" name="menu-price" placeholder="<?php esc_attr_e( 'Price', 'my-listing' ) ?>">
-				<?php endif ?>
-			</div>
-			<?php if ( isset( $field['allow_link'] ) && $field['allow_link'] === true ): ?>
-				<div class="item-head">
-					<input type="text" name="link-label" placeholder="<?php esc_attr_e( 'Button Label', 'my-listing' ) ?>">
-					<input type="url" name="menu-url" placeholder="<?php esc_attr_e( 'URL', 'my-listing' ) ?>">
-				</div>
-			<?php endif ?>
-			<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
-				<textarea
-				cols="20" rows="2" class="input-text"
-				name="menu-description"
-				placeholder="<?php echo esc_attr_x( 'Description', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
-			<?php endif ?>
 
-			<?php if ( isset( $field['allow_images'] ) && $field['allow_images'] === true ): ?>
+		
 				<div class="field-type-file form-group">
-					<div class="field ">
+					<div class="field ">	
+						<label>Image</label>
 						<?php if ( is_admin() ) : ?>
 							<div class="file-upload-field single-upload form-group-review-gallery">
 								<div class="uploaded-files-list review-gallery-images">
@@ -99,9 +82,27 @@ if ( $uploaded_files ) {
 						<?php endif; ?>
 					</div>
 				</div>
-			<?php endif ?>
-			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i></button>
+
+
+			<div class="fields-box row mx-0">
+
+				<div class="form-group w100 col-12">
+					<input type="text" name="ft_title" placeholder="<?php esc_attr_e( 'Title', 'my-listing' ) ?>">
+				</div>
+
+				<div class="form-group w100 col-12">
+					<input type="text" name="ft_subtitle" placeholder="<?php esc_attr_e( 'Subtitle', 'my-listing' ) ?>">
+				</div>
+			</div>
+				<textarea
+					cols="20" rows="2" class="input-text"
+					name="ft_description"
+					placeholder="<?php echo esc_attr_x( 'Brief Desecription', 'General Repeater Description', 'my-listing' ) ?>">
+				</textarea>
+			
+			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
+			</button>
 		</div>
 	</div>
-	<input data-repeater-create type="button" value="<?php esc_attr_e( 'Add item', 'my-listing' ) ?>" id="add-menu-links-field">
+	<input data-repeater-create type="button" value="Add" id="add-menu-links-field">
 </div>
