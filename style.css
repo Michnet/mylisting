@@ -35,11 +35,9 @@ body:not(.edit-listing-form) .edit_row #acf_col {display: none;}
 
 body:not(.edit-listing-form) .edit_row .mylisting_col {width: 100% !important;}
 
-.edit-listing-form .edit_row .mylisting_col {/* width: auto !important; */}
-
 .add-listing-nav>ul {margin-top: 65px;}
 
-.edit-listing-form.woocommerce-account .woocommerce-MyAccount-content {width: 100%;grid-template-columns: 200px calc(100% - 220px);}
+.edit-listing-form.woocommerce-account .woocommerce-MyAccount-content {width: 100%;max-width: 1024px;margin: 0 auto;grid-template-columns: 200px calc(100% - 220px);}
 
 .edit-listing-form .elementor-section .elementor-element .i-section {display: block;/* max-width: 100%; *//* width: 100%; */}
 
@@ -149,15 +147,6 @@ p {
     margin-right: -10px !important;
 }
 
-.profile-header.got_stuck .profile-menu ul li.active {
-    /* background: #4e1d48; */
-}
-
-.themeBg {
-    background: var(--e-global-color-552f53e);
-    /* background: var(--listingTheme); */
-}
-
 .header,.header.header-style-alternate,.header.header-style-alternate:not(.header-scroll),.header.header-style-default {
     height: 60px!important
 }
@@ -170,8 +159,6 @@ header.hide-until-load {
     box-shadow: rgb(0 0 0 / 21%) 0 0 12px 3px
 }
 
-.case27-primary-text,.case27-secondary-text,.elementor-nav-menu--dropdown.elementor-nav-menu__container .elementor-sub-item,body#tinymce.wp-editor {
-}
 #wpdcom.wpd-layout-3 .wpd-comment .wpd-comment-subheader .wpd-comment-date{
     font-size: 9px;
 }
@@ -213,7 +200,6 @@ div.asp_m.asp_m_1 {
 section#listing_tab_page-home>.container #block_6bQqkvx {
     padding: 0
 }
-#wpdcom.wpd-layout-3 .wpd-comment .wpd-comment-right{}
 
 .active-taxonomy-container .category-background {
     background-size: contain!important;
@@ -3848,9 +3834,9 @@ td.child {
 
 #submit-job-form .field-head {flex-direction: column;}
 
-#submit-job-form .small, #submit-job-form small {
-    color: var(--e-global-color-text);
-    font-size: 11px;
+#submit-job-form .small, #submit-job-form small, .field-head .description {
+    color: var(--wc-secondary-text);
+    font-size: 12px !important;
 }
 
 .acf-field.acf-field-message {
@@ -4554,3 +4540,30 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 #submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
 
+
+
+.repeater-list label {
+    /* font-weight: 500; */
+    font-size: 12px;
+    /* color: var(--grayText); */
+}
+
+.repeater-list {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    grid-column-gap: 10px;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.repeater-field-wrapper {
+    width: 250px;
+    min-width: 250px;
+}
+
+span.label_meta {
+    display: block;
+    color: var(--wc-subtext);
+    font-size: 11px;
+}
