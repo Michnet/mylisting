@@ -839,18 +839,24 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $performers = get_post_meta( $post->ID, '_performers', true);
     $tickets = get_post_meta( $post->ID, '_tickets', true);
     $gen_merch = get_post_meta( $post->ID, '_general_merchandise', true);
-   
+    $punchlines = get_post_meta( $post->ID, '_punch_lines', true);
+    $why_us = get_post_meta( $post->ID, '_why_choose_us', true);
+
     
     $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
     $_data['food_menu'] = $food_menu   ?? null;
-    $_data['marketing']['punch_lines'] = $meta['_punch_lines'][0]   ?? null; 
     $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
     $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
     $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
     $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
-    $_data['listing_store']['tickets'] =  $tickets  ?? null;  
     $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
-    $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;  
+
+    $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
+    $_data['marketing']['wcu'] = $why_us   ?? null; 
+
+    $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
+    $_data['listing_store']['tickets'] =  $tickets  ?? null;   
+
     $_data['author_id'] = $author;
     $_data['comment_num'] = $comment_num;
     $_data['tagline'] = $tagline   ?? null; 
