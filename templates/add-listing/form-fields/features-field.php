@@ -33,7 +33,7 @@ if ( $uploaded_files ) {
 ?>
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-	<div data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+	<div class="repeater-list" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
 		<div data-repeater-item class="repeater-field-wrapper">
 
 		
@@ -87,16 +87,20 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w100 col-12">
-					<input type="text" name="ft_title" placeholder="<?php esc_attr_e( 'Title', 'my-listing' ) ?>">
+					<label>Title</label>
+					<input required type="text" maxlength="30" name="ft_title" placeholder="<?php esc_attr_e( 'Title', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w100 col-12">
-					<input type="text" name="ft_subtitle" placeholder="<?php esc_attr_e( 'Subtitle', 'my-listing' ) ?>">
+					<label>Subtitle <span class='label_meta'>Optional</span></label>
+					<input type="text" maxlength="50" name="ft_subtitle" placeholder="<?php esc_attr_e( 'Subtitle(Optional)', 'my-listing' ) ?>">
 				</div>
 			</div>
 				<textarea
+				    required
 					cols="20" rows="2" class="input-text"
 					name="ft_description"
+					maxlength="180"
 					placeholder="<?php echo esc_attr_x( 'Brief Desecription', 'General Repeater Description', 'my-listing' ) ?>">
 				</textarea>
 			

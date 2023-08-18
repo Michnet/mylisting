@@ -33,8 +33,8 @@ if ( $uploaded_files ) {
 ?>
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-	<div class="row" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
-		<div data-repeater-item class="col-md-6 col-12 repeater-field-wrapper">
+	<div class="repeater-list" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+		<div data-repeater-item class="repeater-field-wrapper">
 
 		
 				<div class="field-type-file form-group">
@@ -87,19 +87,23 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
+					<label>First name </label>
+					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
+					<label>Last name </label>
 					<input type="text" name="last_name" placeholder="<?php esc_attr_e( 'Last Name', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="job_title" placeholder="<?php esc_attr_e( 'Job Title', 'my-listing' ) ?>">
+				    <label>Role </label>
+					<input required type="text" name="job_title" placeholder="<?php esc_attr_e( 'Role e.g Guest of Honour, Instructor', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
-					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications', 'my-listing' ) ?>">
+				    <label>Qualifications/Credentials </label>
+					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications, credentials, etc', 'my-listing' ) ?>">
 				</div>
 			</div>
 
