@@ -852,7 +852,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
 
     $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
-    $_data['marketing']['wcu'] = $why_us   ?? null; 
+    $_data['marketing']['wcu']['list'] = $why_us   ?? null; 
 
     $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
     $_data['listing_store']['tickets'] =  $tickets  ?? null;   
