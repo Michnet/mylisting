@@ -836,6 +836,7 @@ function process_dates($listing){
 function my_rest_prepare_listing( $data, $post, $request ) {
     $_data = $data->data;
     $post_id = $post->ID;
+    $listing_post = \MyListing\Src\Listing::get( $post_id);
 
     //$category = get_the_category ( $post->ID );
   	$acf_data = get_fields($post_id);
@@ -885,7 +886,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $special_guests = get_post_meta( $post_id, '_special-guests', true);
       $performers = get_post_meta( $post_id, '_performers', true);
       $tickets = get_post_meta( $post_id, '_tickets', true);
-      $dates = process_dates($post);
+      $dates = process_dates($listing_post);
 
       $_data['persons']['special_guests'] = $special_guests ?? null;
       $_data['persons']['performers'] = $performers ?? null;
