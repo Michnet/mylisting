@@ -891,7 +891,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['persons']['special_guests'] = $special_guests ?? null;
       $_data['persons']['performers'] = $performers ?? null;
       $_data['listing_store']['tickets'] =  $tickets  ?? null;   
-      $_data['dates'] = $dates   ?? null;
+      $_data['event_date'] = $dates   ?? null;
     }
 
     
