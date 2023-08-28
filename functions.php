@@ -793,16 +793,57 @@ function update_user_info( $request ) {
   }
 }
 
+//Include dates in rest event listing
+
+function process_dates($listing){
+  
+   // $listing = \MyListing\Src\Listing::get( $event_id);
+
+    $dates = [];
+    $now = date_create('now');
+    $field = $listing->get_field_object('event-date');
+    if ( ! $field ) {
+        return $dates;
+    }
+
+    if ( $field->get_type() === 'date' ) {
+        $date = $field->get_value();
+        if ( ! empty( $date ) && strtotime( $date ) ) {
+            $dates[] = [
+                'start' => $date,
+                'end' => '',
+                'gcal_link' => get_google_calendar_link( $date, '', $listing ),
+                'is_over' => $now->getTimestamp() > strtotime( $date, $now->getTimestamp() ),
+            ];
+        }
+    }
+
+    if ( $field->get_type() === 'recurring-date' ) {
+        $dates = array_merge(
+            \MyListing\Src\Recurring_Dates\get_previous_instances( $field->get_value(), 0 ),
+            \MyListing\Src\Recurring_Dates\get_upcoming_instances( $field->get_value(), 1 )
+        );
+
+        foreach ( $dates as $key => $date ) {
+            $dates[$key]['gcal_link'] = get_google_calendar_link( $date['start'], $date['end'], $listing);
+            $dates[$key]['is_over'] = $now->getTimestamp() > strtotime( $date['end'], $now->getTimestamp() );
+        }
+    }
+
+    return $dates;
+}
+
 function my_rest_prepare_listing( $data, $post, $request ) {
     $_data = $data->data;
+    $post_id = $post->ID;
 
     //$category = get_the_category ( $post->ID );
-  	$acf_data = get_fields($post->ID);
-    $thumbnail = get_the_post_thumbnail_url( $post->ID, 'thumbnail' );
-    $large_thumbnail = get_the_post_thumbnail_url( $post->ID, 'medium' );
-	  $xlarge_thumb = get_the_post_thumbnail_url( $post->ID, 'medium_large' );
-  	$cats = get_the_terms( $post->ID, 'job_listing_category' );
-    $locs = get_the_terms( $post->ID, 'region' );
+  	$acf_data = get_fields($post_id);
+    $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+    $large_thumbnail = get_the_post_thumbnail_url( $post_id, 'medium' );
+	  $xlarge_thumb = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+  	$cats = get_the_terms( $post_id, 'job_listing_category' );
+    $locs = get_the_terms( $post_id, 'region' );
     
     $catIds = array();
     if($cats){
@@ -811,7 +852,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       }
     }
    
-        $views = get_visits($post->ID);
+    $views = get_visits($post_id);
 
     if($catIds){
       $category = get_term( $catIds[0], 'job_listing_category' );
@@ -820,27 +861,37 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $category->color = $cat_meta['color'][0]   ?? null;
     }
 
-    $meta = get_post_meta( $post->ID );
-    $excerpt = get_the_excerpt( $post->ID);
+    $meta = get_post_meta( $post_id );
+    $excerpt = get_the_excerpt( $post_id);
     $the_content = apply_filters('the_content', get_the_content());
 
-    $hours = get_post_meta($post->ID, '_work_hours', true);
-    $food_menu = get_post_meta($post->ID, '_food-drinks-menu', true);
-    $social_links = get_post_meta($post->ID, '_links', true);
-    $phone = get_post_meta($post->ID, '_job_phone', true);
-    $tagline = get_post_meta($post->ID, '_job_tagline', true);
-    $cover = get_post_meta($post->ID, '_job_cover', true);
-    $logo = get_post_meta($post->ID, '_job_logo', true);
-    $gallery = get_post_meta($post->ID, '_job_gallery', true);
+    $hours = get_post_meta($post_id, '_work_hours', true);
+    $food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
+    $social_links = get_post_meta($post_id, '_links', true);
+    $phone = get_post_meta($post_id, '_job_phone', true);
+    $tagline = get_post_meta($post_id, '_job_tagline', true);
+    $cover = get_post_meta($post_id, '_job_cover', true);
+    $logo = get_post_meta($post_id, '_job_logo', true);
+    $gallery = get_post_meta($post_id, '_job_gallery', true);
     $author = get_the_author_meta('ID');
-    $comment_num = get_comments_number($post->ID);
-    $team = get_post_meta($post->ID, '_team', true);
-    $special_guests = get_post_meta( $post->ID, '_special-guests', true);
-    $performers = get_post_meta( $post->ID, '_performers', true);
-    $tickets = get_post_meta( $post->ID, '_tickets', true);
-    $gen_merch = get_post_meta( $post->ID, '_general_merchandise', true);
-    $punchlines = get_post_meta( $post->ID, '_punch_lines', true);
-    $why_us = get_post_meta( $post->ID, '_why_choose_us', true);
+    $comment_num = get_comments_number($post_id);
+    $team = get_post_meta($post_id, '_team', true);
+    $gen_merch = get_post_meta( $post_id, '_general_merchandise', true);
+    $punchlines = get_post_meta( $post_id, '_punch_lines', true);
+    $why_us = get_post_meta( $post_id, '_why_choose_us', true);
+
+
+    if($meta['_case27_listing_type'][0] == 'event'){
+      $special_guests = get_post_meta( $post_id, '_special-guests', true);
+      $performers = get_post_meta( $post_id, '_performers', true);
+      $tickets = get_post_meta( $post_id, '_tickets', true);
+      $dates = process_dates($post);
+
+      $_data['persons']['special_guests'] = $special_guests ?? null;
+      $_data['persons']['performers'] = $performers ?? null;
+      $_data['listing_store']['tickets'] =  $tickets  ?? null;   
+      $_data['dates'] = $dates   ?? null;
+    }
 
     
     $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
@@ -850,13 +901,9 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
     $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
     $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
-
     $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
     $_data['marketing']['wcu']['list'] = $why_us   ?? null; 
-
     $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
-    $_data['listing_store']['tickets'] =  $tickets  ?? null;   
-
     $_data['author_id'] = $author;
     $_data['comment_num'] = $comment_num;
     $_data['tagline'] = $tagline   ?? null; 
@@ -865,9 +912,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['phone'] = $phone  ?? null;
     $_data['page_views'] = $views  ?? null;
     $_data['content'] = $the_content ?? null;
-    $_data['team'] = $team ?? null;
-    $_data['special_guests'] = $special_guests ?? null;
-    $_data['performers'] = $performers ?? null;
+    $_data['persons']['team'] = $team ?? null;
     $_data['short_desc'] = $excerpt;
     $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
     $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
