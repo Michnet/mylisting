@@ -946,7 +946,7 @@ add_filter( 'rest_prepare_job_listing', 'my_rest_prepare_listing', 10, 3 );
 function my_rest_prepare_post( $data, $post, $request ) {
     $_data = $data->data;
 
-  	$postMeta = get_post_meta($post->ID);
+  	//$postMeta = get_post_meta($post->ID);
     $thumbnail = get_the_post_thumbnail_url( $post->ID, 'medium' );
   
     if($_data['acf']['listing']){
@@ -2212,7 +2212,7 @@ add_filter( 'bp_loggedin_user_id', 'custom_bp_loggedin_user_id', 11, 1);
 
 //(1) Messages
 
-$custom_messages_endpoint = new BP_REST_Messages_Endpoint;
+//$custom_messages_endpoint = new BP_REST_Messages_Endpoint;
 
 function custom_get_messages_permission( $retval, $request ) {
 
