@@ -2212,7 +2212,7 @@ add_filter( 'bp_loggedin_user_id', 'custom_bp_loggedin_user_id', 11, 1);
 
 //(1) Messages
 
-//$custom_messages_endpoint = new BP_REST_Messages_Endpoint;
+$custom_messages_endpoint = new BP_REST_Messages_Endpoint;
 
 function custom_get_messages_permission( $retval, $request ) {
 
