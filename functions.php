@@ -146,6 +146,29 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
  return $response;
 }, 10, 2);
 
+function after_social_login($user_id, $provider) {
+  $user = get_userdata($user_id);
+  //$user_roles = $user->roles;
+
+   $user_meta = [];
+   $response = [];
+
+   $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? [];
+   $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? [];
+
+  /* if (in_array('subscriber', $user_roles, true)) {
+      add_filter($provider->getId() . '_login_redirect_url', function () {
+          return 'https://example.com/page-for-subscribers';
+      });
+
+  } */
+  $response['user'] = $user;
+  $response['user']['user_meta'] = $user_meta;
+  return $response;
+}
+add_action('nsl_login', 'after_social_login', 10, 2);
+
+
 
 //show acf fields in admin
 add_filter( 'acf/settings/show_admin', '__return_true', 50 );
