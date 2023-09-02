@@ -611,9 +611,30 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 
+    register_rest_route(
+      'm-api/v1',
+      'get_social_user(?:/(?P<id>\d+))?',
+      array(
+          'methods' => 'POST',
+          'callback' => 'get_social_user_rest',
+          'permission_callback' => '__return_true',
+      ));
+
     $controller = new Bookings_REST_Booking_Controller();
 		$controller->register_routes();
 });
+
+function get_social_user_rest($request) {
+
+  $provider = NextendSocialLogin::$enabledProviders[$request['provider']];
+  try {
+      $user = $provider->findUserByAccessToken($request['access_token']);
+  } catch (Exception $e) {
+      return new WP_Error('error', $e->getMessage());
+  }
+
+  return $user;
+}
 
 
 function check_slot_availability($request){
