@@ -644,7 +644,7 @@ function get_social_user_rest($request) {
    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? [];
    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? [];
   $response['user'] = $user_data;
-  $response['user']['user_meta'] = $user_meta;
+  $response['user'] -> user_meta = $user_meta;
   
   return $response;
   //return $user;
