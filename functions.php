@@ -611,14 +611,22 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 
-    register_rest_route(
-      'm-api/v1',
-      'get_social_user(?:/(?P<id>\d+))?',
-      array(
-          'methods' => 'POST',
-          'callback' => 'get_social_user_rest',
-          'permission_callback' => '__return_true',
-      ));
+      register_rest_route('m-api/v1', '/(?P<provider>\w[\w\s\-]*)/get_social_user', array(
+        'args' => array(
+            'provider'     => array(
+                'required'          => true,
+                'validate_callback' => 'validate_soc_provider'
+            ),
+            'access_token' => array(
+                'required' => true,
+            ),
+        ),
+        array(
+            'methods'             => 'POST',
+            'callback'            => 'get_social_user_rest',
+            'permission_callback' => '__return_true'
+        ),
+    ));
 
     $controller = new Bookings_REST_Booking_Controller();
 		$controller->register_routes();
@@ -634,6 +642,22 @@ function get_social_user_rest($request) {
   }
 
   return $user;
+}
+
+function validate_soc_provider($providerID) {
+  if (NextendSocialLogin::isProviderEnabled($providerID)) {
+      if (NextendSocialLogin::$enabledProviders[$providerID] instanceof NextendSocialProviderOAuth) {
+          return true;
+      } else {
+          /*
+           * OpenID providers don't have a secure Access Token, but just a simple ID that is usually easy to guess.
+           * For this reason we shouldn't return the WordPress user ID over the REST API of providers based on OpenID authentication.
+           */
+          return new WP_Error('error', __('This provider doesn\'t support REST API calls!', 'nextend-facebook-connect'));
+      }
+  }
+
+  return false;
 }
 
 
