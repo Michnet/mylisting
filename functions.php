@@ -635,7 +635,7 @@ function get_social_user_rest($request) {
   }
 
   $user_id = intval($user);
-  $user_data = get_userdata($user_id);
+  //$user_data = get_userdata($user_id);
   //$user_roles = $user->roles;
 
    $user_meta = [];
@@ -643,8 +643,20 @@ function get_social_user_rest($request) {
 
    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? [];
    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? [];
-  $response['user'] = $user_data;
-  $response['user'] -> user_meta = $user_meta;
+  //$response['user'] = $user_data;
+  //$response['user'] -> user_meta = $user_meta;
+
+
+  $wp_req = array();
+  $wp_req['id'] = $user_id;
+  $wp_req['context'] = 'edit';
+  $rest_request = new WP_REST_Request();
+  $rest_request->set_query_params($wp_req);
+  $local_controller = new WP_REST_Users_Controller();
+  //var_dump($rest_request);
+  $returnable_user = $local_controller->get_item($rest_request);
+  $response['user'] = $returnable_user->data;
+  $response['user']['user_meta'] = $user_meta;
   
   return $response;
   //return $user;
