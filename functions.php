@@ -22,7 +22,7 @@ add_action( 'admin_init', 'edit_theme_caps');
 
 //Define Constants
 
-$frontend_link = 'https://lyvecity.vercel.app';
+$frontend_link = 'https://lyvecity.com';
 
 
 // Allow Registration Only from @warrenchandler.com email addresses
@@ -56,6 +56,28 @@ function custom_theme_setup() {
   }
   add_image_size( 'big_thumb', 400, 400, false );
 }
+
+
+add_filter( 'rest_request_before_callbacks', 
+function($response, $handler, $request){
+  $params = $request->get_params();
+  $soc_token = $params['soc_token'] ?? null;
+  $soc_id = $params['soc_int'] ?? null;
+  if(isset($soc_token)){
+    $socl = new \NSL\REST();
+    $internal_id = $socl->get_user($request);
+    if(intval($internal_id) == $soc_id){
+      return $response;
+    }else{
+      $error_res = array();
+      $error_res['message'] = 'Need to log in';
+      return $error_res;
+    }
+  }else{
+    return $response;
+  }
+
+});
 
 //Rest init
 add_action( 'rest_api_init', 'addOrderbySupportRest' );
