@@ -77,7 +77,8 @@ function($response, $handler, $request){
     return $response;
   }
 
-});
+}, 10, 3
+);
 
 //Rest init
 add_action( 'rest_api_init', 'addOrderbySupportRest' );
