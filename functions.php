@@ -976,7 +976,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 	  $xlarge_thumb = get_the_post_thumbnail_url( $post_id, 'medium_large' );
   	$cats = get_the_terms( $post_id, 'job_listing_category' );
     $locs = get_the_terms( $post_id, 'region' );
-    $taggs = get_the_terms( $post_id, 'case27_job_listing_tags' );
 
     
     
@@ -1067,7 +1066,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 	  $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
   	$_data['categories'] = $cats   ?? null;
     $_data['locations'] = $locs   ?? null;
-    $_data['tagggs'] = $taggs   ?? null;
 
     $data->data = $_data;
     return $data;
