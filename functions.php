@@ -1835,6 +1835,18 @@ class Custom_Terms_Controller extends WP_REST_Terms_Controller
   
 }
 
+//shortcodes
+//stats
+add_shortcode( 'stats_showcase', 'statistics_showcase' );
+function statistics_showcase( $atts ) {
+	$result = count_users();
+  echo 'There are ', $result['total_users'], ' total users';
+
+  foreach( $result['avail_roles'] as $role => $count )
+      echo ', ', $count, ' are ', $role, 's';
+  echo '.';
+}
+
 // Extend the `WP_REST_Posts_Controller` class
 class Custom_Posts_Controller extends WP_REST_Posts_Controller
 {
