@@ -4158,7 +4158,7 @@ input.acff-submit-button.acf-button:hover {
     }
 
     #wcfm-content .wcfm-collapse .wcfm-collapse-content {
-        padding-left: 70px
+        /* padding-left: 0; */
     }
 
     #wcfm-content .wcfm-collapse .wcfm-page-headig {
@@ -4291,6 +4291,9 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (min-width: 769px) {
+    #wcfm-content .wcfm-collapse .wcfm-collapse-content{
+        padding-left: 70px;
+    }
 
    .add-listing-nav>ul{
     overflow-y: auto;
@@ -4318,6 +4321,9 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (max-width: 768px) {
+    #wcfm-main-contentainer .wcfm_menu_toggle{
+    width: 0;
+}
     .tab-content.listing-tabs.lowered {
     padding-top: 70px;
 }
@@ -4344,7 +4350,7 @@ input.acff-submit-button.acf-button:hover {
     }
 
     #wcfm-main-contentainer .wcfm_menu_toggler {
-        display: block
+        /* display: block; */
     }
 
     #submit-job-form .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -4539,9 +4545,6 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 
 #submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
-
-
-
 .repeater-list label {
     font-weight: 500;
     font-size: 12px;
