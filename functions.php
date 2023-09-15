@@ -46,6 +46,19 @@ function is_valid_email_domain($login, $email, $errors ){
  }
  add_action('register_post', 'is_valid_email_domain',10,3 );
 
+
+ //Guest redirect
+ function my_logged_in_redirect() {
+	
+	if ( !is_user_logged_in() && !is_page(array( 'access', 'home' )) ) 
+    {
+        wp_redirect( '/access');
+        die;
+    }
+	
+}
+add_action( 'template_redirect', 'my_logged_in_redirect' );
+
 //Image sizes
 
 add_action( 'init', 'custom_theme_setup' );
@@ -1846,6 +1859,33 @@ function statistics_showcase( $atts ) {
       echo ', ', $count, ' are ', $role, 's';
   echo '.';
 }
+
+//Login/out button
+
+add_shortcode( 'auth_button', 'login_logout' );
+/**
+ * Add a login/logout shortcode button
+ * @since 1.0.0
+ */
+function login_logout() {
+ob_start();
+    if (is_user_logged_in()) : 
+    // Set the logout URL - below it is set to the root URL
+    ?>
+    <a role="button" href="<?php echo wp_logout_url('/'); ?>">Log Out</a>
+
+<?php 
+    else : 
+    // Set the login URL - below it is set to get_permalink() - you can set that to whatever URL eg '/whatever'
+?>
+    <a role="button" href="<?php echo wp_login_url(get_permalink()); ?>">Log In</span></a>
+
+<?php 
+    endif;
+
+return ob_get_clean();
+}
+
 
 // Extend the `WP_REST_Posts_Controller` class
 class Custom_Posts_Controller extends WP_REST_Posts_Controller
