@@ -54,11 +54,10 @@ function is_valid_email_domain($login, $email, $errors ){
     return;
   } else{
         wp_redirect( '/access');
-        die;
-    }
+ }
 	
 }
-add_action( 'template_redirect', 'my_logged_in_redirect' );
+//add_action( 'template_redirect', 'my_logged_in_redirect' );
 
 //Image sizes
 
