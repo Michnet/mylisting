@@ -238,7 +238,7 @@ if ($data['scroll_border_color']) {
 				<?php else: ?>
 					<div class="user-area signin-area">
 						<i class="mi person user-area-icon"></i>
-						<a href="<?php echo esc_url( \MyListing\get_login_url() ) ?>">
+						<a href="<?php echo esc_url( '/access') ?>">
 							<?php _e( 'Sign in', 'my-listing' ) ?>
 						</a>
 						<?php if ( get_option( 'woocommerce_enable_myaccount_registration' ) === 'yes' ): ?>
@@ -249,7 +249,7 @@ if ($data['scroll_border_color']) {
 						<?php endif ?>
 					</div>
 					<div class="mob-sign-in">
-						<a aria-label="<?php echo esc_attr( _e( 'Mobile sign in button', 'my-listing' ) ) ?>" href="<?php echo esc_url('/access' ) ?>"><i class="mi person"></i></a>
+						<a aria-label="<?php echo esc_attr( _e( 'Mobile sign in button', 'my-listing' ) ) ?>" href="<?php echo esc_url('/access') ?>"><i class="mi person"></i></a>
 					</div>
 
 					<?php if ( c27()->get_setting( 'header_show_cart', true ) !== false ): ?>
