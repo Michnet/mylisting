@@ -4012,6 +4012,7 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (max-width: 1200px) {
+    .header-right .user-profile-dropdown{display: block !important;}
     .add-listing-nav{display: block !important}
     .finder-listings {
         position:relative
