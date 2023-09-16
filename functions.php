@@ -693,8 +693,9 @@ add_action('rest_api_init', function () {
 
 function loginUser($user)
     {
-        wp_set_current_user($user->get('ID'));
-        wp_set_auth_cookie($user->get('ID'));
+      wp_clear_auth_cookie();
+      wp_set_current_user ( $user->ID );
+      wp_set_auth_cookie  ( $user->ID );
 
         do_action('wp_login', $user->user_login, $user);
         return 'Logged';
