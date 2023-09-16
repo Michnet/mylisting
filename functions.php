@@ -697,6 +697,7 @@ function loginUser($user)
         wp_set_auth_cookie($user->get('ID'));
 
         do_action('wp_login', $user->user_login, $user);
+        return 'Logged';
   }
 
 function get_social_user_rest($request) {
@@ -715,7 +716,7 @@ function get_social_user_rest($request) {
   //$user_roles = $user->roles;
 
   $userObj = get_userdata($user_id );
-  loginUser($userObj);
+  $tatus = loginUser($userObj);
 
    $user_meta = [];
    $response = [];
@@ -735,7 +736,7 @@ function get_social_user_rest($request) {
   //var_dump($rest_request);
   $returnable_user = $local_controller->get_item($rest_request);
   $response['user'] = $returnable_user->data;
-  $response['user']['obj'] = $userObj;
+  $response['user']['statues'] = $tatus;
   $response['user']['user_meta'] = $user_meta;
   
   return $response;
