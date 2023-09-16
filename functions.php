@@ -735,6 +735,7 @@ function get_social_user_rest($request) {
   //var_dump($rest_request);
   $returnable_user = $local_controller->get_item($rest_request);
   $response['user'] = $returnable_user->data;
+  $response['user']['obj'] = $userObj;
   $response['user']['user_meta'] = $user_meta;
   
   return $response;
