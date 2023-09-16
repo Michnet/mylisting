@@ -690,18 +690,32 @@ add_action('rest_api_init', function () {
 		$controller->register_routes();
 });
 
+
+function loginUser($user)
+    {
+        wp_set_current_user($user->get('ID'));
+        wp_set_auth_cookie($user->get('ID'));
+
+        do_action('wp_login', $user->user_login, $user);
+  }
+
 function get_social_user_rest($request) {
 
   $provider = NextendSocialLogin::$enabledProviders[$request['provider']];
   try {
-      $user = $provider->findUserByAccessToken($request['access_token']);
+      $userIdBySocial = $provider->findUserByAccessToken($request['access_token']);
   } catch (Exception $e) {
       return new WP_Error('error', $e->getMessage());
   }
 
-  $user_id = intval($user);
+  if($userIdBySocial){
+    $user_id = intval($userIdBySocial);
+  }
   //$user_data = get_userdata($user_id);
   //$user_roles = $user->roles;
+
+  $userObj = get_userdata($user_id );
+  loginUser($userObj);
 
    $user_meta = [];
    $response = [];
