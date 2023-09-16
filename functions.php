@@ -715,35 +715,38 @@ function get_social_user_rest($request) {
       return new WP_Error('error', $e->getMessage());
   }
 
+  $response = [];
+
   if($userIdBySocial){
     $user_id = intval($userIdBySocial);
+
+    $userObj = get_userdata($user_id );
+    $status = loginUser($userObj);
+
+    $user_meta = [];
+
+    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? [];
+    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? [];
+    //$response['user'] = $user_data;
+    //$response['user'] -> user_meta = $user_meta;
+
+
+    $wp_req = array();
+    $wp_req['id'] = $user_id;
+    $wp_req['context'] = 'edit';
+    $rest_request = new WP_REST_Request();
+    $rest_request->set_query_params($wp_req);
+    $local_controller = new WP_REST_Users_Controller();
+    //var_dump($rest_request);
+    $returnable_user = $local_controller->get_item($rest_request);
+    $response['user'] = $returnable_user->data;
+    $response['user']['statues'] = $status;
+    $response['user']['user_meta'] = $user_meta;
+  }else{
+    $response['user']['statues'] = 'unregistered';
   }
   //$user_data = get_userdata($user_id);
-  //$user_roles = $user->roles;
-
-  $userObj = get_userdata($user_id );
-  $tatus = loginUser($userObj);
-
-   $user_meta = [];
-   $response = [];
-
-   $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? [];
-   $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? [];
-  //$response['user'] = $user_data;
-  //$response['user'] -> user_meta = $user_meta;
-
-
-  $wp_req = array();
-  $wp_req['id'] = $user_id;
-  $wp_req['context'] = 'edit';
-  $rest_request = new WP_REST_Request();
-  $rest_request->set_query_params($wp_req);
-  $local_controller = new WP_REST_Users_Controller();
-  //var_dump($rest_request);
-  $returnable_user = $local_controller->get_item($rest_request);
-  $response['user'] = $returnable_user->data;
-  $response['user']['statues'] = $tatus;
-  $response['user']['user_meta'] = $user_meta;
+  //$user_roles = $user->roles
   
   return $response;
   //return $user;
