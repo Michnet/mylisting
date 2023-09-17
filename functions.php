@@ -732,8 +732,8 @@ function authenticateUser($userObj)
 
         $payload = $soc_jwt_class::generatePayload(
             $payload,
-            $soc_jwt_class->wordPressData,
-            $soc_jwt_class->jwtSettings,
+            new stdClass(),
+            new stdClass(),
             $user
         );
 
