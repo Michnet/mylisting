@@ -974,8 +974,12 @@ try {
     $status = loginUser($userObj);
     
     $jwt_userObj['username'] = $userObj->user_login;
-    $jwtClass = new SocialJwt(); 
-    $jwt = $jwtClass->authenticateUser($jwt_userObj);
+    $jwt = null;
+
+    if (class_exists('AuthenticateService')) {
+      $jwtClass = new SocialJwt(); 
+      $jwt = $jwtClass->authenticateUser($jwt_userObj);
+    }
 
     $user_meta = [];
 
