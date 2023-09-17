@@ -767,7 +767,7 @@ function nslLinkOrRegister($providerID, $authOptions) {
                        * fill $user_data with the data that the provider returned
                        */
                       $user_data = array(
-                          'user_login'   => '@'.strtolower(str_replace($base_name)).random_digits(4),
+                          'user_login'   => '@'.str_replace(' ', '-', strtolower($base_name)).random_digits(4),
                           //generate a unique username, e.g. from the name returned by the provider: $provider->getAuthUserDataByAuthOptions('name', $authOptions);
                           'user_email'   => $email,
                           //use the email address returned by the provider, note: it can be empty in certain cases
