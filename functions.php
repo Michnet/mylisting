@@ -1010,7 +1010,7 @@ try {
     $response['user'] = $returnable_user->data;
     $response['user']['status'] = $status;
     $response['jwt'] = $jwt;
-    $response['request'] = $request;
+    $response['request'] = $jwt_userObj;
     $response['user']['user_meta'] = $user_meta;
   }else{
     $response['user']['status'] = 'unregistered';
