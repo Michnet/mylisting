@@ -737,9 +737,9 @@ function authenticateUser($userObj)
             $user
         );
 
-        $jwt_code = SimpleJWTLogin\Libraries\JWT\JWT::encode(
+        $jwt_code = \SimpleJWTLogin\Libraries\JWT\JWT::encode(
                     $payload,
-                    SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory::getFactory($soc_jwt_class->jwtSettings)->getPrivateKey(),
+                    \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory::getFactory($soc_jwt_class->jwtSettings)->getPrivateKey(),
                     $soc_jwt_class->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
         );
 
