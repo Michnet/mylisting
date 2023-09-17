@@ -952,10 +952,10 @@ function loginUser($user)
 }
 
 function get_social_user_rest($request) {
-  $params = $request->get_params();
+  //$params = $request->get_params();
 
-$providerID = $params['provider'];
-$access_token = $params['access_token'];
+$providerID = $request['provider'];
+$access_token = $request['access_token'];
 $authOptions['access_token_data'] = $access_token;
 
 try {
@@ -1000,6 +1000,7 @@ try {
     $response['user'] = $returnable_user->data;
     $response['user']['status'] = $status;
     $response['jwt'] = $jwt;
+    $response['request'] = $request;
     $response['user']['user_meta'] = $user_meta;
   }else{
     $response['user']['status'] = 'unregistered';
