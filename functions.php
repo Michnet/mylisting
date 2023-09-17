@@ -690,10 +690,144 @@ add_action('rest_api_init', function () {
 		$controller->register_routes();
 });
 
+//create 4-digit number
+function random_digits($length=10) {
+
+  $string = '';
+  // You can define your own characters here.
+  $characters = "0123456789";
+
+  for ($p = 0; $p < $length; $p++) {
+      $string .= $characters[mt_rand(0, strlen($characters)-1)];
+  }
+
+  return $string;
+}
+
+
+//nsl handler
+function nslLinkOrRegister($providerID, $authOptions) {
+  $provider = NextendSocialLogin::getProviderByProviderID($providerID);
+  if ($provider) {
+      $social_user_id = $provider->getAuthUserDataByAuthOptions('id', $authOptions);
+      if ($social_user_id) {
+          /**
+           * Step2: Check if the social media account is linked to any WordPress account.
+           */
+          $wordpress_user_id = $provider->getUserIDByProviderIdentifier($social_user_id);
+
+          if (!is_user_logged_in()) {
+
+              /**
+               * Step3: Handle the logged out users
+               */
+              if ($wordpress_user_id !== null) {
+                  $provider->triggerSync($wordpress_user_id, $authOptions, "login", true);
+
+                  /**
+                   * Step 4: This social media account is already linked to a WordPress account.-> Log the user in using the returned User ID.
+                   */
+
+                  return $wordpress_user_id;
+              } else {
+                  /**
+                   * Step 5: This social media account is not linked to any WordPress account, yet. -> Find out if we need to Link or Register
+                   */
+
+                  $wordpress_user_id = false;
+
+                  /**
+                   * Step 6: Attempt to match a WordPress account with the email address returned by the provider:
+                   */
+                  $email = $provider->getAuthUserDataByAuthOptions('email', $authOptions);
+                  if (empty($email)) {
+                      $email = '';
+                  } else {
+                      $wordpress_user_id = email_exists($email);
+                  }
+
+                  if ($wordpress_user_id !== false) {
+                      /**
+                       * Step 7: There is an email address match -> Link the existing user to the provider
+                       */
+                      if ($provider->linkUserToProviderIdentifier($wordpress_user_id, $social_user_id)) {
+                          $provider->triggerSync($wordpress_user_id, $authOptions, "login", true);
+
+                          //log the user in if the linking was successful
+
+                          return $wordpress_user_id;
+                      } else {
+                          // Throw error: User already have another social account from this provider linked to the WordPress account that has the email match. They should use that account.
+                      }
+
+                  } else {
+                      $base_name = $provider->getAuthUserDataByAuthOptions('name', $authOptions);
+                      /**
+                       * Step 8: There is no email address match -> Register a new WordPress account, e.g. with wp_insert_user()
+                       * fill $user_data with the data that the provider returned
+                       */
+                      $user_data = array(
+                          'user_login'   => '@'.strtolower($base_name),
+                          //generate a unique username, e.g. from the name returned by the provider: $provider->getAuthUserDataByAuthOptions('name', $authOptions);
+                          'user_email'   => $email,
+                          //use the email address returned by the provider, note: it can be empty in certain cases
+                          'user_pass'    =>  wp_generate_password(),
+                          //generate a password, e.g.: with wp_generate_password()
+                          'display_name' => $base_name,
+                          //generate a display name, e.g. from the name returned by the provider: $provider->getAuthUserDataByAuthOptions('name', $authOptions);
+                          'first_name'   => $provider->getAuthUserDataByAuthOptions('first_name', $authOptions) ?? '',
+                          //generate a first name, e.g.: from the first name returned by the provider: $provider->getAuthUserDataByAuthOptions('first_name', $authOptions);
+                          'last_name'    => $provider->getAuthUserDataByAuthOptions('last_name', $authOptions) ?? '',
+                          //generate a last name, e.g.: from the last name returned by the provider: $provider->getAuthUserDataByAuthOptions('last_name', $authOptions);
+                      );
+
+
+                      $wordpress_user_id = wp_insert_user($user_data);
+
+                      if (!is_wp_error($wordpress_user_id) && $wordpress_user_id) {
+                          /**
+                           * Step 9: Link the new user to the provider
+                           */
+                          if ($provider->linkUserToProviderIdentifier($wordpress_user_id, $social_user_id, true)) {
+                              $provider->triggerSync($wordpress_user_id, $authOptions, 'register', false);
+                              $provider->triggerSync($wordpress_user_id, $authOptions, "login", true);
+
+                              //The registration and the linking was successful -> log the user in.
+
+                              return $wordpress_user_id;
+                          }
+                      } else {
+                          //Throw error: There was an error with the registration
+                      }
+                  }
+              }
+          } else {
+              /**
+               * Step 10: Handle the linking for logged in users
+               */
+              $current_user = wp_get_current_user();
+              if ($wordpress_user_id === null) {
+                  // Let's connect the account to the current user!
+                  if ($provider->linkUserToProviderIdentifier($current_user->ID, $social_user_id)) {
+                      //account is linked, we don't need to trigger additional actions we just need to sync the avatar
+                      $provider->triggerSync($current_user->ID, $authOptions, false, true);
+
+                      return $current_user->ID;
+                  } else {
+                      //Throw error: Another social media account is already linked to the current WordPress account. The user need to unlink the currently linked one and he/she can link the this social media account.
+                  }
+              } else if ($current_user->ID != $wordpress_user_id) {
+                  //Throw error: This social account is already linked to another WordPress user.
+              }
+          }
+      }
+  }
+
+  return false;
+}
 
 function loginUser($user)
     {
-     
       clean_user_cache( $user->ID );
       wp_clear_auth_cookie();
 
@@ -707,21 +841,33 @@ function loginUser($user)
   }
 
 function get_social_user_rest($request) {
-
+  $params = $request->get_params();
+/* 
   $provider = NextendSocialLogin::$enabledProviders[$request['provider']];
   try {
       $userIdBySocial = $provider->findUserByAccessToken($request['access_token']);
   } catch (Exception $e) {
       return new WP_Error('error', $e->getMessage());
-  }
+  } */
+
+$providerID = $params['provider'];
+$access_token = $params['access_token'];
+$authOptions['access_token_data'] = $access_token;
+
+try {
+  $userIdBySocial = nslLinkOrRegister($providerID, $authOptions);
+} catch (Exception $e) {
+  //handle the exceptions
+  return new WP_Error('error', $e->getMessage());
+}
 
   $response = [];
 
   if($userIdBySocial){
     $user_id = intval($userIdBySocial);
 
-    $userObj = get_userdata($user_id );
-    $status = loginUser($userObj);
+   // $userObj = get_userdata($user_id );
+    //$status = loginUser($userObj);
 
     $user_meta = [];
 
@@ -740,10 +886,10 @@ function get_social_user_rest($request) {
     //var_dump($rest_request);
     $returnable_user = $local_controller->get_item($rest_request);
     $response['user'] = $returnable_user->data;
-    $response['user']['statues'] = $status;
+    $response['user']['status'] = 'logged_in';
     $response['user']['user_meta'] = $user_meta;
   }else{
-    $response['user']['statues'] = 'unregistered';
+    $response['user']['status'] = 'unregistered';
   }
   //$user_data = get_userdata($user_id);
   //$user_roles = $user->roles
