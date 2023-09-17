@@ -767,7 +767,7 @@ function nslLinkOrRegister($providerID, $authOptions) {
                        * fill $user_data with the data that the provider returned
                        */
                       $user_data = array(
-                          'user_login'   => '@'.str_replace(' ', '-', strtolower($base_name)).random_digits(4),
+                          'user_login'   => '@'.str_replace(' ', '-', strtolower($base_name)).'-'.random_digits(4),
                           //generate a unique username, e.g. from the name returned by the provider: $provider->getAuthUserDataByAuthOptions('name', $authOptions);
                           'user_email'   => $email,
                           //use the email address returned by the provider, note: it can be empty in certain cases
@@ -837,7 +837,7 @@ function loginUser($user)
       update_user_caches( $user );
 
         do_action('wp_login', $user->user_login, $user);
-        return 'Logged';
+        return 'Logged In';
   }
 
 function get_social_user_rest($request) {
@@ -866,8 +866,8 @@ try {
   if($userIdBySocial){
     $user_id = intval($userIdBySocial);
 
-   // $userObj = get_userdata($user_id );
-    //$status = loginUser($userObj);
+    $userObj = get_userdata($user_id );
+    $status = loginUser($userObj);
 
     $user_meta = [];
 
@@ -886,7 +886,7 @@ try {
     //var_dump($rest_request);
     $returnable_user = $local_controller->get_item($rest_request);
     $response['user'] = $returnable_user->data;
-    $response['user']['status'] = 'logged_in';
+    $response['user']['status'] = $status;
     $response['user']['user_meta'] = $user_meta;
   }else{
     $response['user']['status'] = 'unregistered';
