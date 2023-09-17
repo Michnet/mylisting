@@ -705,7 +705,79 @@ function random_digits($length=10) {
 }
 
 //Auth social by JWT
+if (class_exists('AuthenticateService')) {
+  class SocialJwt extends AuthenticateService
+{
+    /**
+     * @param array $payload
+     * @param WordPressDataInterface $wordPressData
+     * @param SimpleJWTLoginSettings $jwtSettings
+     * @param WP_User $user
+     *
+     * @return array
+     */
+  
 
+    public function makeAction($userObj)
+    {
+       // $this->checkAuthenticationEnabled();
+        //$this->checkAllowedIPAddress();
+        //$this->validateAuthenticationAuthKey(ErrorCodes::ERR_INVALID_AUTH_CODE_PROVIDED);
+
+        return $this->authenticateUser($userObj);
+    }
+
+    /**
+     * @SuppressWarnings(StaticAccess)
+     * @return WP_REST_Response
+     * @throws Exception
+     */
+    public function authenticateUser($userObj)
+    {
+       
+
+      $user = isset($userObj['username'])
+      ? $this->wordPressData->getUserByUserLogin(
+          $this->wordPressData->sanitizeTextField($userObj['username'])
+      )
+      : $this->wordPressData->getUserDetailsByEmail(
+          $this->wordPressData->sanitizeTextField($userObj['email'])
+      ); 
+
+        if (empty($user)) {
+            throw new Exception(
+                __('Wrong user credentials.', 'simple-jwt-login'),
+                ErrorCodes::AUTHENTICATION_WRONG_CREDENTIALS
+            );
+        }
+
+        //Generate payload
+        $payload = isset($this->userObj['payload'])
+            ? json_decode(
+                stripslashes(
+                    $this->wordPressData->sanitizeTextField($this->userObj['payload'])
+                ),
+                true
+            )
+            : [];
+
+        $payload = self::generatePayload(
+            $payload,
+            $this->wordPressData,
+            $this->jwtSettings,
+            $user
+        );
+
+        $response = JWT::encode(
+                    $payload,
+                    JwtKeyFactory::getFactory($this->jwtSettings)->getPrivateKey(),
+                    $this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
+        );
+
+        return $response;
+    }
+}
+}
 class SocialJwt extends AuthenticateService
 {
     /**
