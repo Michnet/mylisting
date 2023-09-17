@@ -986,7 +986,7 @@ try {
     $jwt_userObj['username'] = $userObj->user_login;
     $jwt = null;
 
-    if (class_exists('AuthenticateService')) {
+    if (class_exists('SocialJwt')) {
       $jwtClass = new SocialJwt(); 
       $jwt = $jwtClass->authenticateUser($jwt_userObj);
     }
