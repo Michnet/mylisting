@@ -904,7 +904,9 @@ try {
 
     $userObj = get_userdata($user_id );
     $status = loginUser($userObj);
-    $jwt_userObj['username'] = $userObj->user_login;
+
+    $jwt_userObj = new stdClass();
+    $jwt_userObj->username = $userObj->user_login;
     $jwt = authenticateUser($jwt_userObj);
 
     $user_meta = [];
