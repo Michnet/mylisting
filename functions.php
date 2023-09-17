@@ -704,6 +704,49 @@ function random_digits($length=10) {
   return $string;
 }
 
+//Auth social by JWT
+
+function authenticateUser($userObj)
+    {
+      //$jwt_factory = new SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory;
+     // $jwt_maker = new SimpleJWTLogin\Libraries\JWT\JWT;
+      $soc_jwt_class = new \SimpleJWTLogin\Services\AuthenticateService();
+
+        $user = isset($userObj['username'])
+            ? $soc_jwt_class()->wordPressData->getUserByUserLogin(
+                $soc_jwt_class->wordPressData->sanitizeTextField($userObj['username'])
+            )
+            : $soc_jwt_class->wordPressData->getUserDetailsByEmail(
+                $soc_jwt_class->wordPressData->sanitizeTextField($userObj['email'])
+            );
+
+        //Generate payload
+        $payload = isset($userObj['payload'])
+            ? json_decode(
+                stripslashes(
+                    $soc_jwt_class->wordPressData->sanitizeTextField($userObj['payload'])
+                ),
+                true
+            )
+            : [];
+
+        $payload = self::generatePayload(
+            $payload,
+            $soc_jwt_class->wordPressData,
+            $soc_jwt_class->jwtSettings,
+            $user
+        );
+
+        $jwt_code = SimpleJWTLogin\Libraries\JWT\JWT::encode(
+                    $payload,
+                    SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory::getFactory($soc_jwt_class->jwtSettings)->getPrivateKey(),
+                    $soc_jwt_class->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
+        );
+
+       // return $this->wordPressData->createResponse($response);
+       return $jwt_code;
+    }
+
 
 //nsl handler
 function nslLinkOrRegister($providerID, $authOptions) {
@@ -838,17 +881,10 @@ function loginUser($user)
 
         do_action('wp_login', $user->user_login, $user);
         return 'Logged In';
-  }
+}
 
 function get_social_user_rest($request) {
   $params = $request->get_params();
-/* 
-  $provider = NextendSocialLogin::$enabledProviders[$request['provider']];
-  try {
-      $userIdBySocial = $provider->findUserByAccessToken($request['access_token']);
-  } catch (Exception $e) {
-      return new WP_Error('error', $e->getMessage());
-  } */
 
 $providerID = $params['provider'];
 $access_token = $params['access_token'];
@@ -868,6 +904,8 @@ try {
 
     $userObj = get_userdata($user_id );
     $status = loginUser($userObj);
+    $jwt_userObj['username'] = $userObj->user_login;
+    $jwt = authenticateUser($jwt_userObj);
 
     $user_meta = [];
 
@@ -887,6 +925,7 @@ try {
     $returnable_user = $local_controller->get_item($rest_request);
     $response['user'] = $returnable_user->data;
     $response['user']['status'] = $status;
+    $response['jwt'] = $jwt;
     $response['user']['user_meta'] = $user_meta;
   }else{
     $response['user']['status'] = 'unregistered';
