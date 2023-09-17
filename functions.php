@@ -712,23 +712,18 @@ function authenticateUser($userObj)
      // $jwt_maker = new SimpleJWTLogin\Libraries\JWT\JWT;
       $soc_jwt_class = new \SimpleJWTLogin\Services\AuthenticateService();
 
-        $user = isset($userObj['username'])
+        /* $user = isset($userObj['username'])
             ? $soc_jwt_class->wordPressData->getUserByUserLogin(
                 $soc_jwt_class->wordPressData->sanitizeTextField($userObj['username'])
             )
             : $soc_jwt_class->wordPressData->getUserDetailsByEmail(
                 $soc_jwt_class->wordPressData->sanitizeTextField($userObj['email'])
-            );
+            ); */
+
+          $user =  get_user_by('login', $userObj['username']);
 
         //Generate payload
-        $payload = isset($userObj['payload'])
-            ? json_decode(
-                stripslashes(
-                    $soc_jwt_class->wordPressData->sanitizeTextField($userObj['payload'])
-                ),
-                true
-            )
-            : [];
+        $payload = [];
 
         $payload = $soc_jwt_class::generatePayload(
             $payload,
