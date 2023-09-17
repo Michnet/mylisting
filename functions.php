@@ -713,7 +713,7 @@ function authenticateUser($userObj)
       $soc_jwt_class = new \SimpleJWTLogin\Services\AuthenticateService();
 
         $user = isset($userObj['username'])
-            ? $soc_jwt_class()->wordPressData->getUserByUserLogin(
+            ? $soc_jwt_class->wordPressData->getUserByUserLogin(
                 $soc_jwt_class->wordPressData->sanitizeTextField($userObj['username'])
             )
             : $soc_jwt_class->wordPressData->getUserDetailsByEmail(
@@ -730,7 +730,7 @@ function authenticateUser($userObj)
             )
             : [];
 
-        $payload = self::generatePayload(
+        $payload = $soc_jwt_class::generatePayload(
             $payload,
             $soc_jwt_class->wordPressData,
             $soc_jwt_class->jwtSettings,
