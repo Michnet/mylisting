@@ -718,21 +718,7 @@ function socialJwtFunc(){
        * @return array
        */
     
-  
-      public function makeAction($userObj)
-      {
-         // $this->checkAuthenticationEnabled();
-          //$this->checkAllowedIPAddress();
-          //$this->validateAuthenticationAuthKey(ErrorCodes::ERR_INVALID_AUTH_CODE_PROVIDED);
-  
-          return $this->authenticateUser($userObj);
-      }
-  
-      /**
-       * @SuppressWarnings(StaticAccess)
-       * @return WP_REST_Response
-       * @throws Exception
-       */
+
       public function authenticateUser($userObj)
       {
          
@@ -783,47 +769,11 @@ function socialJwtFunc(){
 }
 
 
-add_action( 'plugins_loaded', 'my_plugin_override' );
+add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
   socialJwtFunc();
 }
-
-function authenticateUser($userObj)
-    {
-      //$jwt_factory = new SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory;
-     // $jwt_maker = new SimpleJWTLogin\Libraries\JWT\JWT;
-      $soc_jwt_class = new \SimpleJWTLogin\Services\AuthenticateService();
-
-        /* $user = isset($userObj['username'])
-            ? $soc_jwt_class->wordPressData->getUserByUserLogin(
-                $soc_jwt_class->wordPressData->sanitizeTextField($userObj['username'])
-            )
-            : $soc_jwt_class->wordPressData->getUserDetailsByEmail(
-                $soc_jwt_class->wordPressData->sanitizeTextField($userObj['email'])
-            ); */
-
-          $user =  get_user_by('login', $userObj['username']);
-
-        //Generate payload
-        $payload = [];
-
-        $payload = $soc_jwt_class::generatePayload(
-            $payload,
-            new stdClass(),
-            new stdClass(),
-            $user
-        );
-
-        $jwt_code = \SimpleJWTLogin\Libraries\JWT\JWT::encode(
-                    $payload,
-                    \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory::getFactory($soc_jwt_class->jwtSettings)->getPrivateKey(),
-                    $soc_jwt_class->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
-        );
-
-       // return $this->wordPressData->createResponse($response);
-       return $jwt_code;
-    }
 
 
 //nsl handler
