@@ -767,6 +767,9 @@ function socialJwtFunc(){
   new SocialJwt();
   }
 }
+
+require plugin_dir_path('Simple-JWT-Login').'src/Services/AuthenticateService.php';
+
 $authObj = new AuthenticateService();
 
 add_action( 'after_setup_theme', 'my_plugin_override' );
