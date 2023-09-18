@@ -767,7 +767,7 @@ function socialJwtFunc(){
   new SocialJwt();
   }
 }
-
+$authObj = new AuthenticateService();
 
 add_action( 'after_setup_theme', 'my_plugin_override' );
 
