@@ -924,10 +924,10 @@ function get_social_user_rest($request) {
 
 $reflector = new ReflectionObject($jwt_auth_space);
 $wordPressData = $reflector->getProperty('wordPressData'); 
-$jwtSettings = $reflector->getProperty('jwtSettings'); 
+//$jwtSettings = $reflector->getProperty('jwtSettings'); 
 
 $wordPressData->setAccessible(true);
-$jwtSettings->setAccessible(true);
+//$jwtSettings->setAccessible(true);
 
 //$method->setAccessible(true);
 //echo $method->invoke($object);
@@ -963,7 +963,7 @@ try {
     $jwt = $jwt_auth_space->generatePayload(
       [],
       $wordPressData,
-      $jwtSettings,
+      new stdClass(),
       $jwt_userObj
     );
 
