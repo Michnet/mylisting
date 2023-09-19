@@ -924,7 +924,7 @@ function get_social_user_rest($request) {
 
 $reflector = new ReflectionObject($jwt_auth_space);
 $wordPressData = $reflector->getProperty('wordPressData'); 
-$jwtSettings = $reflector->getProperty('jwtSettings'); 
+$jwtSettings = $reflector->getMethod('jwtSettings'); 
 
 $wordPressData->setAccessible(true);
 $jwtSettings->setAccessible(true);
