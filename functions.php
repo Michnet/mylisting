@@ -924,10 +924,15 @@ function get_social_user_rest($request) {
 
 $reflector = new ReflectionObject($jwt_auth_space);
 $wordPressData = $reflector->getProperty('wordPressData'); 
-//$jwtSettings = $reflector->getProperty('jwtSettings'); 
+$jwtSettings = $reflector->getProperty('jwtSettings');  
 
 $wordPressData->setAccessible(true);
-//$jwtSettings->setAccessible(true);
+$jwtSettings->setAccessible(true);
+
+
+/* $reflector = new ReflectionObject($jwt_auth_space);
+$wordPressData = $jwt_auth_space-> wordPressData; 
+$jwtSettings = $reflector->getProperty('jwtSettings');  */
 
 //$method->setAccessible(true);
 //echo $method->invoke($object);
@@ -955,7 +960,7 @@ try {
     $jwt_userObj['username'] = $userObj->user_login;
     $jwt = 'No class';
 
-    if (class_exists('SocialJwt')) {
+   /*  if (class_exists('SocialJwt')) {
      // $jwtClass = new SocialJwt(); 
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
@@ -963,9 +968,9 @@ try {
     $jwt = $jwt_auth_space->generatePayload(
       [],
       $wordPressData,
-      new stdClass(),
+      $jwtSettings,
       $jwt_userObj
-    );
+    ); */
 
     $user_meta = [];
 
