@@ -774,7 +774,7 @@ add_action( 'after_setup_theme', 'my_plugin_override' );
 function my_plugin_override() {
   socialJwtFunc();
   
-require plugin_dir_path( __DIR__ ).'simple-jwt-login/src/Services/AuthenticateService.php';
+require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 
 $authObj = new AuthenticateService();
 }
