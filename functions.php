@@ -948,12 +948,12 @@ try {
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
     }
-    /* $jwt = $jwt_auth_space->generatePayload(
+    $jwt = $jwt_auth_space->generatePayload(
       [],
       $jwt_auth_space->wordPressData,
       $jwt_auth_space->jwtSettings,
       $jwt_userObj
-    ); */
+    );
 
     $user_meta = [];
 
