@@ -926,6 +926,9 @@ $reflector = new ReflectionObject($jwt_auth_space);
 $wordPressData = $reflector->getProperty('wordPressData'); 
 $jwtSettings = $reflector->getProperty('jwtSettings'); 
 
+$wordPressData->setAccessible(true);
+$jwtSettings->setAccessible(true);
+
 //$method->setAccessible(true);
 //echo $method->invoke($object);
 
