@@ -920,6 +920,15 @@ function get_social_user_rest($request) {
   //$params = $request->get_params();
   $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
 
+ // $object = new LockedGate();
+
+$reflector = new ReflectionObject($jwt_auth_space);
+$wordPressData = $reflector->getProperty('wordPressData'); 
+$jwtSettings = $reflector->getProperty('jwtSettings'); 
+
+//$method->setAccessible(true);
+//echo $method->invoke($object);
+
 
 $providerID = $request['provider'];
 $access_token = $request['access_token'];
@@ -950,8 +959,8 @@ try {
     }
     $jwt = $jwt_auth_space->generatePayload(
       [],
-      $jwt_auth_space->wordPressData,
-      $jwt_auth_space->jwtSettings,
+      $wordPressData,
+      $jwtSettings,
       $jwt_userObj
     );
 
