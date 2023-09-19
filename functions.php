@@ -968,7 +968,7 @@ try {
     $jwt = $jwt_auth_space->generatePayload(
       [],
       $jwt_auth_space->$wordPressData,
-      $jwt_auth_space->jwtSettings,
+      $jwt_auth_space->getjwtSettings(),
       $jwt_userObj
     );
 
