@@ -960,17 +960,17 @@ try {
     $jwt_userObj['username'] = $userObj->user_login;
     $jwt = 'No class';
 
-   /*  if (class_exists('SocialJwt')) {
+    /* if (class_exists('SocialJwt')) {
      // $jwtClass = new SocialJwt(); 
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
-    }
+    } */
     $jwt = $jwt_auth_space->generatePayload(
       [],
-      $wordPressData,
-      $jwtSettings,
+      $jwt_auth_space->$wordPressData,
+      $jwt_auth_space->jwtSettings,
       $jwt_userObj
-    ); */
+    );
 
     $user_meta = [];
 
