@@ -779,7 +779,6 @@ function my_plugin_override() {
 //$authObj = new AuthenticateService();
 }
 
-$auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
 
 
 //nsl handler
@@ -919,6 +918,8 @@ function loginUser($user)
 
 function get_social_user_rest($request) {
   //$params = $request->get_params();
+  $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
+
 
 $providerID = $request['provider'];
 $access_token = $request['access_token'];
@@ -947,6 +948,12 @@ try {
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
     }
+    $jwt = $jwt_auth_space->generatePayload(
+      [],
+      $jwt_auth_space->wordPressData,
+      $jwt_auth_space->jwtSettings,
+      $jwt_userObj
+    );
 
     $user_meta = [];
 
