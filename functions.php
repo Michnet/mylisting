@@ -919,6 +919,7 @@ function loginUser($user)
 function get_social_user_rest($request) {
   //$params = $request->get_params();
   $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
+  $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
 
  // $object = new LockedGate();
 
@@ -967,8 +968,8 @@ try {
     } */
     $jwt = $jwt_auth_space->generatePayload(
       [],
-      $jwt_auth_space->$wordPressData,
-      $jwt_auth_space->withSettings(),
+      $authSettings,
+      $authSettings->getWordPressData(),
       $jwt_userObj
     );
 
