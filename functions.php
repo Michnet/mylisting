@@ -918,20 +918,29 @@ function loginUser($user)
 
 use SimpleJWTLogin\Modules\WordPressDataInterface;
 use SimpleJWTLogin\Modules\SimpleJWTLoginSettings;
+
+
 function get_social_user_rest($request) {
   //$params = $request->get_params();
   $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
  // $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
+  $wordPressData = new \SimpleJWTLogin\Modules\WordPressDataInterface();
+  $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
 
  // $object = new LockedGate();
- 
-
+ /**  
+     * @param WordPressDataInterface $wordPressData
+     * @param SimpleJWTLoginSettings $jwtSettings
+     * 
+     * @return array
+     **/
+/* 
 $reflector = new ReflectionObject($jwt_auth_space);
 $wordPressData = $reflector->getProperty('wordPressData'); 
 $jwtSettings = $reflector->getProperty('jwtSettings');  
 
 $wordPressData->setAccessible(true);
-$jwtSettings->setAccessible(true);
+$jwtSettings->setAccessible(true); */
 
 
 /* $reflector = new ReflectionObject($jwt_auth_space);
@@ -969,10 +978,7 @@ try {
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
     } */
-    /**  
-     * @param WordPressDataInterface $wordPressData;
-     * @param SimpleJWTLoginSettings $jwtSettings
-     **/
+    
     $jwt = $jwt_auth_space->generatePayload(
       [],
       $jwtSettings,
