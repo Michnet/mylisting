@@ -971,6 +971,7 @@ try {
     $status = loginUser($userObj);
     
     $jwt_userObj['username'] = $userObj->user_login;
+    $jwt_userObj = (object)$jwt_userObj;
     $jwt = 'No class';
 
     /* if (class_exists('SocialJwt')) {
