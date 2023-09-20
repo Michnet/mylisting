@@ -924,7 +924,7 @@ function get_social_user_rest($request) {
   //$params = $request->get_params();
   $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
  // $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
-  $wordPressData = new \SimpleJWTLogin\Modules\WordPressDataInterface();
+  $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
   $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
 
  // $object = new LockedGate();
