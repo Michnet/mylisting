@@ -916,12 +916,14 @@ function loginUser($user)
         return 'Logged In';
 }
 
+use SimpleJWTLogin\Modules\WordPressDataInterface;
 function get_social_user_rest($request) {
   //$params = $request->get_params();
   $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
   $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
 
  // $object = new LockedGate();
+ 
 
 $reflector = new ReflectionObject($jwt_auth_space);
 $wordPressData = $reflector->getProperty('wordPressData'); 
@@ -966,10 +968,12 @@ try {
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
     } */
+    /**  @param WordPressDataInterface $wordPressData
+     **/
     $jwt = $jwt_auth_space->generatePayload(
       [],
       $authSettings,
-      $authSettings->getWordPressData(),
+      $wordPressData,
       $jwt_userObj
     );
 
