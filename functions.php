@@ -70,7 +70,7 @@ function custom_theme_setup() {
   add_image_size( 'big_thumb', 400, 400, false );
 }
 
-
+/* 
 add_filter( 'rest_request_before_callbacks', 
 function($response, $handler, $request){
   $params = $request->get_params();
@@ -91,7 +91,7 @@ function($response, $handler, $request){
   }
 
 }, 10, 3
-);
+); */
 
 add_action('after_setup_theme', 'remove_admin_bar');
 function remove_admin_bar() {
