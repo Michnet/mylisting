@@ -917,10 +917,11 @@ function loginUser($user)
 }
 
 use SimpleJWTLogin\Modules\WordPressDataInterface;
+use SimpleJWTLogin\Modules\SimpleJWTLoginSettings;
 function get_social_user_rest($request) {
   //$params = $request->get_params();
   $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
-  $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
+ // $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
 
  // $object = new LockedGate();
  
@@ -968,11 +969,13 @@ try {
       //$jwt = $jwtClass->authenticateUser($jwt_userObj);
       $jwt = 'class_exists';
     } */
-    /**  @param WordPressDataInterface $wordPressData
+    /**  
+     * @param WordPressDataInterface $wordPressData;
+     * @param SimpleJWTLoginSettings $jwtSettings
      **/
     $jwt = $jwt_auth_space->generatePayload(
       [],
-      $authSettings,
+      $jwtSettings,
       $wordPressData,
       $jwt_userObj
     );
