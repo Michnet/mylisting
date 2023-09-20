@@ -3186,11 +3186,12 @@ function get_listings_query($request) {
     // handle find listings using explore page query url
         $params = $request->get_params();
 
+        $sort = $params['sort'] ?? null;
         $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
         $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
         $page = absint( isset($params['page']) ? $params['page'] : 0 );
 
-
+    $meta_q = [];
 		$per_page = absint( isset($params['per_page']) ? $params['per_page'] : c27()->get_setting('general_explore_listings_per_page', 9));
 		$orderby = sanitize_text_field( isset($params['orderby']) ? $params['orderby'] : 'date' );
 		$context = sanitize_text_field( isset( $params['context'] ) ? $params['context'] : 'advanced-search' );
@@ -3200,11 +3201,19 @@ function get_listings_query($request) {
 			'orderby' => $orderby,
 			'posts_per_page' => $per_page,
 			'tax_query' => [],
-			'meta_query' => [],
+			'meta_query' => $meta_q,
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
-            'fields' =>  'ids',
+      'fields' =>  'ids',
 			'recurring_dates' => [],
 		];
+
+    if(isset($sort)){
+      if($sort === 'top-rated'){
+        $args['meta_key'] = 'user_rating';
+        $args['orderby'] = 'meta_value_num';
+        $args['order'] = 'DESC';
+      }
+    }
 
 		get_ordering_clauses( $args, $type, $params );
 
