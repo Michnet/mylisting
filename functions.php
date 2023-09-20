@@ -927,6 +927,9 @@ function get_social_user_rest($request) {
   $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
   $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
 
+  $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
+  $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+
  // $object = new LockedGate();
  /**  
      * @param WordPressDataInterface $wordPressData
@@ -980,11 +983,17 @@ try {
       $jwt = 'class_exists';
     } */
     
-    $jwt = $jwt_auth_space->generatePayload(
+    $payload = $jwt_auth_space->generatePayload(
       [],
       $wordPressData,
       $jwtSettings,
       $userObj
+    );
+
+    $jwt = $JWT::encode(
+      $payload,
+      $JwtKeyFactory::getFactory($jwtSettings)->getPrivateKey(),
+      $jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
     );
 
     $user_meta = [];
