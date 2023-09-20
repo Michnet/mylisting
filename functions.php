@@ -984,7 +984,7 @@ try {
       [],
       $wordPressData,
       $jwtSettings,
-      $jwt_userObj
+      $userObj
     );
 
     $user_meta = [];
