@@ -2704,8 +2704,6 @@ add_filter( 'bp_loggedin_user_id', 'custom_bp_loggedin_user_id', 11, 1);
 
 //(1) Messages
 
-$custom_messages_endpoint = new BP_REST_Messages_Endpoint;
-
 function custom_get_messages_permission( $retval, $request ) {
 
     $retval = true;
@@ -2746,7 +2744,6 @@ function custom_get_messages_permission( $retval, $request ) {
 }
 
 add_filter( 'bp_rest_messages_get_items_permissions_check', 'custom_get_messages_permission', 11, 2 );
-//add_filter(array( 'custom_messages_endpoint', 'get_items_permissions_check' ), 'custom_get_messages_permission', 11, 2 );
 
 
 //Single thread permission
@@ -2763,7 +2760,8 @@ function custom_single_thread_permission($retval, $request ) {
       );
   }
 
-  $thread = BP_REST_Messages_Endpoint::get_thread_object( $request['id'] );
+  $endpoint = new BP_REST_Messages_Endpoint();
+  $thread = $endpoint->get_thread_object( $request['id'] );
 
   if ( true === $retval && empty( $thread->thread_id ) ) {
       $retval = new WP_Error(
