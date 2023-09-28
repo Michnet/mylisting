@@ -1429,120 +1429,6 @@ function custom_comments_rest( $prepared_args, $request ){
 	return $prepared_args;
 }
 
-class MY_REST_Comments_Controller extends WP_REST_Comments_Controller {
-
-  public function get_items( $request ) {
-
-    $response = parent::get_items($request);
-    $params = $request->get_params();
-
-    $prepared_args = array('comment__in' => $request['include'], 'comment__not_in' => $request['exclude'], 'number' => $request['per_page'], 'post_id' => $request['post'] ? $request['post'] : '', 'parent' => isset($params['parent']) ? intval($params['parent'][0]) : '', 'search' => $request['search'], 'offset' => $request['offset'], 'orderby' => $this->normalize_query_param($request['orderby']), 'order' => $request['order'], 'status' => 'approve', 'type' => 'comment', 'no_found_rows' => false, 'hierarchical' => 'threaded');
-    if (empty($request['offset'])) {
-        $prepared_args['offset'] = $prepared_args['number'] * (absint($request['page']) - 1);
-    }
-    if (current_user_can('edit_posts')) {
-        $protected_args = array('user_id' => $request['author'] ? $request['author'] : '', 'status' => $request['status'], 'type' => isset($request['type']) ? $request['type'] : '', 'author_email' => isset($request['author_email']) ? $request['author_email'] : '', 'karma' => isset($request['karma']) ? $request['karma'] : '', 'post_author' => isset($request['post_author']) ? $request['post_author'] : '', 'post_name' => isset($request['post_slug']) ? $request['post_slug'] : '', 'post_parent' => isset($request['post_parent']) ? $request['post_parent'] : '', 'post_status' => isset($request['post_status']) ? $request['post_status'] : '', 'post_type' => isset($request['post_type']) ? $request['post_type'] : '');
-        $prepared_args = array_merge($prepared_args, $protected_args);
-    }
-    
-    $prepared_args = apply_filters('rest_comment_query', $prepared_args, $request);
-    $query = new WP_Comment_Query();
-    $query_result = $query->query($prepared_args);
-    $comments = array();
-    foreach ($query_result as $comment) {
-        $post = get_post($comment->comment_post_ID);
-        if (!$this->check_read_post_permission($post) || !$this->check_read_permission($comment)) {
-            continue;
-        }
-        $data = $this->prepare_item_for_response($comment, $request);
-        $comments[] = $this->prepare_response_for_collection($data);
-    }
-    $total_comments = (int) $query->found_comments;
-    $max_pages = (int) $query->max_num_pages;
-    if ($total_comments < 1) {
-        // Out-of-bounds, run the query again without LIMIT for total count
-        unset($prepared_args['number']);
-        unset($prepared_args['offset']);
-        $query = new WP_Comment_Query();
-        $prepared_args['count'] = true;
-        $total_comments = $query->query($prepared_args);
-        $max_pages = ceil($total_comments / $request['per_page']);
-    }
-    $response = rest_ensure_response($comments);
-    $response->header('X-WP-Total', $total_comments);
-    $response->header('X-WP-TotalPages', $max_pages);
-    $base = add_query_arg($request->get_query_params(), rest_url('/wp/v2/comments'));
-    if ($request['page'] > 1) {
-        $prev_page = $request['page'] - 1;
-        if ($prev_page > $max_pages) {
-            $prev_page = $max_pages;
-        }
-        $prev_link = add_query_arg('page', $prev_page, $base);
-        $response->link_header('prev', $prev_link);
-    }
-    if ($max_pages > $request['page']) {
-        $next_page = $request['page'] + 1;
-        $next_link = add_query_arg('page', $next_page, $base);
-        $response->link_header('next', $next_link);
-    }
-    return $response;
-  }
-
-  public function prepare_item_for_response( $comment, $request ) {
-
-    $response = parent::prepare_item_for_response($comment, $request);
-    $response->data['new_request'] = $request->get_params(); 
-
-    $response->data['count'] = 0;
-    $response->data['replies'] = [];
-
-    if (empty($response->data))
-        return $response;
-
-       if($comment->populated_children()){
-        $id = intval($comment->comment_ID);
-        $args = array(
-          'parent'    => intval($id),
-        );
-        $comments_query = new WP_Comment_Query();
-        $comments = $comments_query->query($args);
-        $childArray = array();
-
-        foreach ( $comments as $comment ) {
-  
-          $data = parent::prepare_item_for_response( $comment, $request );
-          $childArray[] = parent::prepare_response_for_collection( $data );
-        }
-
-        $childResponse = rest_ensure_response( $childArray );
-        $count = count($comments);
-
-        $response->data['count'] = $count;
-        $response->data['replies'] = $childResponse;
-      } 
-
-      return apply_filters( 'rest_prepare_comment', $response, $comment, $request );
-
-  }
-
-  public function get_item( $request ) {
-    $comment = $this->get_comment( $request['id'] );
-    if ( is_wp_error( $comment ) ) {
-        return $comment;
-    }
-
-    $data     = $this->prepare_item_for_response( $comment, $request );
-    $response = rest_ensure_response( $data );
-
-    return $response;
-}
-}
-
-if(class_exists('MY_REST_Comments_Controller'))
-{
-    new MY_REST_Comments_Controller;
-}
-
 //custom rest comment item
 add_filter( 'rest_prepare_comment', 'my_rest_prepare_comment', 10, 3 );
 
@@ -3321,6 +3207,7 @@ class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controll
 		$args['offset']              = $request['offset'];
 		$args['order']               = $request['order'];
 		$args['orderby']             = $request['orderby'];
+    $args['author']             = $request['author'];
 		$args['paged']               = $request['page'];
 		$args['post__in']            = $request['include'];
 		$args['post__not_in']        = $request['exclude'];
