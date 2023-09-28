@@ -1508,8 +1508,8 @@ class MY_REST_Comments_Controller extends WP_REST_Comments_Controller {
 
       foreach ( $comments as $comment ) {
  
-        $data       = $this->prepare_item_for_response( $comment, $request );
-        $childArray[] = $this->prepare_response_for_collection( $data );
+        $data       = parent::prepare_item_for_response( $comment, $request );
+        $childArray[] = parent::prepare_response_for_collection( $data );
       }
 
       $childResponse = rest_ensure_response( $childArray );
