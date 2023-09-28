@@ -1552,7 +1552,6 @@ function my_rest_prepare_comment($response, $comment, $request){
         $id = intval($comment->comment_ID);
 
       $response->data['count'] = 0;
-      $response->data['request'] = $request->get_params();
       $response->data['replies'] = [];
 
       if(($comment->get_children([ 'parent' => $id, 'count' => true ] ) > 0)){
