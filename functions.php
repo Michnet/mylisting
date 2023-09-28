@@ -3297,6 +3297,8 @@ class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controll
 	public function prepare_object_for_response( $object, $request ) {
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 
+    $pdt_id = $object->get_product_id( $context );
+
 		$data = array(
 			'id'                       => $object->get_id(),
 			'all_day'                  => $object->get_all_day( $context ),
@@ -3310,8 +3312,9 @@ class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controll
 			'order_item_id'            => $object->get_order_item_id( $context ),
 			'parent_id'                => $object->get_parent_id( $context ),
 			'person_counts'            => $object->get_person_counts( $context ),
-			'product_id'               => $object->get_product_id( $context ),
-       'product_thumb'           => get_the_post_thumbnail_url($object->get_product_id( $context )),
+			'product_id'               => $pdt_id,
+      'product_thumb'            => get_the_post_thumbnail_url($pdt_id),
+      'product_title'            => get_the_title($pdt_id),
 			'resource_id'              => $object->get_resource_id( $context ),
 			'start'                    => $object->get_start( $context ),
 			'status'                   => $object->get_status( $context ),
