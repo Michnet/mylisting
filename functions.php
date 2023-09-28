@@ -1562,11 +1562,21 @@ function my_rest_prepare_comment($response, $comment, $request){
       $comments_query = new WP_Comment_Query();
       $comments = $comments_query->query($args);
       $count = count($comments);
-      
+
+      $childArray = array();
+
+      foreach ( $comments as $comment ) {
+        $com_controller = new WP_REST_Comments_Controller();
+        $data = $com_controller::prepare_item_for_response( $comment, $request );
+        $childArray[] = $com_controller::prepare_response_for_collection( $data );
+      }
+
+      $childResponse = rest_ensure_response( $childArray );
+      $count = count($comments);      
 
       $response->data['count'] = $count;
       $response->data['request'] = $request->get_params();
-      $response->data['New Kids'] = $comments;
+      $response->data['New Kids'] = $childResponse;
 
       return $response;
 
