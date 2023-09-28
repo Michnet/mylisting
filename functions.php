@@ -1500,7 +1500,7 @@ class MY_REST_Comments_Controller extends WP_REST_Comments_Controller {
 
       $id = intval($comment->comment_ID);
       $args = array(
-        'parent'    => $id,
+        'parent'    => intval($id),
       );
       $comments_query = new WP_Comment_Query();
       $comments = $comments_query->query($args);
