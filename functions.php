@@ -1541,7 +1541,7 @@ if(class_exists('MY_REST_Comments_Controller'))
 }
 
 //custom rest comment item
-add_filter( 'rest_prepare_comment', 'my_rest_prepare_comment', 10, 3 );
+//add_filter( 'rest_prepare_comment', 'my_rest_prepare_comment', 10, 3 );
 
 function my_rest_prepare_comment($response, $comment, $request){
   if (empty($response->data))
@@ -1554,11 +1554,12 @@ function my_rest_prepare_comment($response, $comment, $request){
       $id = intval($comment->comment_ID);
       $args = array(
        // 'count' => true,
-        'parent'    => $id,
+        'parent'    => intval($id),
       );
       $comments_query = new WP_Comment_Query();
       $comments = $comments_query->query($args);
       $count = count($comments);
+      
 
       $response->data['count'] = $count;
       $response->data['request'] = $request->get_params();
