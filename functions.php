@@ -1493,33 +1493,33 @@ class MY_REST_Comments_Controller extends WP_REST_Comments_Controller {
     $response = parent::prepare_item_for_response($comment, $request);
     $response->data['new_request'] = $request->get_params(); 
 
+    $response->data['count'] = 0;
+    $response->data['replies'] = [];
 
     if (empty($response->data))
         return $response;
 
-       if($comment->get_children()){
-        $response->data['kids'] = $comment->get_children();
+       if($comment->populated_children()){
+        $id = intval($comment->comment_ID);
+        $args = array(
+          'parent'    => intval($id),
+        );
+        $comments_query = new WP_Comment_Query();
+        $comments = $comments_query->query($args);
+        $childArray = array();
+
+        foreach ( $comments as $comment ) {
+  
+          $data = parent::prepare_item_for_response( $comment, $request );
+          $childArray[] = parent::prepare_response_for_collection( $data );
+        }
+
+        $childResponse = rest_ensure_response( $childArray );
+        $count = count($comments);
+
+        $response->data['count'] = $count;
+        $response->data['replies'] = $childResponse;
       } 
-
-      $id = intval($comment->comment_ID);
-      $args = array(
-        'parent'    => intval($id),
-      );
-      $comments_query = new WP_Comment_Query();
-      $comments = $comments_query->query($args);
-      $childArray = array();
-
-      foreach ( $comments as $comment ) {
- 
-        $data = parent::prepare_item_for_response( $comment, $request );
-        $childArray[] = parent::prepare_response_for_collection( $data );
-      }
-
-      $childResponse = rest_ensure_response( $childArray );
-      $count = count($comments);
-
-      $response->data['count'] = $count;
-      $response->data['New Kids'] = $childResponse;
 
       return apply_filters( 'rest_prepare_comment', $response, $comment, $request );
 
@@ -1550,36 +1550,33 @@ function my_rest_prepare_comment($response, $comment, $request){
   if (empty($response->data))
         return $response;
 
-       if($comment->get_children()){
-        $response->data['kids'] = $comment->get_children();
+      $response->data['count'] = 0;
+      $response->data['request'] = $request->get_params();
+      $response->data['replies'] = [];
+
+      if($comment->populated_children()){
+        $id = intval($comment->comment_ID);
+        $args = array(
+          'parent'    => intval($id),
+        );
+        $comments_query = new WP_Comment_Query();
+        $comments = $comments_query->query($args);
+        $childArray = array();
+
+        foreach ( $comments as $comment ) {
+          $com_controller = new WP_REST_Comments_Controller();
+          $data = $com_controller->prepare_item_for_response( $comment, $request );
+          $childArray[] = $com_controller->prepare_response_for_collection( $data );
+        }
+
+        $childResponse = rest_ensure_response( $childArray );
+        $count = count($comments);
+
+        $response->data['count'] = $count;
+        $response->data['replies'] = $childResponse;
       } 
 
-      $id = intval($comment->comment_ID);
-      $args = array(
-       // 'count' => true,
-        'parent'    => intval($id),
-      );
-      $comments_query = new WP_Comment_Query();
-      $comments = $comments_query->query($args);
-      $count = count($comments);
-
-      $childArray = array();
-
-      foreach ( $comments as $comment ) {
-        $com_controller = new WP_REST_Comments_Controller();
-        $data = $com_controller->prepare_item_for_response( $comment, $request );
-        $childArray[] = $com_controller->prepare_response_for_collection( $data );
-      }
-
-      $childResponse = rest_ensure_response( $childArray );
-      $count = count($comments);      
-
-      $response->data['count'] = $count;
-      $response->data['request'] = $request->get_params();
-      $response->data['New Kids'] = $childResponse;
-
       return $response;
-
 } 
 
 //Custom woo product query
