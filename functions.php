@@ -1573,7 +1573,7 @@ function my_rest_prepare_comment($response, $comment, $request){
         $count = count($comments);
 
         $response->data['count'] = $count;
-        $response->data['replies'] = $childResponse;
+        $response->data['replies'] = $childResponse->data;
       } 
 
       return $response;
