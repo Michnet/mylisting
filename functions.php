@@ -1434,7 +1434,6 @@ class MY_REST_Comments_Controller extends WP_REST_Comments_Controller {
   public function get_items( $request ) {
 
     $response = parent::get_items($request);
-    $response->data['new_request'] = $request->get_params(); 
 
     $prepared_args = array('comment__in' => $request['include'], 'comment__not_in' => $request['exclude'], 'number' => $request['per_page'], 'post_id' => $request['post'] ? $request['post'] : '', 'parent' => isset($request['parent']) ? intval($request['parent']) : '', 'search' => $request['search'], 'offset' => $request['offset'], 'orderby' => $this->normalize_query_param($request['orderby']), 'order' => $request['order'], 'status' => 'approve', 'type' => 'comment', 'no_found_rows' => false, 'hierarchical' => 'threaded');
     if (empty($request['offset'])) {
@@ -1491,6 +1490,8 @@ class MY_REST_Comments_Controller extends WP_REST_Comments_Controller {
   public function prepare_item_for_response( $comment, $request ) {
 
     $response = parent::prepare_item_for_response($comment, $request);
+    $response->data['new_request'] = $request->get_params(); 
+
 
     if (empty($response->data))
         return $response;
