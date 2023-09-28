@@ -3286,4 +3286,54 @@ class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controll
 		return $this->prepare_items_query( $args, $request );
 	}
 
+  /**
+	 * Prepare a single product output for response.
+	 *
+	 * @param WC_Booking      $object  Object data.
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function prepare_object_for_response( $object, $request ) {
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+
+		$data = array(
+			'id'                       => $object->get_id(),
+			'all_day'                  => $object->get_all_day( $context ),
+			'cost'                     => $object->get_cost( $context ),
+			'customer_id'              => $object->get_customer_id( $context ),
+			'date_created'             => $object->get_date_created( $context ),
+			'date_modified'            => $object->get_date_modified( $context ),
+			'end'                      => $object->get_end( $context ),
+			'google_calendar_event_id' => $object->get_google_calendar_event_id( $context ),
+			'order_id'                 => $object->get_order_id( $context ),
+			'order_item_id'            => $object->get_order_item_id( $context ),
+			'parent_id'                => $object->get_parent_id( $context ),
+			'person_counts'            => $object->get_person_counts( $context ),
+			'product_id'               => $object->get_product_id( $context ),
+       'product_thumb'           => get_the_post_thumbnail_url($object->get_product_id( $context )),
+			'resource_id'              => $object->get_resource_id( $context ),
+			'start'                    => $object->get_start( $context ),
+			'status'                   => $object->get_status( $context ),
+			'local_timezone'           => $object->get_local_timezone( $context ),
+		);
+
+		$data     = $this->add_additional_fields_to_object( $data, $request );
+		$data     = $this->filter_response_by_context( $data, $context );
+		$response = rest_ensure_response( $data );
+		$response->add_links( $this->prepare_links( $object, $request ) );
+
+		/**
+		 * Filter the data for a response.
+		 *
+		 * The dynamic portion of the hook name, $this->post_type,
+		 * refers to object type being prepared for the response.
+		 *
+		 * @param WP_REST_Response $response The response object.
+		 * @param WC_Data          $object   Object data.
+		 * @param WP_REST_Request  $request  Request object.
+		 */
+		return apply_filters( "woocommerce_rest_prepare_{$this->post_type}_object", $response, $object, $request );
+	}
+
 }
