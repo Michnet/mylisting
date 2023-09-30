@@ -3180,7 +3180,7 @@ function get_listings_query($request) {
 }
 
 //Submit Reviews
-class Custom_Submit_Review extends Submit_Review {
+class Custom_Submit_Review extends \Jet_Reviews\Endpoints\Submit_Review{
 
 	/**
 	 * [get_method description]
