@@ -3394,8 +3394,6 @@ function rest_delete_review( $request ) {
   if (!empty( $review_list )) {
     if(is_array($review_list)){
       if (in_array($post_id, $review_list)){
-        $review_list[] = $post_id;
-
         $review_list = array_diff($review_list, array($post_id));
         update_user_meta( $author_id, 'reviewed_list', $review_list);
       }
