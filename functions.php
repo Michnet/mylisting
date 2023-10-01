@@ -196,7 +196,7 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
    $user_meta = [];
    $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
    $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
-   $user_meta['following'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
+   $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
    //$avatar = get_avatar_url($user_obj->ID);
    //$user_obj->avatar = $avatar;
    $request['id'] = $user_obj->ID;
@@ -1011,8 +1011,10 @@ try {
 
     $user_meta = [];
 
-    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? [];
-    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? [];
+    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? false;
+    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? false;
+    $user_meta['reviewed'] = get_user_meta( $user_id, 'reviewed_list', true ) ?? false;
+
     //$response['user'] = $user_data;
     //$response['user'] -> user_meta = $user_meta;
 
