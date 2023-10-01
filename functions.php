@@ -194,8 +194,9 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
    $user_name = $request['name'];
    $user_obj = get_user_by('login', $user_name);
    $user_meta = [];
-   $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true );
-   $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true );
+   $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
+   $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
+   $user_meta['following'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
    //$avatar = get_avatar_url($user_obj->ID);
    //$user_obj->avatar = $avatar;
    $request['id'] = $user_obj->ID;
