@@ -3347,6 +3347,7 @@ function rest_submit_reviews( $request ) {
     'data'    => array (
       'item'   => $return_data,
       'rating' => $insert_data[ 'rating' ],
+      'user_meta'=> $review_list
     ),
   ) );
 }
