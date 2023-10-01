@@ -3272,7 +3272,7 @@ function rest_submit_reviews( $request ) {
   }
 
   $review_list = get_user_meta( $author_id, 'reviewed_list' , true );
-  if (! empty( $review_list )) {
+  if (empty( $review_list )) {
     $tempArr = array();
     $tempArr[] = $source_id;
     add_user_meta( $author_id, 'reviewed_list', $tempArr);
