@@ -3405,6 +3405,9 @@ function rest_delete_review( $request ) {
   return rest_ensure_response( array(
     'success'  => true,
     'message' => __( 'The review have been deleted', 'jet-reviews' ),
+    'data'    => array (
+    'user_meta'=> $review_list
+    ),
   ) );
 }
 
