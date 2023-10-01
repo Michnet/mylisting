@@ -3187,7 +3187,7 @@ function get_listings_query($request) {
 //Submit Reviews
 function rest_submit_reviews( $request ) {
   $base_class = new \Jet_Reviews\Endpoints\Submit_Review();
-  $reviesData = new \Jet_Reviews\Reviews\Data();
+  $reviewsData = new \Jet_Reviews\Reviews\Data();
 
   $args = $request->get_params();
 
@@ -3248,7 +3248,7 @@ function rest_submit_reviews( $request ) {
     'pinned'      => 0,
   );
 
-  $insert_data = reviesData::get_instance()->add_new_review( $prepared_data );
+  $insert_data = $reviewsData::get_instance()->add_new_review( $prepared_data );
 
   if ( ! $insert_data ) {
     return rest_ensure_response( array (
