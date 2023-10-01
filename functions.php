@@ -636,6 +636,11 @@ add_action('rest_api_init', function () {
       'permission_callback' => '__return_true',
   ));
 
+  register_rest_route('m-api/v1', 'delete-review(?:/(?P<id>\d+))?',array(
+    'methods'  => 'POST',
+    'callback' => 'rest_delete_review',
+    'permission_callback' => '__return_true',
+    ));
 
   register_rest_route('m-api/v1', 'submit-review(?:/(?P<id>\d+))?',array(
     'methods'  => 'POST',
@@ -3184,7 +3189,7 @@ function get_listings_query($request) {
 		return $listings;
 }
 
-//Submit Reviews
+//User Reviews
 function rest_submit_reviews( $request ) {
   $base_class = new \Jet_Reviews\Endpoints\Submit_Review();
   $reviewsData = new \Jet_Reviews\Reviews\Data();
@@ -3349,6 +3354,54 @@ function rest_submit_reviews( $request ) {
       'rating' => $insert_data[ 'rating' ],
       'user_meta'=> $review_list
     ),
+  ) );
+}
+
+function rest_delete_review( $request ) {
+ // $delete_class = new \Jet_Reviews\Endpoints\Delete_Review();
+  $reviewsData = new \Jet_Reviews\Reviews\Data();
+
+
+  $args = $request->get_params();
+
+  $author_id = $args['author'];
+  $post_id = isset( $args['post_id'] ) && ! empty( $args['post_id'] ) ? $args['post_id'] : false;
+  $review_id = isset( $args['id'] ) && ! empty( $args['id'] ) ? $args['id'] : false;
+
+  if ( ! $review_id ) {
+    return rest_ensure_response( array(
+      'success' => false,
+      'message' => __( 'Error', 'jet-reviews' ),
+    ) );
+  }
+
+  jet_reviews()->user_manager->delete_user_approval_review( $review_id );
+
+  $delete_review = $reviewsData::get_instance()->delete_review_by_id( $review_id );
+
+  if ( 0 === $delete_review ) {
+    return rest_ensure_response( array(
+      'success' => false,
+      'message' => __( 'The review has not been deleted', 'jet-reviews' ),
+    ) );
+  }
+
+  $review_list = get_user_meta( $author_id, 'reviewed_list' , true );
+
+  if (!empty( $review_list )) {
+    if(is_array($review_list)){
+      if (in_array($post_id, $review_list)){
+        $review_list[] = $post_id;
+
+        $review_list = array_diff($review_list, array($post_id));
+        update_user_meta( $author_id, 'reviewed_list', $review_list);
+      }
+    }
+  }
+
+  return rest_ensure_response( array(
+    'success'  => true,
+    'message' => __( 'The review have been deleted', 'jet-reviews' ),
   ) );
 }
 
