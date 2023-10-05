@@ -491,7 +491,7 @@ function all_items_ids($request) {
   	$postList = array();
   
   	foreach($posts as $post){
-      $postList[] = $slugs ? $post -> slug : $post-> ID;
+      $postList[] = $slugs ? $post -> post_name : $post-> ID;
     }
 
     $response = new WP_REST_Response($postList);
