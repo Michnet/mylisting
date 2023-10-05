@@ -1395,6 +1395,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['tagline'] = $tagline   ?? null; 
     $_data['category'] = $category  ?? null;
     $_data['home'] = $meta['_listing-home-page'][0] ?? null; 
+    $_data['community_id'] = $meta['community_id'][0] ?? null; 
     $_data['phone'] = $phone  ?? null;
     $_data['page_views'] = $views  ?? null;
     $_data['content'] = $the_content ?? null;
