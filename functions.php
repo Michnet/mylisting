@@ -171,7 +171,10 @@ function add_listing_fields($post_id) {
       update_post_meta( $post_id, 'listing_logo', $listing->get_logo());
       update_post_meta( $post_id, 'listing_cover', $listing->get_cover_image());
       if(!$existing_grp){
-        add_post_meta( $post_id, 'community_id', $group_id);
+        if($group_id){
+          add_post_meta( $post_id, 'community_id', $group_id);
+          groups_add_groupmeta($group_id, 'linked_post', $post_id, true);
+        }
       }
 
       add_action('save_post_job_listing', 'add_listing_fields');
