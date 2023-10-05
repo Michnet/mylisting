@@ -139,16 +139,29 @@ function add_listing_fields($post_id) {
       
    $excer = get_post_meta($post_id, '_short-description', true);
    $featImg = get_post_meta($post_id, '_featured-image', true)[0];
-   $tickets = get_post_meta($post_id, '_tickets', true)[0] ?? null;
-
-   $listing_meta = get_post_meta($post_id);
+   $existing_grp = get_post_meta($post_id, 'community_id', true) ?? false;
 
    $imId = attachment_url_to_postid( $featImg);
+
+   $post_ob = get_post($post_id);
 
     $my_args = array( 
       'ID' => $post_id,
       'post_excerpt' => $excer,
     );
+
+    $g_args = array(
+      'group_id'     => $existing_grp ?? 0,
+      'creator_id'   => $post_ob->post_author,
+      'name'         => get_the_title($post_id),
+      'description'  => '',
+     // 'slug'         => '',
+      'status'       => 'public',
+      'enable_forum' => 0,
+      'date_created' => bp_core_current_time()
+    );
+
+    $group_id = groups_create_group($g_args);
 
     $listing = \MyListing\Src\Listing::get( $post_id );
   
@@ -157,6 +170,9 @@ function add_listing_fields($post_id) {
       wp_update_post( $my_args );
       update_post_meta( $post_id, 'listing_logo', $listing->get_logo());
       update_post_meta( $post_id, 'listing_cover', $listing->get_cover_image());
+      if(!isset($existing_grp)){
+        add_post_meta( $post_id, 'community_id', $group_id);
+      }
 
       add_action('save_post_job_listing', 'add_listing_fields');
 }
