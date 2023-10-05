@@ -454,6 +454,7 @@ function all_items_ids($request) {
     $type  = $params['type'];
     $pdt_type  = $params['product_type'];
     $l_type  = $params['listing_type'] ?? null;
+    $slugs  = $params['slugs'] ?? null;
 
     $args = array(
         'post_type'  => $type,
@@ -490,7 +491,7 @@ function all_items_ids($request) {
   	$postList = array();
   
   	foreach($posts as $post){
-      $postList[] = $post-> ID;
+      $postList[] = $slugs ? $post -> slug : $post-> ID;
     }
 
     $response = new WP_REST_Response($postList);
