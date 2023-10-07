@@ -681,6 +681,12 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 
+    register_rest_route('m-api/v1', 'activity(?:/(?P<id>\d+))?',array(
+      'methods'  => 'GET',
+      'callback' => 'public_activity',
+      'permission_callback' => '__return_true',
+  ));
+
     register_rest_route('m-api/v1', 'listings(?:/(?P<id>\d+))?',array(
         'methods'  => 'GET',
         'callback' => 'get_listings_query',
@@ -735,6 +741,160 @@ function random_digits($length=10) {
   }
 
   return $string;
+}
+
+
+//public activity rest api
+
+function public_activity( $request ) {
+  $rootClass = new BP_REST_Activity_Endpoint();
+  global $bp;
+
+  $args = array(
+    'exclude'           => $request['exclude'],
+    'in'                => $request['include'],
+    'page'              => $request['page'],
+    'per_page'          => $request['per_page'],
+    'search_terms'      => $request['search'],
+    'sort'              => strtoupper( $request['order'] ),
+    'order_by'          => $request['orderby'],
+    'spam'              => $request['status'],
+    'display_comments'  => $request['display_comments'],
+    'site_id'           => $request['site_id'],
+    'group_id'          => $request['group_id'],
+    'scope'             => $request['scope'],
+    'privacy'           => ( ! empty( $request['privacy'] ) ? ( is_array( $request['privacy'] ) ? $request['privacy'] : (array) $request['privacy'] ) : '' ),
+    'count_total'       => true,
+    'fields'            => 'all',
+    'show_hidden'       => false,
+    'update_meta_cache' => true,
+    'filter'            => false,
+  );
+
+  if ( empty( $args['display_comments'] ) || 'false' === $args['display_comments'] ) {
+    $args['display_comments'] = false;
+  }
+
+  if ( empty( $request['exclude'] ) ) {
+    $args['exclude'] = false;
+  }
+
+  if ( empty( $request['include'] ) ) {
+    $args['in'] = false;
+  }
+
+  if ( isset( $request['after'] ) ) {
+    $args['since'] = $request['after'];
+  }
+
+  if ( isset( $request['user_id'] ) ) {
+    $args['filter']['user_id'] = $request['user_id'];
+    if ( ! empty( $request['user_id'] ) ) {
+      $bp->displayed_user->id = (int) $request['user_id'];
+    }
+  }
+
+  $item_id = 0;
+  if ( ! empty( $args['group_id'] ) ) {
+    $request['component']         = 'groups';
+    $args['filter']['object']     = 'groups';
+    $args['filter']['primary_id'] = $args['group_id'];
+    $args['privacy']              = array( 'public' );
+
+    $item_id = $args['group_id'];
+  } elseif ( ! empty( $request['component'] ) && 'groups' === $request['component'] && ! empty( $request['primary_id'] ) ) {
+    $args['privacy'] = array( 'public' );
+  }
+
+  if ( ! empty( $args['site_id'] ) ) {
+    $args['filter']['object']     = 'blogs';
+    $args['filter']['primary_id'] = $args['site_id'];
+
+    $item_id = $args['site_id'];
+  }
+
+  if ( empty( $args['group_id'] ) && empty( $args['site_id'] ) ) {
+    if ( isset( $request['component'] ) ) {
+      $args['filter']['object'] = $request['component'];
+    }
+
+    if ( ! empty( $request['primary_id'] ) ) {
+      $item_id                      = $request['primary_id'];
+      $args['filter']['primary_id'] = $item_id;
+    }
+  }
+
+  if ( empty( $request['scope'] ) ) {
+    $args['scope'] = false;
+  }
+
+  if ( isset( $request['type'] ) ) {
+    $args['filter']['action'] = $request['type'];
+  }
+
+  if ( ! empty( $request['secondary_id'] ) ) {
+    $args['filter']['secondary_id'] = $request['secondary_id'];
+  }
+
+  if ( ! empty( $args['order_by'] ) && 'include' === $args['order_by'] ) {
+    $args['order_by'] = 'in';
+  }
+
+  if ( $args['in'] ) {
+    $args['count_total'] = false;
+  }
+
+  if ( $rootClass->show_hidden( $request['component'], $item_id ) ) {
+    $args['show_hidden'] = true;
+  }
+
+  $args['scope'] = $rootClass->bp_rest_activity_default_scope(
+    $args['scope'],
+    ( $request['user_id'] ? $request['user_id'] : 0 ),
+    $args['group_id'],
+    isset( $request['component'] ) ? $request['component'] : '',
+    $request['primary_id']
+  );
+
+  if ( empty( $args['scope'] ) ) {
+    $args['privacy'] = 'public';
+  }
+
+  /**
+   * Filter the query arguments for the request.
+   *
+   * @param array           $args    Key value array of query var to query value.
+   * @param WP_REST_Request $request The request sent to the API.
+   *
+   * @since 0.1.0
+   */
+  $args = apply_filters( 'bp_rest_activity_get_items_query_args', $args, $request );
+
+  // Actually, query it.
+  $activities = bp_activity_get( $args );
+
+  $retval = array();
+  foreach ( $activities['activities'] as $activity ) {
+    $retval[] = $rootClass->prepare_response_for_collection(
+      $rootClass->prepare_item_for_response( $activity, $request )
+    );
+  }
+
+  $response = rest_ensure_response( $retval );
+  $response = bp_rest_response_add_total_headers( $response, $activities['total'], $args['per_page'] );
+
+  /**
+   * Fires after a list of activities is fetched via the REST API.
+   *
+   * @param array            $activities Fetched activities.
+   * @param WP_REST_Response $response   The response data.
+   * @param WP_REST_Request  $request    The request sent to the API.
+   *
+   * @since 0.1.0
+   */
+  do_action( 'bp_rest_activity_get_items', $activities, $response, $request );
+
+  return $response;
 }
 
 //Auth social by JWT
