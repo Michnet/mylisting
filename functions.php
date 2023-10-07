@@ -844,9 +844,9 @@ function public_activity( $request ) {
     $args['count_total'] = false;
   }
 
-  if ( $rootClass::show_hidden( $request['component'], $item_id ) ) {
+  /* if ( $rootClass::show_hidden( $request['component'], $item_id ) ) {
     $args['show_hidden'] = true;
-  }
+  } */
 
   $args['scope'] = $rootClass->bp_rest_activity_default_scope(
     $args['scope'],
