@@ -844,7 +844,7 @@ function public_activity( $request ) {
     $args['count_total'] = false;
   }
 
-  if ( $rootClass->show_hidden( $request['component'], $item_id ) ) {
+  if ( $rootClass::show_hidden( $request['component'], $item_id ) ) {
     $args['show_hidden'] = true;
   }
 
