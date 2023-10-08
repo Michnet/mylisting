@@ -155,7 +155,7 @@ function add_listing_fields($post_id) {
       'creator_id'   => $post_ob->post_author,
       'name'         => get_the_title($post_id),
       'description'  => '',
-     // 'slug'         => '',
+      'slug'         => $post_ob->post_name,
       'status'       => 'public',
       'enable_forum' => 0,
       'date_created' => bp_core_current_time()
