@@ -173,7 +173,7 @@ function add_listing_fields($post_id) {
       if(!$existing_grp){
         if($group_id){
           add_post_meta( $post_id, 'community_id', $group_id);
-          groups_add_groupmeta($group_id, 'linked_post', $post_id, true);
+          groups_add_groupmeta($group_id, 'linked_post', $post_id);
         }
       }
 
