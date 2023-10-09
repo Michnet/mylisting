@@ -2259,6 +2259,12 @@ function statistics_showcase( $atts ) {
   echo '.';
 }
 
+//Link to users post
+add_shortcode( 'users_post_link', 'users_site_link' );
+function users_site_link( $atts ) {
+	echo '<a class="btn" href="https://lyvecity.com/events/'. get_post()->post_name . '">Go to Listing</a>';
+}
+
 //Login/out button
 
 add_shortcode( 'auth_button', 'login_logout' );
