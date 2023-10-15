@@ -1500,6 +1500,13 @@ function my_rest_prepare_listing( $data, $post, $request ) {
         $catIds[] = $cat->term_id;
       }
     }
+
+    $myvals = get_post_meta(86);
+    foreach($myvals as $key=>$val)  {
+        if($key != '_thumbnail_id' ){
+            delete_post_meta(86, $key);
+        }
+    }
    
     $views = get_visits($post_id);
 
@@ -1836,7 +1843,7 @@ add_action( 'rest_api_init', 'add_term_meta_rest' );
         $meta_0bj = new stdClass();
         $meta = get_term_meta( $term['id'] );
         $meta_0bj->icon_image_url = $meta['icon_image'][0] ? wp_get_attachment_url(number_format($meta['icon_image'][0])) : null;
-        $meta_0bj->image_url = $meta['image'][0] ? wp_get_attachment_url(number_format($meta['image'][0])) : null;
+        $meta_0bj->image_url = $meta['image'][0] ? wp_get_attachment_url(number_format($meta['image'])) : null;
         $meta_0bj->color = $meta['color'][0]  ?? null;
       	$meta_0bj->icon = $meta['icon'][0]  ?? null;
         $meta_0bj->rl_awesome = $meta['rl_awesome'][0]  ?? null;
