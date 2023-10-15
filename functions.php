@@ -1848,6 +1848,7 @@ add_action( 'rest_api_init', 'add_term_meta_rest' );
       	$meta_0bj->icon = $meta['icon'][0]  ?? null;
         $meta_0bj->rl_awesome = $meta['rl_awesome'][0]  ?? null;
         $meta_0bj->iconify = $meta['iconify'][0]  ?? null;
+        $meta_0bj->meta = $meta  ?? null;
         return $meta_0bj;
     }
 
