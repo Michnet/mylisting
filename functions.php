@@ -133,9 +133,8 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
 
 //When image deleted
 function execute_on_deleted_post_event($postid, $post){
-  //xdebug_start_trace();
+  xdebug_start_trace();
   error_log("Post deletionn error.");
-  error_log(xdebug_start_trace());
   xdebug_stop_trace();
   }
   // add the action
@@ -1513,13 +1512,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       }
     }
 
-    $myvals = get_post_meta(86);
-    foreach($myvals as $key=>$val)  {
-        if($key != '_thumbnail_id' ){
-            delete_post_meta(86, $key);
-        }
-    }
-   
     $views = get_visits($post_id);
 
     if($catIds){
