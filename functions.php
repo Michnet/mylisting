@@ -131,6 +131,15 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
     return $args;
 }
 
+//When image deleted
+function execute_on_deleted_post_event($postid, $post){
+  error_log("Post deletionn error.");
+  }
+  // add the action
+
+  add_action( "deleted_post", "execute_on_deleted_post_event" , 10, 2);
+  
+
 //Edit listing fields
 function add_listing_fields($post_id) {
   // If this is a revision, get real post ID
