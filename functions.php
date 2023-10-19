@@ -133,7 +133,10 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
 
 //When image deleted
 function execute_on_deleted_post_event($postid, $post){
+  //xdebug_start_trace();
   error_log("Post deletionn error.");
+  error_log(xdebug_start_trace());
+  xdebug_stop_trace();
   }
   // add the action
 
