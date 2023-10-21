@@ -190,8 +190,7 @@ function add_listing_fields($post_id) {
 
       add_action('save_post_job_listing', 'add_listing_fields');
 }
-add_action( 'save_post_job_listing', 'add_listing_fields' );
-
+add_action( 'save_post_job_listing', 'add_listing_fields', 11, 1);
 
 //Product fields
 function add_product_fields($post_id) {
@@ -3090,7 +3089,6 @@ function update_vendor_categories($post_id)
             $new_list = $cat_ids;
             add_user_meta($author_id, 'store_categories', $new_list);
         }
-
     }
 }
 
