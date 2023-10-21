@@ -143,7 +143,7 @@ function execute_on_deleted_post_event($postid, $post){
   
 
 //Edit listing fields
-function add_listing_fields($post_id) {
+function add_listing_fields($post_id, $post, $update) {
   // If this is a revision, get real post ID
   if ( $parent_id = wp_is_post_revision( $post_id ) ) 
       $post_id = $parent_id;
@@ -190,7 +190,7 @@ function add_listing_fields($post_id) {
 
       add_action('save_post_job_listing', 'add_listing_fields');
 }
-add_action( 'save_post_job_listing', 'add_listing_fields', 11, 1);
+add_action( 'save_post_job_listing', 'add_listing_fields', 11, 3);
 
 //Product fields
 function add_product_fields($post_id) {
