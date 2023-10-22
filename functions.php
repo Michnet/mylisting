@@ -1490,6 +1490,8 @@ function process_dates($listing){
 }
 
 function my_rest_prepare_listing( $data, $post, $request ) {
+
+    $params = $request->get_query_params();
     $_data = $data->data;
     $post_id = $post->ID;
     $listing_post = \MyListing\Src\Listing::get( $post_id);
@@ -1592,6 +1594,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 	  $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
   	$_data['categories'] = $cats   ?? null;
     $_data['locations'] = $locs   ?? null;
+
+    if(isset($params['_fields'])){
+      $_data['fields'] = $params['_fields']  ?? null;
+    }
 
     $data->data = $_data;
     return $data;
