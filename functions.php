@@ -3339,6 +3339,17 @@ function get_listings_query($request) {
 			];
 		}
 
+    //category
+    if (!empty($params['category'] ) ) {
+      $category  = $params['category'];	
+
+      $args['tax_query'][] = [
+        'taxonomy' => 'job_listing_category',
+        'field'    => 'slug',
+        'terms'    => [ $category ],
+      ];
+    }
+
 		if ( $context === 'term-search' ) {
 			$taxonomy = ! empty( $params['taxonomy'] ) ? sanitize_text_field( $params['taxonomy'] ) : false;
 			$term = ! empty( $params['term'] ) ? sanitize_text_field( $params['term'] ) : false;
