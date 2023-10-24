@@ -3340,7 +3340,7 @@ function get_listings_query($request) {
 		}
 
     //category
-    if (isset($params['category'] ) ) {
+    if(isset($params['category'] ) ) {
       $category  = $params['category'];	
 
       $args['tax_query'][] = [
@@ -3406,7 +3406,7 @@ function get_listings_query($request) {
 
     $listings = directory_query_args($args);
 
-		return $listings;
+		return $params['category'];
 }
 
 //User Reviews
