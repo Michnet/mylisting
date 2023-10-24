@@ -3346,7 +3346,7 @@ function get_listings_query($request) {
       $args['tax_query'][] = [
         'taxonomy' => 'job_listing_category',
         'field'    => 'slug',
-        'terms'    => [ $category ],
+        'terms'    =>  array( $category),
         'operator' => 'NOT IN',
         'include_children' => true,
       ];
