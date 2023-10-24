@@ -3365,7 +3365,9 @@ function get_listings_query($request) {
 				'field' => 'term_id',
 				'terms' => $term,
 				'operator' => $tax_query_operator,
-				'include_children' => $tax_query_operator !== 'AND',
+				//'include_children' => $tax_query_operator !== 'AND',			
+        'include_children' => true,
+
 			];
 
 			// add support for nearby order in single term page
