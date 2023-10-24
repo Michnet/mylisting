@@ -3347,6 +3347,7 @@ function get_listings_query($request) {
         'taxonomy' => 'job_listing_category',
         'field'    => 'slug',
         'terms'    => [ $category ],
+        'operator' => 'NOT IN',
         'include_children' => true,
       ];
     }
@@ -3406,7 +3407,7 @@ function get_listings_query($request) {
 
     $listings = directory_query_args($args);
 
-		return $params['category'];
+		return $listings;
 }
 
 //User Reviews
