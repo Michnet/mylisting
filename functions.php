@@ -3340,7 +3340,7 @@ function get_listings_query($request) {
 		}
 
     //category
-    if (!empty($params['category'] ) ) {
+    if (isset($params['category'] ) ) {
       $category  = $params['category'];	
 
       $args['tax_query'][] = [
@@ -3365,9 +3365,8 @@ function get_listings_query($request) {
 				'field' => 'term_id',
 				'terms' => $term,
 				'operator' => $tax_query_operator,
-				//'include_children' => $tax_query_operator !== 'AND',			
-        'include_children' => true,
-
+				'include_children' => $tax_query_operator !== 'AND',			
+        //
 			];
 
 			// add support for nearby order in single term page
