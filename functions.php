@@ -3347,6 +3347,7 @@ function get_listings_query($request) {
         'taxonomy' => 'job_listing_category',
         'field'    => 'slug',
         'terms'    => [ $category ],
+        'include_children' => true,
       ];
     }
 
