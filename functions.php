@@ -3314,7 +3314,7 @@ function get_listings_query($request) {
 			'offset' => $page * $per_page,
 			'orderby' => $orderby,
 			'posts_per_page' => $per_page,
-			'tax_query' => [],
+			//'tax_query' => [],
 			'meta_query' => $meta_q,
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       'fields' =>  'ids',
@@ -3341,7 +3341,7 @@ function get_listings_query($request) {
 		}
 
     //category
-    if(isset($params['category'] ) ) {
+    if($params['category'] ) {
       $category  = $params['category'];	
 
       $args['tax_query'][] = [
