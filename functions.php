@@ -3347,7 +3347,7 @@ function get_listings_query($request) {
         'taxonomy' => 'job_listing_category',
         'field'    => 'slug',
         'terms'    =>  array( $category),
-        'operator' => 'NOT IN',
+        //'operator' => 'NOT IN',
         'include_children' => true,
       ];
     }
