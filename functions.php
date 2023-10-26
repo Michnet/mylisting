@@ -2045,7 +2045,7 @@ function directory_query_args( $args = [] ) {
     }
 
     if ( empty( $query_args['tax_query'] ) ) {
-       // unset( $query_args['tax_query'] );
+        unset( $query_args['tax_query'] );
     }
 
     if ( ! $query_args['author'] ) {
