@@ -2109,7 +2109,7 @@ function directory_query_args( $args = [] ) {
     remove_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby' ], 35 );
 
     //return $result;
-    return $query_args;
+    return $args;
 }
 
 // Extend the `WP_REST_Posts_Controller` class
