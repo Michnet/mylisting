@@ -93,10 +93,6 @@ function($response, $handler, $request){
 }, 10, 3
 ); */
 
-add_filter( 'show_admin_bar' , 'my_function_admin_bar');
-function my_function_admin_bar($show_admin_bar) {
-	return ( current_user_can( 'administrator' ) ) ? $show_admin_bar : false;
-}
 
 //Rest init
 add_action( 'rest_api_init', 'addOrderbySupportRest' );
