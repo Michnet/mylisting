@@ -2108,8 +2108,8 @@ function directory_query_args( $args = [] ) {
     remove_filter( 'posts_join', [ $query_base_class, 'rating_field_join' ], 35 );
     remove_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby' ], 35 );
 
-    //return $result;
-    return $args;
+    return $result;
+    //return $args;
 }
 
 // Extend the `WP_REST_Posts_Controller` class
@@ -3298,12 +3298,12 @@ function get_ordering_clauses( &$args, $type, $form_data ) {
 function get_listings_query($request) {
     global $wpdb;
     // handle find listings using explore page query url
-        $params = $request->get_params();
+    $params = $request->get_params();
 
-        $sort = $params['sort'] ?? null;
-        $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
-        $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
-        $page = absint( isset($params['page']) ? $params['page'] : 0 );
+    $sort = $params['sort'] ?? null;
+    $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
+    $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
+    $page = absint( isset($params['page']) ? $params['page'] : 0 );
 
     $meta_q = [];
 		$per_page = absint( isset($params['per_page']) ? $params['per_page'] : c27()->get_setting('general_explore_listings_per_page', 9));
@@ -3341,7 +3341,7 @@ function get_listings_query($request) {
 		}
 
     //category
-    if($params['category'] ) {
+    if(isset($params['category'])){
       $category  = $params['category'];	
 
       $args['tax_query'][] = [
