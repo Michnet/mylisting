@@ -1830,7 +1830,7 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
 
     $cat_meta = get_term_meta($term_id);
 
-    if ($cat_meta['image'][0] && $cat_meta['color'][0] && $cat_meta['cover_photo'][0]) {
+    if (isset($cat_meta['image'][0]) && !empty($cat_meta['image'][0]) && $cat_meta['color'][0] && $cat_meta['cover_photo'][0]) {
         return;
     } else {
         $borrowed_meta = inherit_meta($term_id, 'job_listing_category');
