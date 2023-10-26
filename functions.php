@@ -2045,7 +2045,7 @@ function directory_query_args( $args = [] ) {
     }
 
     if ( empty( $query_args['tax_query'] ) ) {
-        unset( $query_args['tax_query'] );
+       // unset( $query_args['tax_query'] );
     }
 
     if ( ! $query_args['author'] ) {
@@ -2108,8 +2108,8 @@ function directory_query_args( $args = [] ) {
     remove_filter( 'posts_join', [ $query_base_class, 'rating_field_join' ], 35 );
     remove_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby' ], 35 );
 
-    return $result;
-    //return $query_args;
+    //return $result;
+    return $query_args;
 }
 
 // Extend the `WP_REST_Posts_Controller` class
