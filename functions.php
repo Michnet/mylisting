@@ -1798,6 +1798,130 @@ function custom_product_rest($response, $object, $request) {
     return $response;
 }
 
+//category tax meta inherit
+function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
+{
+
+  if($taxonomy !== 'job_listing_category'){
+    return;
+  }
+    // If this is a revision, get real post ID
+    if ($parent_id = wp_is_post_revision($term_id))
+        $term_id = $parent_id;
+
+    $meta_arr = array();
+
+    if (!function_exists('inherit_meta')) {
+
+        function inherit_meta($new_id, $tax_slug)
+        {
+            $ansestor_arr = get_ancestors($new_id, $tax_slug);
+            if ($ansestor_arr) {
+                $ans_id = $ansestor_arr[0];
+                $ans_meta = get_term_meta($ans_id);
+                if ($ans_meta['image'][0]) {
+                    return $ans_meta;
+                } else {
+                    return inherit_meta($ans_id);
+                }
+            }
+        }
+    }
+
+    $cat_meta = get_term_meta($term_id);
+
+    if ($cat_meta['image'][0] && $cat_meta['color'][0] && $cat_meta['cover_photo'][0]) {
+        return;
+    } else {
+        $borrowed_meta = inherit_meta($term_id, 'job_listing_category');
+        if ($borrowed_meta) {
+            $meta_arr['color'] = $cat_meta['color'] ? $cat_meta['color'] : $borrowed_meta['color'];
+            $meta_arr['image'] = $cat_meta['image'] ? $cat_meta['image'] : $borrowed_meta['image'];
+            $meta_arr['rl_awesome'] = $cat_meta['rl_awesome'] ? $cat_meta['rl_awesome'] : $borrowed_meta['rl_awesome'];
+        }
+    }
+
+    $total_meta = array_replace_recursive($cat_meta, $meta_arr);
+
+
+    remove_action('saved_term', 'inherit_cat_tax_meta');
+    //wp_update_post( $my_args );
+    if ($meta_arr['color'][0]) {
+        update_term_meta($term_id, 'color', $meta_arr['color'][0]);
+    }
+    if ($meta_arr['image'][0]) {
+        update_term_meta($term_id, 'image', $meta_arr['image'][0]);
+    }
+    if ($meta_arr['rl_awesome'][0]) {
+        update_term_meta($term_id, 'rl_awesome', $meta_arr['rl_awesome'][0]);
+    }
+
+    add_action('saved_term', 'inherit_cat_tax_meta');
+}
+add_action('saved_term', 'inherit_cat_tax_meta', 10, 5);
+
+
+//term meta inheritance
+function add_woo_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
+{
+
+  if($taxonomy !== 'product_cat'){
+    return;
+  }
+    // If this is a revision, get real post ID
+    if ($parent_id = wp_is_post_revision($term_id))
+        $term_id = $parent_id;
+
+    $meta_arr = array();
+
+    if (!function_exists('inherit_meta')) {
+
+        function inherit_meta($new_id, $tax_slug)
+        {
+            $ansestor_arr = get_ancestors($new_id, $tax_slug);
+            if ($ansestor_arr) {
+                $ans_id = $ansestor_arr[0];
+                $ans_meta = get_term_meta($ans_id);
+                if ($ans_meta['thumbnail_id'][0]) {
+                    return $ans_meta;
+                } else {
+                    return inherit_meta($ans_id);
+                }
+            }
+        }
+    }
+
+    $cat_meta = get_term_meta($term_id);
+
+    if ($cat_meta['thumbnail_id'][0] && $cat_meta['color'][0] && $cat_meta['cover_photo'][0]) {
+        return;
+    } else {
+        $borrowed_meta = inherit_meta($term_id, 'product_cat');
+        if ($borrowed_meta) {
+            $meta_arr['color'] = $cat_meta['color'] ? $cat_meta['color'] : $borrowed_meta['color'];
+            $meta_arr['thumbnail_id'] = $cat_meta['thumbnail_id'] ? $cat_meta['thumbnail_id'] : $borrowed_meta['thumbnail_id'];
+            $meta_arr['cover_photo'] = $cat_meta['cover_photo'] ? $cat_meta['cover_photo'] : $borrowed_meta['cover_photo'];
+        }
+    }
+
+    $total_meta = array_replace_recursive($cat_meta, $meta_arr);
+
+
+    remove_action('saved_term', 'add_woo_tax_meta');
+    //wp_update_post( $my_args );
+    if ($meta_arr['color'][0]) {
+        update_term_meta($term_id, 'color', $meta_arr['color'][0]);
+    }
+    if ($meta_arr['thumbnail_id'][0]) {
+        update_term_meta($term_id, 'thumbnail_id', $meta_arr['thumbnail_id'][0]);
+    }
+    if ($meta_arr['cover_photo'][0]) {
+        update_term_meta($term_id, 'cover_photo', $meta_arr['cover_photo'][0]);
+    }
+
+    add_action('saved_term', 'add_woo_tax_meta');
+}
+add_action('saved_term', 'add_woo_tax_meta', 10, 5);
 
 //Term meta in Rest
 
@@ -3344,12 +3468,13 @@ function get_listings_query($request) {
       $category  = $params['category'];	
 
       $args['tax_query'][] = [
-        'taxonomy' => 'job_listing_category',
-        'field'    => 'slug',
-        'terms'    =>  array( $category),
-        //'operator' => 'NOT IN',
-        'include_children' => true,
-      ];
+				'taxonomy' => 'job_listing_category',
+				'field' => 'slug',
+				'terms' => array( $category),
+				'operator' => 'IN',
+				'include_children' => true,			
+        //
+			];
     }
 
 		if ( $context === 'term-search' ) {
