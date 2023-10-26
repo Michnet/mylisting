@@ -184,7 +184,7 @@ function add_listing_fields($post_id, $post, $update) {
 
       add_action('save_post_job_listing', 'add_listing_fields');
 }
-add_action( 'save_post_job_listing', 'add_listing_fields', 11, 3);
+//add_action( 'save_post_job_listing', 'add_listing_fields', 11, 3);
 
 //Product fields
 function add_product_fields($post_id) {
