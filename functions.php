@@ -3363,7 +3363,7 @@ function get_listings_query($request) {
 			$tax_query_operator = apply_filters( 'mylisting/explore/match-all-terms', false ) === true ? 'AND' : 'IN';
 			$args['tax_query'][] = [
 				'taxonomy' => $taxonomy,
-				'field' => 'term_id',
+				'field' => 'slug',
 				'terms' => $term,
 				'operator' => $tax_query_operator,
 				'include_children' => $tax_query_operator !== 'AND',			
