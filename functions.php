@@ -93,12 +93,7 @@ function($response, $handler, $request){
 }, 10, 3
 ); */
 
-add_action('after_setup_theme', 'remove_admin_bar');
-function remove_admin_bar() {
-if (!current_user_can('manage_options')) {
-  show_admin_bar(false);
-}
-}
+add_filter('show_admin_bar', '__return_false');
 
 //Rest init
 add_action( 'rest_api_init', 'addOrderbySupportRest' );
