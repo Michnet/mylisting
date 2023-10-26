@@ -138,6 +138,10 @@ function execute_on_deleted_post_event($postid, $post){
 
 //Edit listing fields
 function add_listing_fields($post_id, $post, $update) {
+
+  if ( 'job_listing' !== $post->post_type ) {
+		return;
+	}
   // If this is a revision, get real post ID
   if ( $parent_id = wp_is_post_revision( $post_id ) ) 
       $post_id = $parent_id;
@@ -170,7 +174,7 @@ function add_listing_fields($post_id, $post, $update) {
 
     $listing = \MyListing\Src\Listing::get( $post_id );
   
-    remove_action('save_post_job_listing', 'add_listing_fields');
+    remove_action('save_post', 'add_listing_fields');
       set_post_thumbnail( $post_id, $imId );
       wp_update_post( $my_args );
       update_post_meta( $post_id, 'listing_logo', $listing->get_logo());
@@ -182,9 +186,10 @@ function add_listing_fields($post_id, $post, $update) {
         }
       }
 
-      add_action('save_post_job_listing', 'add_listing_fields');
+      add_action('save_post', 'add_listing_fields');
 }
-//add_action( 'save_post_job_listing', 'add_listing_fields', 11, 3);
+
+add_action( 'save_post', 'add_listing_fields', 11, 3);
 
 //Product fields
 function add_product_fields($post_id) {
