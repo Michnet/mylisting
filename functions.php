@@ -1822,7 +1822,7 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
                 if ($ans_meta['image'][0]) {
                     return $ans_meta;
                 } else {
-                    return inherit_meta($ans_id);
+                    return inherit_meta($ans_id, 'job_listing_category');
                 }
             }
         }
@@ -1885,7 +1885,7 @@ function add_woo_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
                 if ($ans_meta['thumbnail_id'][0]) {
                     return $ans_meta;
                 } else {
-                    return inherit_meta($ans_id);
+                    return inherit_meta($ans_id, 'product_cat');
                 }
             }
         }
