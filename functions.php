@@ -258,7 +258,7 @@ add_action('nsl_login', 'after_social_login', 10, 2); */
 
 
 //show acf fields in admin
-add_filter( 'acf/settings/show_admin', '__return_true', 50 );
+//add_filter( 'acf/settings/show_admin', '__return_true', 50 );
 
 
 add_filter( 'register_post_type_args', function( $args, $post_type ) {
@@ -1822,7 +1822,7 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
                 if ($ans_meta['image'][0]) {
                     return $ans_meta;
                 } else {
-                    return inherit_meta($ans_id, 'job_listing_category');
+                    return inherit_meta($ans_id, $tax_slug);
                 }
             }
         }
@@ -1875,7 +1875,6 @@ function add_woo_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
     $meta_arr = array();
 
     if (!function_exists('inherit_meta')) {
-
         function inherit_meta($new_id, $tax_slug)
         {
             $ansestor_arr = get_ancestors($new_id, $tax_slug);
@@ -1885,7 +1884,7 @@ function add_woo_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
                 if ($ans_meta['thumbnail_id'][0]) {
                     return $ans_meta;
                 } else {
-                    return inherit_meta($ans_id, 'product_cat');
+                    return inherit_meta($ans_id, $tax_slug);
                 }
             }
         }
