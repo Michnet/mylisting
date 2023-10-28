@@ -259,8 +259,10 @@ add_action('nsl_login', 'after_social_login', 10, 2); */
 
 
 
-//show acf fields in admin
+//mylisting snippets
 add_filter( 'acf/settings/show_admin', '__return_true', 50 );
+
+add_filter( 'mylisting\packages\free\skip-checkout', '__return_true' );
 
 
 add_filter( 'register_post_type_args', function( $args, $post_type ) {
@@ -2661,7 +2663,7 @@ function acf_after_save_post( $post_id ) {
     if ($the_query->have_posts()) {
       $first_post = $the_query->posts[0];
       $product = wc_get_product( $first_post->ID);
-      update_post_meta( $post_id, 'min_price', $product->get_price());
+      update_post_meta( $post_id, 'min_price', $product->get_price_html());
     }
     }
 }
