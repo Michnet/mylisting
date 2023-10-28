@@ -1503,7 +1503,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
   	$cats = get_the_terms( $post_id, 'job_listing_category' );
     $locs = get_the_terms( $post_id, 'region' );
 
-    
+    $fields = $params['_fields']  ?? null;
     
     $catIds = array();
     if($cats){
@@ -1551,7 +1551,13 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['persons']['performers'] = $performers ?? null;
       $_data['listing_store']['tickets'] =  $tickets  ?? null;   
       $_data['event_date'] = $dates   ?? null;
+
+      if (isset($tickets) && count($tickets) !== 0) {
+        
+      }
     }
+
+    
 
     
     $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
@@ -2635,6 +2641,23 @@ add_action('rest_api_init', function () {
     $listingsController = new Custom_Posts_Controller('job_listing');
     $listingsController->register_routes();
 });
+
+
+//acf after post save
+add_action('acf/save_post', 'acf_after_save_post');
+function acf_after_save_post( $post_id ) {
+
+    // Get newly saved values.
+    $values = get_fields( $post_id );
+
+    // Check the new value of a specific field.
+    $hero_image = get_field('hero_image', $post_id);
+    if( $hero_image ) {
+        // Do something...
+    }
+
+    
+}
 
 
 add_filter( 'acf/rest/get_fields', function ( $fields, $resource, $http_method ) {
