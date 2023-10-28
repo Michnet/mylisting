@@ -1907,8 +1907,8 @@ a.acf-icon {
 .acf-relationship .list .acf-rel-item .thumbnail img {
     width: 42px;
     height: 42px;
-    max-width: 45px;
-    max-height: 45px;
+    max-width: 45px !important;
+    max-height: 45px !important;
 }
 
 .acf-relationship .list .acf-rel-item .thumbnail {
@@ -1989,6 +1989,7 @@ a.acf-icon {
     bottom: 30px;
     top: auto !important;
     background: gainsboro !important;
+    z-index: 9;
 }
 
 .single-job-listing .element, #widget-comments-container .wpdiscuz-widgets-content {
@@ -2593,7 +2594,7 @@ ul#product_cats_checklist {
 }
 
 .acf-fields.acf-form-fields.-top {
-    padding: 0 30px
+    /* padding: 0 30px; */
 }
 
 .tab-content.listing-tabs>section.top-pad-o {
@@ -3882,7 +3883,7 @@ input.acff-submit-button.acf-button:hover {
 }
 
 .acf-relationship {
-    border: none;
+    border: none !important;
 }
 
 .acf-image-uploader .image-wrap img {
@@ -4527,7 +4528,7 @@ input.acff-submit-button.acf-button:hover {
 
 
     .acf-fields.acf-form-fields.-top {
-        padding: 0 10px;
+        /* padding: 0 10px; */
     }
 
 }
@@ -4573,4 +4574,10 @@ span.label_meta {
     display: block;
     color: var(--wc-subtext);
     font-size: 11px;
+}
+
+#item_products .acff-edit-button.edit-button {
+    position: fixed;
+    left: 10px;
+    bottom: 76px;
 }
