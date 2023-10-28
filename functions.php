@@ -258,7 +258,7 @@ add_action('nsl_login', 'after_social_login', 10, 2); */
 
 
 //show acf fields in admin
-//add_filter( 'acf/settings/show_admin', '__return_true', 50 );
+add_filter( 'acf/settings/show_admin', '__return_true', 50 );
 
 
 add_filter( 'register_post_type_args', function( $args, $post_type ) {
