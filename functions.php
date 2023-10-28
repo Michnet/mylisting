@@ -186,6 +186,8 @@ function add_listing_fields($post_id, $post, $update) {
         }
       }
 
+      acf_after_save_post($post_id);
+
       add_action('save_post', 'add_listing_fields');
 }
 
@@ -2641,10 +2643,10 @@ add_action('rest_api_init', function () {
 
 
 //acf after post save
-add_action('acf/save_post', 'acf_after_save_post');
+//add_action('acf/save_post', 'acf_after_save_post');
 function acf_after_save_post( $post_id ) {
 
-    $tickets = get_field('tickets');
+    $tickets = get_field('tickets', $post_id);
 
     if( $tickets && count($tickets) !== 0){
       $args = array(
