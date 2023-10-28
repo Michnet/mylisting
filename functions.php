@@ -1555,7 +1555,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['persons']['performers'] = $performers ?? null;
       $_data['listing_store']['tickets'] =  $tickets  ?? null;   
       $_data['event_date'] = $dates   ?? null;
-
+      $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
     }
 
     
@@ -2663,7 +2663,7 @@ function acf_after_save_post( $post_id ) {
     if ($the_query->have_posts()) {
       $first_post = $the_query->posts[0];
       $product = wc_get_product( $first_post->ID);
-      update_post_meta( $post_id, 'min_price', $product->get_price_html());
+      update_post_meta( $post_id, 'ticket_min_price', $product->get_price_html());
     }
     }
 }
