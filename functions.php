@@ -1552,9 +1552,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['listing_store']['tickets'] =  $tickets  ?? null;   
       $_data['event_date'] = $dates   ?? null;
 
-      if (isset($tickets) && count($tickets) !== 0) {
-        
-      }
     }
 
     
@@ -2647,16 +2644,24 @@ add_action('rest_api_init', function () {
 add_action('acf/save_post', 'acf_after_save_post');
 function acf_after_save_post( $post_id ) {
 
-    // Get newly saved values.
-    $values = get_fields( $post_id );
+    $tickets = get_field('tickets');
 
-    // Check the new value of a specific field.
-    $hero_image = get_field('hero_image', $post_id);
-    if( $hero_image ) {
-        // Do something...
+    if( $tickets && count($tickets) !== 0){
+      $args = array(
+        'posts_per_page' => 1,
+        'post_type' => 'product',
+        'orderby' => 'meta_value_num',
+        'meta_key' => '_price',
+        'order' => 'asc',
+        'post__in' => $tickets
+    );
+    $the_query = new WP_Query( $args );
+    if ($the_query->have_posts()) {
+      $first_post = $the_query->posts[0];
+      $product = wc_get_product( $first_post->ID);
+      update_post_meta( $post_id, 'min_price', $product->get_price());
     }
-
-    
+}
 }
 
 
