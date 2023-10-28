@@ -1536,7 +1536,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $author = get_the_author_meta('ID');
     $comment_num = get_comments_number($post_id);
     $team = get_post_meta($post_id, '_team', true);
-    $gen_merch = get_post_meta( $post_id, '_general_merchandise', true);
+    $gen_merch = get_post_meta( $post_id, 'general_merchandise', true);
     $punchlines = get_post_meta( $post_id, '_punch_lines', true);
     $why_us = get_post_meta( $post_id, '_why_choose_us', true);
 
@@ -1544,7 +1544,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     if($meta['_case27_listing_type'][0] == 'event'){
       $special_guests = get_post_meta( $post_id, '_special-guests', true);
       $performers = get_post_meta( $post_id, '_performers', true);
-      $tickets = get_post_meta( $post_id, '_tickets', true);
+      $tickets = get_post_meta( $post_id, 'tickets', true);
       $dates = process_dates($listing_post);
 
       $_data['persons']['special_guests'] = $special_guests ?? null;
