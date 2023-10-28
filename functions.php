@@ -2661,7 +2661,7 @@ function acf_after_save_post( $post_id ) {
       $product = wc_get_product( $first_post->ID);
       update_post_meta( $post_id, 'min_price', $product->get_price());
     }
-}
+    }
 }
 
 
