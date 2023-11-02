@@ -1556,11 +1556,13 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['listing_store']['tickets'] =  $tickets  ?? null;   
       $_data['event_date'] = $dates   ?? null;
       $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
+      $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
     }
 
     
 
-    
+    $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
+    $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
     $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
     $_data['food_menu'] = $food_menu   ?? null;
     $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
