@@ -4592,10 +4592,14 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 
 #submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
+
+.field-type-file.form-group {
+    padding-left: 0 !important;
+}
 .repeater-list label {
     font-weight: 500;
-    font-size: 12px;
-    /* color: var(--grayText); */
+    font-size: 14px;
+    color: #b4b3b3;
 }
 
 .repeater-list {
@@ -4639,4 +4643,30 @@ span.product-type.tips.simple.wcicon-simple.text_tip {}
 
 table#wcfm-products thead, table#wcfm-products tfoot {
     display: none;
+}
+
+.uploaded-file.uploaded-image.review-gallery-image.job-manager-uploaded-file {
+    height: 100px;
+    width: 100px;
+}
+
+.repeater-list input {
+    border: none;
+}
+
+.uploaded-files-list.review-gallery-images {
+    display: flex;
+    align-items: flex-end;
+}
+
+.field-type-file.form-group .review-gallery-add {
+    order: 2;
+    height: 50px;
+    width: 50px;
+}
+
+button.delete-repeater-item {
+    bottom: 5px;
+    right: 0px;
+    left: auto;
 }
