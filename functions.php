@@ -2649,6 +2649,7 @@ add_action('rest_api_init', function () {
 function acf_after_save_post( $post_id ) {
 
     $tickets = get_field('tickets', $post_id);
+    $merch = get_field('general_merchandise', $post_id);
 
     if( $tickets && count($tickets) !== 0){
       $args = array(
@@ -2663,7 +2664,26 @@ function acf_after_save_post( $post_id ) {
     if ($the_query->have_posts()) {
       $first_post = $the_query->posts[0];
       $product = wc_get_product( $first_post->ID);
-      update_post_meta( $post_id, 'ticket_min_price', $product->get_price_html());
+      update_post_meta( $post_id, 'ticket_min_price_html', $product->get_price_html());
+      update_post_meta( $post_id, 'ticket_min_price', $product->get_price());
+    }
+    }
+
+    if( $merch && count($merch) !== 0){
+      $args = array(
+        'posts_per_page' => 1,
+        'post_type' => 'product',
+        'orderby' => 'meta_value_num',
+        'meta_key' => '_price',
+        'order' => 'asc',
+        'post__in' => $merch
+    );
+    $the_query = new WP_Query( $args );
+    if ($the_query->have_posts()) {
+      $first_post = $the_query->posts[0];
+      $product = wc_get_product( $first_post->ID);
+      update_post_meta( $post_id, 'items_min_price_html', $product->get_price_html());
+      update_post_meta( $post_id, 'items_min_price', $product->get_price());
     }
     }
 }
