@@ -128,6 +128,7 @@ p {
 }
 
 /*displayNone*/
+div#wcfm_products_manage_form_booking_options_expander,
 .booking div#wcfm_products_manage_form_attribute_expander,
 div#wcfm_products_manage_form_attribute_head.booking,
 div#wcfm_products_manage_form_claim-data_head,
@@ -2408,7 +2409,7 @@ section.code_sect #messages-modal-toggle i {
 }
 
 .wcfm-tabWrap {
-    display: flex
+    display: flex;
 }
 
 #wcfm-main-contentainer .wcfm-collapse {
@@ -2427,7 +2428,7 @@ section.code_sect #messages-modal-toggle i {
 .wcfm-tabWrap-content {
     display: flex;
     flex-direction: row;
-    height: 50px
+    height: 50px;
 }
 
 .wcfm-collapse .wcfm-tabWrap .wcfm-container,.wcfm-tabWrap .page_collapsible+.wcfm-container {
@@ -2438,10 +2439,17 @@ section.code_sect #messages-modal-toggle i {
 .wcfm-collapse .wcfm-tabWrap .wcfm-container {
     padding: 16px 18px;
     margin-top: 50px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #fff;
 }
 
 .wcfm-collapse .wcfm-container,.wcfm-tabWrap {
-    box-shadow: none
+    box-shadow: none;
+    position: relative;
 }
 
 .wcfm-collapse .wcfm-container {
@@ -4388,6 +4396,9 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (max-width: 768px) {
+    #wcfm_menu .wcfm_menu_items{
+    height: 50px;
+}
     #wcfm-main-contentainer .wcfm_menu_toggle{
     width: 0;
 }
@@ -4535,6 +4546,9 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (max-width: 640px) {
+    .wcfm-tabWrap{
+    height: 300px;
+}
     #wcfm-content .wcfm-collapse .wcfm-collapse-content{
     padding: 0 10px;
 }
@@ -4612,6 +4626,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 
 /*media qs end*/
+.wcfm-product-feature-upload, #gallery_img, #wcfm_360_images, .wcfm-product-feature-upload .placeHolder, .wcfm-product-feature-upload img{width: 100%}
 
 
 #submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
@@ -4701,4 +4716,13 @@ button.delete-repeater-item {
 #wcfm-main-contentainer .wp-media-buttons .insert-media {
     font-size: 12px;
     border-radius: 22px;
+}
+
+#wcfm_menu .wcfm_menu_home {
+    margin-top: 0;
+}
+
+.wcfm_menu_items {
+    margin: 0;
+    border: none;
 }
