@@ -127,8 +127,20 @@ p {
     transition: .3s ease-in-out
 }
 
-::-webkit-scrollbar {
-    display: none
+/*displayNone*/
+.booking div#wcfm_products_manage_form_attribute_expander,
+div#wcfm_products_manage_form_attribute_head.booking,
+div#wcfm_products_manage_form_claim-data_head,
+div#wcfm_products_manage_form_claim-data_expander,
+div#wcfm_products_manage_form_persons_expander,
+div#wcfm_products_manage_form_persons_head,
+div#wcfm_products_manage_form_costs_head,
+div#wcfm_products_manage_form_costs_expander,
+div#wcfm_products_manage_form_availability_expander,
+div#wcfm_products_manage_form_availability_head,
+div#wcfm_products_manage_form_booking_options_head,
+::-webkit-scrollbar, p.catalog_visibility.wcfm_title.wcfm_full_ele.catalog_visibility_ele, input#_wc_booking_has_persons, #wcfm-main-contentainer p.has_person_ele_title, input#_wc_booking_has_resources, #wcfm-main-contentainer p.has_resource_ele_title, select#catalog_visibility {
+    display: none !important;
 }
 
 
@@ -2407,7 +2419,9 @@ section.code_sect #messages-modal-toggle i {
     width: auto;
     height: 15px;
     z-index: 2;
-    white-space: nowrap
+    white-space: nowrap;
+    border-radius: 30px;
+    margin: 10px 5px;
 }
 
 .wcfm-tabWrap-content {
@@ -2421,6 +2435,11 @@ section.code_sect #messages-modal-toggle i {
     margin-top: 40px
 }
 
+.wcfm-collapse .wcfm-tabWrap .wcfm-container {
+    padding: 16px 18px;
+    margin-top: 50px;
+}
+
 .wcfm-collapse .wcfm-container,.wcfm-tabWrap {
     box-shadow: none
 }
@@ -2431,7 +2450,11 @@ section.code_sect #messages-modal-toggle i {
 }
 
 #wcfm-main-contentainer #wcfm_products_manage_form div.wcfm-content {
-    padding: 0
+    padding: 0;
+}
+
+div#wcfm_products_manage_form_product-booking_expander {
+    /* padding: 28px 15px 15px !important; */
 }
 
 .wcfm_product_manager_general_fields {
@@ -4191,7 +4214,7 @@ input.acff-submit-button.acf-button:hover {
 @media screen and (max-width: 1052px) {
     #wcfm_menu {
         position:fixed;
-        top: 136px;
+        top: 115px;
         bottom: 0;
         box-shadow: hsl(0deg 0% 0% / 16%) 0 0 17px 3px;
         overflow: hidden;
@@ -4334,7 +4357,7 @@ input.acff-submit-button.acf-button:hover {
 
 @media screen and (min-width: 769px) {
     #wcfm-content .wcfm-collapse .wcfm-collapse-content{
-        padding-left: 70px;
+        padding-left: 10px;
     }
 
    .add-listing-nav>ul{
@@ -4593,7 +4616,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 #submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
 
-.field-type-file.form-group {
+.repeater-field-wrapper .field-type-file.form-group {
     padding-left: 0 !important;
 }
 .repeater-list label {
@@ -4669,4 +4692,13 @@ button.delete-repeater-item {
     bottom: 5px;
     right: 0px;
     left: auto;
+}
+
+#wcfm-main-contentainer a.add_new_wcfm_ele_dashboard, #wcfm-main-contentainer a.wcfm_import_export {
+    border-radius: 30px;
+}
+
+#wcfm-main-contentainer .wp-media-buttons .insert-media {
+    font-size: 12px;
+    border-radius: 22px;
 }
