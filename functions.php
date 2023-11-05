@@ -1258,6 +1258,8 @@ function check_slot_availability($request){
   $start_date = $params['start_date'] ?? null;
   $max_slots = $params['occurrence_slots'] ?? null;
 
+  $availability_obj = new stdClass();
+
   $pdt_bookings = get_post_meta( $product_id, 'booking_schedule', true );
 
   if(metadata_exists('post', $product_id, 'booking_schedule')){
@@ -1267,20 +1269,21 @@ function check_slot_availability($request){
     if($filteredItems){
       foreach($filteredItems as $the_occurrence){
          if($the_occurrence['booked_slots'] < intval($max_slots)){
-          return "Available";
+          $availability_obj->available = true;
+          $availability_obj->slots = intval($max_slots) - $the_occurrence['booked_slots'];
          }else{
-          return "Occurence full";
+          $availability_obj->available = false;
          }
       }
     }else{
-      return "no_occurence";
-      //foreach($pdt_bookings as $thething){
-       //return $thething['start_date'];
-      //}
+      $availability_obj->available = true;
+      $availability_obj->slots = intval($max_slots);
     }
   }else{
-    return "no_data";
+    $availability_obj->available = true;
+    $availability_obj->slots = intval($max_slots);
   }
+  return $availability_obj;
 }
 
 
