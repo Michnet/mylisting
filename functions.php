@@ -204,7 +204,7 @@ function add_product_fields($post_id) {
       $listingId = intval(get_post_meta($post_id, 'listing', true)[0]);
       $listing_meta = get_post_meta($listingId);
   
-      $meta_arr['slug'] = get_post_field( 'post_name', $post_id );
+      $meta_arr['slug'] = get_post_field( 'post_name', intval($listingId) );
       $meta_arr['phone'] = $listing_meta['_job_phone'][0] ?? null;
       $meta_arr['cover'] = $listing_meta['listing_cover'][0] ?? null;
       $meta_arr['logo'] = $listing_meta['listing_logo'][0] ?? null;
