@@ -538,7 +538,7 @@ function all_items_ids($request) {
     return $response;
 }
 
-function get_google_calendar_link($listing, $start_date, $end_date = '' ) {
+function get_google_calendar_link( $start_date, $end_date = '', $listing ) {
     // &dates=20170101T180000Z/20170101T190000Z
     $template = 'https://calendar.google.com/calendar/render?action=TEMPLATE&';
     $template .= 'text={title}&dates={dates}&details={description}&location={location}&trp=true&ctz={timezone}';
