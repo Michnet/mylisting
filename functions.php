@@ -3260,11 +3260,11 @@ function sv_woo_calc_my_discount_quickedit( $post ) {
 }
 
 //Create vendor category
-add_action('save_post_product', 'update_vendor_categories', 20);
+add_action('save_post_product', 'update_vendor_categories', 10, 1);
 function update_vendor_categories($post_id)
 {
 
-  remove_action('save_post_product', 'add_product_fields');
+  remove_action('save_post_product', 'update_vendor_categories');
 
     $product = wc_get_product($post_id);
     $post_obj = get_post($post_id);
@@ -3281,7 +3281,7 @@ function update_vendor_categories($post_id)
             add_user_meta($author_id, 'store_categories', $new_list);
         }
     }
-    add_action('save_post_product', 'add_product_fields');
+    add_action('save_post_product', 'update_vendor_categories');
 }
 
 //clean vendors
