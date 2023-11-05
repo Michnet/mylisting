@@ -538,7 +538,7 @@ function all_items_ids($request) {
     return $response;
 }
 
-function get_google_calendar_link( $start_date, $end_date = '', $listing ) {
+function get_google_calendar_link($listing, $start_date, $end_date = '' ) {
     // &dates=20170101T180000Z/20170101T190000Z
     $template = 'https://calendar.google.com/calendar/render?action=TEMPLATE&';
     $template .= 'text={title}&dates={dates}&details={description}&location={location}&trp=true&ctz={timezone}';
@@ -3487,7 +3487,7 @@ function get_listings_query($request) {
     $sort = $params['sort'] ?? null;
     $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
     $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
-    $page = absint( isset($params['page']) ? $params['page'] : 0 );
+    $page = absint( isset($params['page']) ? $params['page'] - 1 : 0 );
 
     $meta_q = [];
 		$per_page = absint( isset($params['per_page']) ? $params['per_page'] : c27()->get_setting('general_explore_listings_per_page', 9));
