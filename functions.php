@@ -2737,7 +2737,8 @@ add_filter( 'acf/rest/get_fields', function ( $fields, $resource, $http_method )
 //logout user by rest
 function logout_user_rest($request){
   $parameters = $request->get_params();
-  $headers = $request->get_headers(); 
+  $headers = $request->get_headers();
+  $cookies = $request->get_header('cookie');  
 
   $ret_obj = new stdClass();
   
@@ -2747,6 +2748,7 @@ function logout_user_rest($request){
   }
 
   $ret_obj->headers = $headers;
+  $ret_obj->cookies = $cookies;
   return $ret_obj;
   
 }
