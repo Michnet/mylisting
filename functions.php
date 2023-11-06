@@ -243,6 +243,7 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
  return $response;
 }, 10, 2);
 
+
 /* 
 function after_social_login($user_id, $provider) {
   $user = get_userdata($user_id);
@@ -664,6 +665,12 @@ add_action('rest_api_init', function () {
       'callback' => 'update_user_info',
       'permission_callback' => '__return_true',
   ));
+
+  register_rest_route( 'user-actions/v1', 'logout(?:/(?P<id>\d+))?', array(
+    'methods' => 'POST',
+    'callback' => 'logout_user_rest',
+    'permission_callback' => '__return_true',
+));
 
     register_rest_route('m-api/v1', 'ids(?:/(?P<id>\d+))?',array(
       'methods'  => 'GET',
@@ -2654,8 +2661,8 @@ add_action('rest_api_init', function () {
 //add_action('acf/save_post', 'acf_after_save_post');
 function acf_after_save_post( $post_id ) {
 
-    $tickets = get_field('tickets', $post_id);
-    $merch = get_field('general_merchandise', $post_id);
+    $tickets = get_field('tickets', $post_id) ?? null;
+    $merch = get_field('general_merchandise', $post_id) ?? null;
 
     if( $tickets && count($tickets) !== 0){
       $args = array(
@@ -2726,9 +2733,25 @@ add_filter( 'acf/rest/get_fields', function ( $fields, $resource, $http_method )
     return $fields;
 }, 10, 3 );
 
+
+//logout user by rest
+function logout_user_rest($request){
+  $parameters = $request->get_params();
+  $headers = $request->get_headers(); 
+
+  $ret_obj = new stdClass();
+  
+  $user_id = $parameters['user_id'] ?? null;
+  if(is_user_logged_in() && $user_id) {
+    $ret_obj->user_id = $user_id;
+  }
+
+  $ret_obj->headers = $headers;
+  return $ret_obj;
+  
+}
+
 //Record vsist
-
-
 function record_visit($request ) {
     
     $parameters = $request->get_params();
