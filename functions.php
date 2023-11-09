@@ -50,10 +50,10 @@ function is_valid_email_domain($login, $email, $errors ){
  //Guest redirect
  function my_logged_in_redirect() {
 	
-	if ( is_user_logged_in() || is_page(array( 'access', 'home' )) ){
+	if ( is_user_logged_in() || is_page(array( 'my-account', 'home' )) ){
     return;
   } else{
-        wp_redirect( '/access');
+        wp_redirect( '/my-account');
  }
 	
 }
