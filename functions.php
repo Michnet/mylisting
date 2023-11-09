@@ -140,7 +140,7 @@ function login_by_jwt(){
   				$JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
 
 
-				$JWT::$leeway = self::JWT_LEEVAY;
+				$JWT::$leeway = $jwt_base::JWT_LEEVAY;
 				$decoded = (array)$JWT::decode(
 					//$jwt_base->jwt,
 					$tok,
