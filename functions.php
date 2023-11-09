@@ -3299,6 +3299,7 @@ add_filter( 'mylisting/listing-types/register-fields', function( $fields ) {
   $fields[] = \MyListing\Src\Forms\Fields\Team_Members_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Features_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Repeater_Text_Field::class;
+  $fields[] = \MyListing\Src\Forms\Fields\Faqs_Field::class;
   $fields[] = \MyListing\Src\Listing_Types\Content_Blocks\General_Repeater_Block::class;
   
   return $fields;
