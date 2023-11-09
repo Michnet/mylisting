@@ -64,7 +64,12 @@ if ($data['scroll_border_color']) {
 	$GLOBALS['case27_custom_styles'] .= '.c27-main-header.header-scroll .header-skin { border-bottom: 1px solid ' . $data['scroll_border_color'] . ' !important; } ';
 }
 
-
+function login_by_jwt(){
+	if (!is_user_logged_in() ) {
+		
+		echo 'not logged';
+	}
+}
 
 ?>
 
@@ -132,7 +137,7 @@ if ($data['scroll_border_color']) {
 						</a>
 					</div>
 
-					<?php if ( is_user_logged_in() ): $current_user = wp_get_current_user(); ?>
+					<?php login_by_jwt(); if ( is_user_logged_in() ): $current_user = wp_get_current_user(); ?>
 						<div class="user-profile-dropdown">
 							<a class="user-profile-name" href="#">
 								<div class="avatar">
