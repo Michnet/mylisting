@@ -199,7 +199,7 @@ function login_by_jwt(){
 						</a>
 					</div>
 
-					<?php login_by_jwt(); if ( is_user_logged_in() ): $current_user = wp_get_current_user(); ?>
+					<?php if ( is_user_logged_in() ): $current_user = wp_get_current_user(); ?>
 						<div class="user-profile-dropdown">
 							<a class="user-profile-name" href="#">
 								<div class="avatar">
