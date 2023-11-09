@@ -1574,7 +1574,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $listing_post = \MyListing\Src\Listing::get( $post_id);
 
     //$category = get_the_category ( $post->ID );
-  	$acf_data = get_fields($post_id);
+  	$acf_data = get_fields($post_id) ?? null;
     $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
     $large_thumbnail = get_the_post_thumbnail_url( $post_id, 'medium' );
 	  $xlarge_thumb = get_the_post_thumbnail_url( $post_id, 'medium_large' );
@@ -1582,6 +1582,9 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $locs = get_the_terms( $post_id, 'region' );
 
     $fields = $params['_fields']  ?? null;
+    if ( $fields && !empty( $fields ) ) {
+      $_data['fields'] = $fields ??  null;
+    }
     
     $catIds = array();
     if($cats){
@@ -1617,6 +1620,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $gen_merch = get_post_meta( $post_id, 'general_merchandise', true);
     $punchlines = get_post_meta( $post_id, '_punch_lines', true);
     $why_us = get_post_meta( $post_id, '_why_choose_us', true);
+    $faq_us = get_post_meta( $post_id, '_frequently-asked-questions', true);
 
 
     if($meta['_case27_listing_type'][0] == 'event'){
@@ -1646,7 +1650,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
     $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
     $_data['marketing']['wcu']['list'] = $why_us   ?? null;
-    $_data['about_us']['faqs'] = $meta['_frequently-asked-questions'][0] ?? null;
+    $_data['about_us']['faqs'] = $faq_us ?? null;
     $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
     $_data['author_id'] = $author;
     $_data['comment_num'] = $comment_num;
