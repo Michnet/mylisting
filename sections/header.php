@@ -63,8 +63,7 @@ if ($data['scroll_border_color']) {
 
 	$GLOBALS['case27_custom_styles'] .= '.c27-main-header.header-scroll .header-skin { border-bottom: 1px solid ' . $data['scroll_border_color'] . ' !important; } ';
 }
-?>
-<?php
+
 function login_by_jwt(){
 	if (!is_user_logged_in() ) {
 		
@@ -100,7 +99,7 @@ function login_by_jwt(){
 					$tok
 				);
 
-				/** @var WP_User|null $user */
+				/* @var WP_User|null $user */
 				$user = $jwt_login->getUserDetails($loginParameter);
 				if ($user === null) {
 					throw new Exception(
@@ -133,6 +132,7 @@ function login_by_jwt(){
 		}
 	}
 }
+
 ?>
 
 <header class="<?php echo esc_attr( join( ' ', $header_classes ) ) ?>">
