@@ -125,15 +125,78 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
     return $args;
 }
 
-//When image deleted
-function execute_on_deleted_post_event($postid, $post){
-  xdebug_start_trace();
-  error_log("Post deletionn error.");
-  xdebug_stop_trace();
-  }
-  // add the action
+//log in by jwt
 
-  add_action( "deleted_post", "execute_on_deleted_post_event" , 10, 2);
+function login_by_jwt(){
+	if (!is_user_logged_in() ) {
+		
+		if(isset($_GET["lc_tok"])){
+
+			function validateJWTAndGetUserValueFromPayload($parameter, $tok)
+			{
+
+				$jwt_base  = new \SimpleJWTLogin\Services\BaseService();
+				$JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
+  				$JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+
+
+				$JWT::$leeway = self::JWT_LEEVAY;
+				$decoded = (array)$JWT::decode(
+					//$jwt_base->jwt,
+					$tok,
+					$JwtKeyFactory::getFactory($jwt_base->jwtSettings)->getPublicKey(),
+					[$jwt_base->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
+				);
+		
+				return $jwt_base->getUserParameterValueFromPayload($decoded, $parameter);
+			}
+		function make_login($tok)
+			{
+
+				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
+
+
+				$jwt_login->validateDoLogin();
+				$loginParameter = validateJWTAndGetUserValueFromPayload(
+					$jwt_login->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
+					$tok
+				);
+
+				/* @var WP_User|null $user */
+				$user = $jwt_login->getUserDetails($loginParameter);
+				if ($user === null) {
+					throw new Exception(
+						__('User not found.', 'simple-jwt-login'),
+						ErrorCodes::ERR_DO_LOGIN_USER_NOT_FOUND
+					);
+				}
+
+				$jwt_login->validateJwtRevoked(
+					$jwt_login->wordPressData->getUserProperty($user, 'ID'),
+					$jwt_login->jwt
+				);
+				$jwt_login->wordPressData->loginUser($user);
+				/* if ($jwt_login->jwtSettings->getHooksSettings()->isHookEnable(SimpleJWTLoginHooks::LOGIN_ACTION_NAME)) {
+					$jwt_login->wordPressData->triggerAction(SimpleJWTLoginHooks::LOGIN_ACTION_NAME, $user);
+				} */
+
+				/* return (new \SimpleJWTLogin\Services\RedirectService())  
+					->withSettings($jwt_login->jwtSettings)
+					->withSession($jwt_login->session)
+					->withCookies($jwt_login->cookie)
+					->withRequest($jwt_login->request)
+					->withUser($user)
+					->withServerHelper($jwt_login->serverHelper)
+					->makeAction(); */
+			}
+
+			$token = trim($_GET["lc_tok"]);
+			make_login($token);
+		}
+	}
+}
+
+add_action('wp_loaded','login_by_jwt');
   
 
 //Edit listing fields
