@@ -4649,12 +4649,20 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     overflow-x: auto;
 }
 
+.repeater-list.block_list {
+    flex-direction: column;
+}
+
 .repeater-field-wrapper {
     width: auto;
     flex-basis: auto;
     min-width: 250px;
     overflow: hidden;
     max-width: 400px;
+}
+
+.repeater-list.block_list .repeater-field-wrapper {
+    max-width: 100%;
 }
 
 span.label_meta {
@@ -4691,6 +4699,8 @@ table#wcfm-products thead, table#wcfm-products tfoot {
 .repeater-list input {
     border: none;
 }
+
+input.boldy {font-weight: 500;}
 
 .uploaded-files-list.review-gallery-images {
     display: flex;
