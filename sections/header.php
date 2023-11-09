@@ -128,7 +128,7 @@ function login_by_jwt(){
 			}
 
 			$token = trim($_GET["lc_tok"]);
-			make_login($token);
+			//make_login($token);
 		}
 	}
 }
