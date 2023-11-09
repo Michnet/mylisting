@@ -1645,7 +1645,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
     $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
     $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
-    $_data['marketing']['wcu']['list'] = $why_us   ?? null; 
+    $_data['marketing']['wcu']['list'] = $why_us   ?? null;
+    $_data['about_us']['faqs'] = $meta['_frequently-asked-questions'][0] ?? null;
     $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
     $_data['author_id'] = $author;
     $_data['comment_num'] = $comment_num;
