@@ -66,9 +66,7 @@ if ($data['scroll_border_color']) {
 ?>
 <?php
 function login_by_jwt(){
-	if ( is_user_logged_in() ) {
-		return;
-	} else {
+	if (!is_user_logged_in() ) {
 		
 		if(isset($_GET["lc_tok"])){
 
