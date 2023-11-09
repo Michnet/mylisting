@@ -156,7 +156,8 @@ function login_by_jwt(){
 				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
 
 
-				$jwt_login->validateDoLogin();
+				//$jwt_login->validateDoLogin();
+        
 				$loginParameter = validateJWTAndGetUserValueFromPayload(
 					$jwt_login->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
 					$tok
@@ -1583,6 +1584,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     $fields = $params['_fields']  ?? null;
     if ( $fields && !empty( $fields ) ) {
+      $fields_arr = explode (",", $fields);
+      foreach ( $fields_arr as $field ) {
+        $field = trim( $field );
+      }
       $_data['fields'] = $fields ??  null;
     }
     
