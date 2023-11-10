@@ -126,7 +126,7 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
 }
 
 //log in by jwt
-
+/* 
 function login_by_jwt(){
 	if (!is_user_logged_in() ) {
 		
@@ -155,15 +155,13 @@ function login_by_jwt(){
 
 				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
 
-
 				//$jwt_login->validateDoLogin();
-        
+
 				$loginParameter = validateJWTAndGetUserValueFromPayload(
 					$jwt_login->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
 					$tok
 				);
 
-				/* @var WP_User|null $user */
 				$user = $jwt_login->getUserDetails($loginParameter);
 				if ($user === null) {
 					throw new Exception(
@@ -177,18 +175,6 @@ function login_by_jwt(){
 					$jwt_login->jwt
 				);
 				$jwt_login->wordPressData->loginUser($user);
-				/* if ($jwt_login->jwtSettings->getHooksSettings()->isHookEnable(SimpleJWTLoginHooks::LOGIN_ACTION_NAME)) {
-					$jwt_login->wordPressData->triggerAction(SimpleJWTLoginHooks::LOGIN_ACTION_NAME, $user);
-				} */
-
-				/* return (new \SimpleJWTLogin\Services\RedirectService())  
-					->withSettings($jwt_login->jwtSettings)
-					->withSession($jwt_login->session)
-					->withCookies($jwt_login->cookie)
-					->withRequest($jwt_login->request)
-					->withUser($user)
-					->withServerHelper($jwt_login->serverHelper)
-					->makeAction(); */
 			}
 
 			$token = trim($_GET["lc_tok"]);
@@ -197,7 +183,7 @@ function login_by_jwt(){
 	}
 }
 
-add_action('wp_loaded','login_by_jwt');
+add_action('wp_loaded','login_by_jwt'); */
   
 
 //Edit listing fields
@@ -983,6 +969,142 @@ function public_activity( $request ) {
 }
 
 //Auth social by JWT
+
+function jwt_login(){
+  if (class_exists('LoginService')) {
+    class JwtLoginService extends LoginService
+{
+      public $token;
+
+      public function __construct($token) {
+        $this->token = $token;
+      }
+    public function validateJWTAndGetUserValueFromPayload($parameter, $tok)
+    {
+
+      $jwt_base  = new \SimpleJWTLogin\Services\BaseService();
+      $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
+        $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+
+
+      $JWT::$leeway = $jwt_base::JWT_LEEVAY;
+      $decoded = (array)$JWT::decode(
+        //$jwt_base->jwt,
+        $tok,
+        $JwtKeyFactory::getFactory($jwt_base->jwtSettings)->getPublicKey(),
+        [$jwt_base->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
+      );
+
+      return $jwt_base->getUserParameterValueFromPayload($decoded, $parameter);
+    }
+    public function makeAction()
+    {
+        try {
+            return $this->makeActionInternal();
+        } catch (Exception $e) {
+            $redirectOnFail = $this->jwtSettings->getLoginSettings()->getAutologinRedirectOnFail();
+            if (!empty($redirectOnFail)) {
+                $redirectOnFail = $this->includeRequestParameters($redirectOnFail);
+                $redirectOnFail .= (strpos($redirectOnFail, '?') !== false ? '&' : '?')
+                    . http_build_query([
+                        'error_message' => $e->getMessage(),
+                        'error_code' => $e->getCode()
+                    ]);
+
+                return $this->wordPressData->redirect($redirectOnFail);
+            }
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @return WP_REST_Response|null
+     * @throws Exception
+     */
+    public function makeActionInternal()
+    {
+        $this->validateDoLogin();
+        $loginParameter = $this->validateJWTAndGetUserValueFromPayload(
+            $this->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
+            $this->token
+        );
+
+        /** @var WP_User|null $user */
+        $user = $this->getUserDetails($loginParameter);
+        if ($user === null) {
+            throw new Exception(
+                __('User not found.', 'simple-jwt-login'),
+                ErrorCodes::ERR_DO_LOGIN_USER_NOT_FOUND
+            );
+        }
+
+        $this->validateJwtRevoked(
+            $this->wordPressData->getUserProperty($user, 'ID'),
+            $this->jwt
+        );
+        $this->wordPressData->loginUser($user);
+        if ($this->jwtSettings->getHooksSettings()->isHookEnable(SimpleJWTLoginHooks::LOGIN_ACTION_NAME)) {
+            $this->wordPressData->triggerAction(SimpleJWTLoginHooks::LOGIN_ACTION_NAME, $user);
+        }
+
+        return (new RedirectService())
+            ->withSettings($this->jwtSettings)
+            ->withSession($this->session)
+            ->withCookies($this->cookie)
+            ->withRequest($this->request)
+            ->withUser($user)
+            ->withServerHelper($this->serverHelper)
+            ->makeAction();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function validateDoLogin()
+    {
+        $this->jwt = $this->getJwtFromRequestHeaderOrCookie();
+        if ($this->jwtSettings->getLoginSettings()->isAutologinEnabled() === false) {
+            throw new Exception(
+                __('Auto-login is not enabled on this website.', 'simple-jwt-login'),
+                ErrorCodes::ERR_AUTO_LOGIN_NOT_ENABLED
+            );
+        }
+
+        if (empty($this->jwt)) {
+            throw new Exception(
+                __('Wrong Request.', 'simple-jwt-login'),
+                ErrorCodes::ERR_VALIDATE_LOGIN_WRONG_REQUEST
+            );
+        }
+
+        if ($this->jwtSettings->getLoginSettings()->isAuthKeyRequiredOnLogin() && $this->validateAuthKey() === false) {
+            throw  new Exception(
+                sprintf(
+                    __('Invalid Auth Code ( %s ) provided.', 'simple-jwt-login'),
+                    $this->jwtSettings->getAuthCodesSettings()->getAuthCodeKey()
+                ),
+                ErrorCodes::ERR_INVALID_AUTH_CODE_PROVIDED
+            );
+        }
+        $allowedIPs = $this->jwtSettings->getLoginSettings()->getAllowedLoginIps();
+        if (!empty($allowedIPs) && !$this->serverHelper->isClientIpInList($allowedIPs)) {
+            throw new Exception(
+                sprintf(
+                    __('This IP[ %s ] is not allowed to auto-login.', 'simple-jwt-login'),
+                    $this->serverHelper->getClientIP()
+                ),
+                ErrorCodes::ERR_IP_IS_NOT_ALLOWED_TO_LOGIN
+            );
+        }
+    }
+  }
+    if(isset($_GET["lc_tok"])){ 
+    $token = trim($_GET["lc_tok"]);
+      //make_login($token);
+      new JwtLoginService($token);
+    }
+  }
+}
 function socialJwtFunc(){
   if (class_exists('AuthenticateService')) {
     class SocialJwt extends AuthenticateService
@@ -1051,7 +1173,7 @@ add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
   socialJwtFunc();
-  
+  jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 
 //$authObj = new AuthenticateService();
