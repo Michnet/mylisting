@@ -125,7 +125,7 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
 }
 
 //log in by jwt
-/* 
+
 function login_by_jwt(){
 	if (!is_user_logged_in() ) {
 		
@@ -182,7 +182,7 @@ function login_by_jwt(){
 	}
 }
 
-add_action('wp_loaded','login_by_jwt'); */
+add_action('wp_loaded','login_by_jwt');
   
 
 //Edit listing fields
@@ -1107,7 +1107,7 @@ function process_jwt_login() {
      }
     }
 }
-function socialJwtFunc(){
+/* function socialJwtFunc(){
   if (class_exists('AuthenticateService')) {
     class SocialJwt extends AuthenticateService
   {
@@ -1118,7 +1118,7 @@ function socialJwtFunc(){
        * @param WP_User $user
        *
        * @return array
-       */
+       
     
 
       public function authenticateUser($userObj)
@@ -1166,14 +1166,14 @@ function socialJwtFunc(){
   }
   new SocialJwt();
   }
-}
+} */
 
 
 add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
   //socialJwtFunc();
-  jwt_login();
+  //jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 //$authObj = new AuthenticateService();
 }
