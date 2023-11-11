@@ -230,13 +230,13 @@ function login_by_jwt(){
 			function validateJWTAndGetUserValueFromPayload($parameter, $tok){
         $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
         $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
-
-				$jwt_base  = new \SimpleJWTLogin\Services\BaseService();
+				//$jwt_base  = new \SimpleJWTLogin\Services\BaseService();
+        $jwt_login = new \SimpleJWTLogin\Services\LoginService();
 				$JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
-  				$JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+  			$JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
 
 
-				$JWT::$leeway = $jwt_base::JWT_LEEVAY;
+				$JWT::$leeway = $jwt_login::JWT_LEEVAY;
 				$decoded = (array)$JWT::decode(
 					//$jwt_base->jwt,
 					$tok,
@@ -244,7 +244,7 @@ function login_by_jwt(){
 					[$jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
 				);
 		
-				return $jwt_base->getUserParameterValueFromPayload($decoded, $parameter);
+				return $jwt_login->getUserParameterValueFromPayload($decoded, $parameter);
 			}
 		function make_login($tok){
 
