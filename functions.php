@@ -226,6 +226,40 @@ function login_by_jwt(){
         }
       }
 
+      function getUserParameterValueFromPayload($payload, $parameter)
+    {
+        if (strpos($parameter, '.') !== false) {
+            $array = explode('.', $parameter);
+            foreach ($array as $value) {
+                $payload = (array)$payload;
+                if (!isset($payload[$value])) {
+                    throw new Exception(
+                        sprintf(
+                            __('Unable to find user %s property in JWT.( Settings: %s )', 'simple-jwt-login'),
+                            $value,
+                            $parameter
+                        ),
+                        ErrorCodes::ERR_UNABLE_TO_FIND_PROPERTY_FOR_USER_IN_JWT
+                    );
+                }
+                $payload = $payload[$value];
+            }
+
+            return (string)$payload;
+        }
+
+        if (!isset($payload[$parameter])) {
+            throw new Exception(
+                sprintf(
+                    __('Unable to find user %s property in JWT.', 'simple-jwt-login'),
+                    $parameter
+                ),
+                ErrorCodes::ERR_JWT_PARAMETER_FOR_USER_NOT_FOUND
+            );
+        }
+
+        return $payload[$parameter];
+    }
       
 			function validateJWTAndGetUserValueFromPayload($parameter, $tok){
         $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
@@ -244,7 +278,8 @@ function login_by_jwt(){
 					[$jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
 				);
 		
-				return $jwt_login->getUserParameterValueFromPayload($decoded, $parameter);
+				//return $jwt_login->getUserParameterValueFromPayload($decoded, $parameter);
+        return getUserParameterValueFromPayload($decoded, $parameter);
 			}
 		function make_login($tok){
 
