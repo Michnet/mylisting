@@ -4079,7 +4079,7 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (max-width: 1200px) {
-    
+    .user-profile-dropdown .user-profile-name{color: rgb(216, 216, 216) !important}
 .user-profile-dropdown .user-profile-name .avatar, .user-area div.avatar img{
     height: 32px !important;
 }
@@ -4735,4 +4735,7 @@ button.delete-repeater-item {
 .wcfm_menu_items {
     margin: 0;
     border: none;
+}
+.woocommerce-account:not(.logged-in) .acff-edit-button.edit-button {
+    display: none !important;
 }
