@@ -124,16 +124,112 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
     return $args;
 }
 
+use SimpleJWTLogin\Modules\WordPressDataInterface;
+use SimpleJWTLogin\Modules\SimpleJWTLoginSettings;
+
+
+function get_social_user_rest($request) {
+  //$params = $request->get_params();
+  $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
+ // $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
+  $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
+  $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
+
+  $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
+  $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+
+ /**  
+     * @param WordPressDataInterface $wordPressData
+     * @param SimpleJWTLoginSettings $jwtSettings
+     * 
+     * @return array
+     **/
+
+
+$providerID = $request['provider'];
+$access_token = $request['access_token'];
+$authOptions['access_token_data'] = $access_token;
+
+try {
+  $userIdBySocial = nslLinkOrRegister($providerID, $authOptions);
+} catch (Exception $e) {
+  return new WP_Error('error', $e->getMessage());
+}
+
+  $response = [];
+
+  if($userIdBySocial){
+    $user_id = intval($userIdBySocial);
+
+    $userObj = get_userdata($user_id );
+    $status = loginUser($userObj);
+    
+    $jwt_userObj['username'] = $userObj->user_login;
+    $jwt_userObj = (object)$jwt_userObj;
+    $jwt = 'No class';
+    
+    $payload = $jwt_auth_space->generatePayload(
+      [],
+      $wordPressData,
+      $jwtSettings,
+      $userObj
+    );
+
+    $jwt = $JWT::encode(
+      $payload,
+      $JwtKeyFactory::getFactory($jwtSettings)->getPrivateKey(),
+      $jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
+    );
+
+    $user_meta = [];
+
+    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? false;
+    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? false;
+    $user_meta['reviewed'] = get_user_meta( $user_id, 'reviewed_list', true ) ?? false;
+
+    $wp_req = array();
+    $wp_req['id'] = $user_id;
+    $wp_req['context'] = 'edit';
+    $rest_request = new WP_REST_Request();
+    $rest_request->set_query_params($wp_req);
+    $local_controller = new WP_REST_Users_Controller();
+    $returnable_user = $local_controller->get_item($rest_request);
+    $response['user'] = $returnable_user->data;
+    $response['user']['status'] = $status;
+    $response['jwt'] = $jwt;
+    $response['request'] = $jwt_userObj;
+    $response['user']['user_meta'] = $user_meta;
+  }else{
+    $response['user']['status'] = 'unregistered';
+  }
+  return $response;
+}
+
 //log in by jwt
 
 function login_by_jwt(){
 	if (!is_user_logged_in() ) {
 		
 		if(isset($_GET["lc_tok"])){
+
+
+      function validateDoLogin($jwt_login, $jwtSettings){
+        $allowedIPs = $jwtSettings->getLoginSettings()->getAllowedLoginIps();
+        if (!empty($allowedIPs) && !$jwt_login->serverHelper->isClientIpInList($allowedIPs)) {
+            throw new Exception(
+                sprintf(
+                    __('This IP[ %s ] is not allowed to auto-login.', 'simple-jwt-login'),
+                    $jwt_login->serverHelper->getClientIP()
+                ),
+                ErrorCodes::ERR_IP_IS_NOT_ALLOWED_TO_LOGIN
+            );
+        }
+      }
+
       
-     // $jwtSettings = new SimpleJWTLoginSettings(new WordPressData());
-			function validateJWTAndGetUserValueFromPayload($parameter, $tok)
-			{
+			function validateJWTAndGetUserValueFromPayload($parameter, $tok){
+        $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
+        $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
 
 				$jwt_base  = new \SimpleJWTLogin\Services\BaseService();
 				$JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
@@ -144,21 +240,23 @@ function login_by_jwt(){
 				$decoded = (array)$JWT::decode(
 					//$jwt_base->jwt,
 					$tok,
-					$JwtKeyFactory::getFactory($jwt_base->jwtSettings)->getPublicKey(),
-					[$jwt_base->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
+					$JwtKeyFactory::getFactory($jwtSettings)->getPublicKey(),
+					[$jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
 				);
 		
 				return $jwt_base->getUserParameterValueFromPayload($decoded, $parameter);
 			}
-		function make_login($tok)
-			{
+		function make_login($tok){
 
 				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
+        $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
+        $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
 
 				//$jwt_login->validateDoLogin();
+        //validateDoLogin($jwt_login, $jwtSettings);
 
 				$loginParameter = validateJWTAndGetUserValueFromPayload(
-					$jwt_login->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
+					$jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
 					$tok
 				);
 
@@ -1316,86 +1414,7 @@ function loginUser($user)
         return 'Logged In';
 }
 
-use SimpleJWTLogin\Modules\WordPressDataInterface;
-use SimpleJWTLogin\Modules\SimpleJWTLoginSettings;
 
-
-function get_social_user_rest($request) {
-  //$params = $request->get_params();
-  $jwt_auth_space = new \SimpleJWTLogin\Services\AuthenticateService();
- // $authSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings();
-  $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
-  $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
-
-  $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
-  $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
-
- /**  
-     * @param WordPressDataInterface $wordPressData
-     * @param SimpleJWTLoginSettings $jwtSettings
-     * 
-     * @return array
-     **/
-
-
-$providerID = $request['provider'];
-$access_token = $request['access_token'];
-$authOptions['access_token_data'] = $access_token;
-
-try {
-  $userIdBySocial = nslLinkOrRegister($providerID, $authOptions);
-} catch (Exception $e) {
-  return new WP_Error('error', $e->getMessage());
-}
-
-  $response = [];
-
-  if($userIdBySocial){
-    $user_id = intval($userIdBySocial);
-
-    $userObj = get_userdata($user_id );
-    $status = loginUser($userObj);
-    
-    $jwt_userObj['username'] = $userObj->user_login;
-    $jwt_userObj = (object)$jwt_userObj;
-    $jwt = 'No class';
-    
-    $payload = $jwt_auth_space->generatePayload(
-      [],
-      $wordPressData,
-      $jwtSettings,
-      $userObj
-    );
-
-    $jwt = $JWT::encode(
-      $payload,
-      $JwtKeyFactory::getFactory($jwtSettings)->getPrivateKey(),
-      $jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
-    );
-
-    $user_meta = [];
-
-    $user_meta['likes'] = get_user_meta( $user_id, 'likes', true ) ?? false;
-    $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? false;
-    $user_meta['reviewed'] = get_user_meta( $user_id, 'reviewed_list', true ) ?? false;
-
-    $wp_req = array();
-    $wp_req['id'] = $user_id;
-    $wp_req['context'] = 'edit';
-    $rest_request = new WP_REST_Request();
-    $rest_request->set_query_params($wp_req);
-    $local_controller = new WP_REST_Users_Controller();
-    $returnable_user = $local_controller->get_item($rest_request);
-    $response['user'] = $returnable_user->data;
-    $response['user']['status'] = $status;
-    $response['jwt'] = $jwt;
-    $response['request'] = $jwt_userObj;
-    $response['user']['user_meta'] = $user_meta;
-  }else{
-    $response['user']['status'] = 'unregistered';
-  }
-  return $response;
-}
 
 function validate_soc_provider($providerID) {
   if (NextendSocialLogin::isProviderEnabled($providerID)) {
