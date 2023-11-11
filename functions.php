@@ -304,6 +304,25 @@ function login_by_jwt(){
 
         return $user;
     }
+
+    function validateJwtRevoked($userId, $jwt, $wordPressData, $jwtSettings)
+    {
+        $revokedTokensArray = $wordPressData->getUserMeta(
+            $userId,
+            $jwtSettings::REVOKE_TOKEN_KEY
+        );
+
+        if (empty($revokedTokensArray)) {
+            return true;
+        }
+        foreach ($revokedTokensArray as $token) {
+            if ($token === $jwt) {
+                throw new Exception(__('This JWT is invalid.', 'simple-jwt-login'), ErrorCodes::ERR_REVOKED_TOKEN);
+            }
+        }
+
+        return true;
+    }
 		function make_login($tok){
 
 				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
@@ -326,11 +345,14 @@ function login_by_jwt(){
 					);
 				}
 
-				$jwt_login->validateJwtRevoked(
-					$jwt_login->wordPressData->getUserProperty($user, 'ID'),
-					$jwt_login->jwt
+				$jwt_login-validateJwtRevoked(
+					$wordPressData->getUserProperty($user, 'ID'),
+					//$jwt_login->jwt
+          $tok,
+          $wordPressData, 
+          $jwtSettings
 				);
-				$jwt_login->wordPressData->loginUser($user);
+				$wordPressData->loginUser($user);
 			}
 
 			$token = trim($_GET["lc_tok"]);
