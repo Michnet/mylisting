@@ -317,8 +317,8 @@ function login_by_jwt(){
 					$jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
 					$tok
 				);
-
-				$user = $jwt_login->getUserDetails($loginParameter, $jwtSettings, $wordPressData);
+        //$user = $jwt_login->getUserDetails($loginParameter);
+				$user = getUserDetails($loginParameter, $jwtSettings, $wordPressData);
 				if ($user === null) {
 					throw new Exception(
 						__('User not found.', 'simple-jwt-login'),
