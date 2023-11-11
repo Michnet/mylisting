@@ -969,7 +969,7 @@ function public_activity( $request ) {
 
 //Auth social by JWT
 
-//function jwt_login(){
+function jwt_login(){
   if (class_exists('LoginService')) {
     class JwtLoginService extends LoginService
 {
@@ -1089,8 +1089,9 @@ function public_activity( $request ) {
         }
     }
   }
+  new JwtLoginService();
   }
-//}
+}
 
 add_action( 'init', 'process_jwt_login' );
 
