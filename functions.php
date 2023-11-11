@@ -1096,11 +1096,11 @@ add_action( 'init', 'process_jwt_login' );
 
 function process_jwt_login() {
   if(isset($_GET["lc_tok"])){ 
-    if(class_exists("JwtLoginService")){
-      $token = trim($_GET["lc_tok"]);
+   // if(class_exists("JwtLoginService")){
+      //$token = trim($_GET["lc_tok"]);
         //make_login($token);
         new JwtLoginService();
-      }
+     // }
     }
 }
 function socialJwtFunc(){
@@ -1171,7 +1171,7 @@ add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
   socialJwtFunc();
-  //jwt_login();
+  jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 //$authObj = new AuthenticateService();
 }
