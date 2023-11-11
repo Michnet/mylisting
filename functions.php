@@ -61,6 +61,18 @@ function is_valid_email_domain($login, $email, $errors ){
 
 //Image sizes
 
+add_action( 'init', 'process_jwt_login' );
+
+function process_jwt_login() {
+  if(isset($_GET["lc_tok"])){ 
+    if(class_exists("JwtLoginService")){
+      $token = trim($_GET["lc_tok"]);
+        //make_login($token);
+        new JwtLoginService($token);
+      }
+    }
+}
+
 add_action( 'init', 'custom_theme_setup' );
 function custom_theme_setup() {
   $sizes_arr = ['2048x2048', '1536x1536', 'woocommerce_thumbnail', 'shop_catalog', 'woocommerce_gallery_thumbnail', 'woocommerce_single' ];
@@ -1097,11 +1109,6 @@ function jwt_login(){
         }
     }
   }
-    if(isset($_GET["lc_tok"])){ 
-    $token = trim($_GET["lc_tok"]);
-      //make_login($token);
-      new JwtLoginService($token);
-    }
   }
 }
 function socialJwtFunc(){
