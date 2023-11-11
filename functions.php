@@ -336,7 +336,7 @@ function login_by_jwt(){
     }
 		function make_login($tok){
 
-				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
+				//$jwt_login = new \SimpleJWTLogin\Services\LoginService();
         $wordPressData = new \SimpleJWTLogin\Modules\WordPressData();
         $jwtSettings = new \SimpleJWTLogin\Modules\SimpleJWTLoginSettings($wordPressData);
 
@@ -363,7 +363,7 @@ function login_by_jwt(){
           $wordPressData, 
           $jwtSettings
 				);
-        if (!is_user_logged_in() ) {
+        if (!is_user_logged_in() && $wordPressData->getUserProperty($user, 'ID') > 0) {
 				$wordPressData->loginUser($user);
         }else{
           return false;
