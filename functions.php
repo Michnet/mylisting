@@ -363,7 +363,11 @@ function login_by_jwt(){
           $wordPressData, 
           $jwtSettings
 				);
+        if (!is_user_logged_in() ) {
 				$wordPressData->loginUser($user);
+        }else{
+          return false;
+        }
 			}
 
 			$token = trim($_GET["lc_tok"]);
