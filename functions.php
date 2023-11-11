@@ -982,20 +982,22 @@ function jwt_login(){
         if(isset($_GET["lc_tok"])){ 
             $token = trim($_GET["lc_tok"]);
               return $token;
+          }else{
+            return new WP_Error( 'no_token', 'No token was found' );
           }
       }
     public function validateJWTAndGetUserValueFromPayload($parameter, $tok)
     {
 
      // $jwt_base  = new \SimpleJWTLogin\Services\BaseService();
-      $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
-      $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+     // $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
+      //$JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
 
 
-      $JWT::$leeway = $this::JWT_LEEVAY;
-      $decoded = (array)$JWT::decode(
+      JWT::$leeway = self::JWT_LEEVAY;
+      $decoded = (array)JWT::decode(
         $tok,
-        $JwtKeyFactory::getFactory($this->jwtSettings)->getPublicKey(),
+        JwtKeyFactory::getFactory($this->jwtSettings)->getPublicKey(),
         [$this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
       );
 
