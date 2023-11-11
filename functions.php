@@ -115,7 +115,6 @@ function addOrderbySupportRest(){
 	);
 }
 
-
 //Limit relationship posts to author
 add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
 function my_acf_fields_relationship_query( $args, $field, $post_id ) {
@@ -1040,7 +1039,7 @@ function jwt_login(){
 
         $this->validateJwtRevoked(
             $this->wordPressData->getUserProperty($user, 'ID'),
-            $this->jwt
+            $this->token
         );
         $this->wordPressData->loginUser($user);
         if ($this->jwtSettings->getHooksSettings()->isHookEnable(SimpleJWTLoginHooks::LOGIN_ACTION_NAME)) {
@@ -1175,7 +1174,6 @@ function my_plugin_override() {
   socialJwtFunc();
   jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
-
 //$authObj = new AuthenticateService();
 }
 
