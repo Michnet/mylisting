@@ -1147,16 +1147,11 @@ function public_activity( $request ) {
 }
 
 //Auth social by JWT
-
+/* 
 function jwt_login(){
   if (class_exists('LoginService')) {
     class JwtLoginService extends LoginService
 {
-     /*  public $token;
-
-      public function __construct($token) {
-        $this->token = $token;
-      } */
       public function token() {
         if(isset($_GET["lc_tok"])){ 
             $token = trim($_GET["lc_tok"]);
@@ -1192,7 +1187,7 @@ function jwt_login(){
         );
 
         return $this->getUserParameterValueFromPayload($decoded, $parameter);
-    } */
+    } 
     public function makeAction()
     {
         try {
@@ -1213,10 +1208,6 @@ function jwt_login(){
         }
     }
 
-    /**
-     * @return WP_REST_Response|null
-     * @throws Exception
-     */
     public function makeActionInternal()
     {
         $this->validateDoLogin();
@@ -1225,7 +1216,7 @@ function jwt_login(){
             $this->token()
         );
 
-        /** @var WP_User|null $user */
+        /** @var WP_User|null $user 
         $user = $this->getUserDetails($loginParameter);
         if ($user === null) {
             throw new Exception(
@@ -1252,10 +1243,6 @@ function jwt_login(){
             ->withServerHelper($this->serverHelper)
             ->makeAction();
     }
-
-    /**
-     * @throws Exception
-     */
     private function validateDoLogin()
     {
         $allowedIPs = $this->jwtSettings->getLoginSettings()->getAllowedLoginIps();
@@ -1272,10 +1259,10 @@ function jwt_login(){
   }
     new JwtLoginService();
   }
-}
+} */
 
-add_action( 'init', 'process_jwt_login' );
-
+//add_action( 'init', 'process_jwt_login' );
+/* 
 function process_jwt_login() {
   //jwt_login();
   if(isset($_GET["lc_tok"])){ 
@@ -1285,7 +1272,7 @@ function process_jwt_login() {
         new JwtLoginService();
      }
     }
-}
+} */
 /* function socialJwtFunc(){
   if (class_exists('AuthenticateService')) {
     class SocialJwt extends AuthenticateService
@@ -1347,7 +1334,7 @@ function process_jwt_login() {
   }
 } */
 
-
+/* 
 add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
@@ -1355,7 +1342,7 @@ function my_plugin_override() {
   //jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 //$authObj = new AuthenticateService();
-}
+} */
 
 
 
