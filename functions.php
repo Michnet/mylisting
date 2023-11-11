@@ -1862,6 +1862,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
     $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
     $_data['address'] = $meta['_job_location'][0]  ?? null;
+    $_data['venue'] = $meta['_venue'][0]  ?? null;
+    $_data['event_type'] = $meta['_event-type'][0] ??
     $_data['greeting'] = $meta['_greeting'][0]  ?? null;
     $_data['cover'] = $cover  ? $cover[0] : null;
     $_data['gallery'] = $gallery ?? null;
