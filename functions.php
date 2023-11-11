@@ -1091,14 +1091,15 @@ function jwt_login(){
         }
     }
   }
+  
+    //}
+  }
   if(isset($_GET["lc_tok"])){ 
     //if(class_exists("JwtLoginService")){
       //$token = trim($_GET["lc_tok"]);
         //make_login($token);
         new JwtLoginService();
      }
-    //}
-  }
 }
 
 add_action( 'init', 'process_jwt_login' );
