@@ -4089,6 +4089,7 @@ function rest_delete_review( $request ) {
 }
 
 //WC Bookings Rest api
+if(class_exists('WC_Bookings_REST_Booking_Controller')){
 class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controller {
 
 	/**
@@ -4250,4 +4251,5 @@ class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controll
 		return apply_filters( "woocommerce_rest_prepare_{$this->post_type}_object", $response, $object, $request );
 	}
 
+}
 }
