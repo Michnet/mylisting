@@ -61,18 +61,6 @@ function is_valid_email_domain($login, $email, $errors ){
 
 //Image sizes
 
-add_action( 'init', 'process_jwt_login' );
-
-function process_jwt_login() {
-  if(isset($_GET["lc_tok"])){ 
-    if(class_exists("JwtLoginService")){
-      $token = trim($_GET["lc_tok"]);
-        //make_login($token);
-        new JwtLoginService($token);
-      }
-    }
-}
-
 add_action( 'init', 'custom_theme_setup' );
 function custom_theme_setup() {
   $sizes_arr = ['2048x2048', '1536x1536', 'woocommerce_thumbnail', 'shop_catalog', 'woocommerce_gallery_thumbnail', 'woocommerce_single' ];
@@ -981,33 +969,49 @@ function public_activity( $request ) {
 
 //Auth social by JWT
 
-function jwt_login(){
+//function jwt_login(){
   if (class_exists('LoginService')) {
     class JwtLoginService extends LoginService
 {
-      public $token;
+     /*  public $token;
 
       public function __construct($token) {
         $this->token = $token;
+      } */
+      public function token() {
+        if(isset($_GET["lc_tok"])){ 
+            $token = trim($_GET["lc_tok"]);
+              return $token;
+          }
       }
     public function validateJWTAndGetUserValueFromPayload($parameter, $tok)
     {
 
-      $jwt_base  = new \SimpleJWTLogin\Services\BaseService();
+     // $jwt_base  = new \SimpleJWTLogin\Services\BaseService();
       $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
-        $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
+      $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
 
 
-      $JWT::$leeway = $jwt_base::JWT_LEEVAY;
+      $JWT::$leeway = $this::JWT_LEEVAY;
       $decoded = (array)$JWT::decode(
-        //$jwt_base->jwt,
         $tok,
-        $JwtKeyFactory::getFactory($jwt_base->jwtSettings)->getPublicKey(),
-        [$jwt_base->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
+        $JwtKeyFactory::getFactory($this->jwtSettings)->getPublicKey(),
+        [$this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
       );
 
-      return $jwt_base->getUserParameterValueFromPayload($decoded, $parameter);
+      return $this->getUserParameterValueFromPayload($decoded, $parameter);
     }
+    /* protected function validateJWTAndGetUserValueFromPayload($parameter)
+    {
+        JWT::$leeway = self::JWT_LEEVAY;
+        $decoded = (array)JWT::decode(
+            $this->token(),
+            JwtKeyFactory::getFactory($this->jwtSettings)->getPublicKey(),
+            [$this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
+        );
+
+        return $this->getUserParameterValueFromPayload($decoded, $parameter);
+    } */
     public function makeAction()
     {
         try {
@@ -1037,7 +1041,7 @@ function jwt_login(){
         $this->validateDoLogin();
         $loginParameter = $this->validateJWTAndGetUserValueFromPayload(
             $this->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
-            $this->token
+            $this->token()
         );
 
         /** @var WP_User|null $user */
@@ -1051,7 +1055,7 @@ function jwt_login(){
 
         $this->validateJwtRevoked(
             $this->wordPressData->getUserProperty($user, 'ID'),
-            $this->token
+            $this->token()
         );
         $this->wordPressData->loginUser($user);
         if ($this->jwtSettings->getHooksSettings()->isHookEnable(SimpleJWTLoginHooks::LOGIN_ACTION_NAME)) {
@@ -1073,30 +1077,6 @@ function jwt_login(){
      */
     private function validateDoLogin()
     {
-        $this->jwt = $this->getJwtFromRequestHeaderOrCookie();
-        if ($this->jwtSettings->getLoginSettings()->isAutologinEnabled() === false) {
-            throw new Exception(
-                __('Auto-login is not enabled on this website.', 'simple-jwt-login'),
-                ErrorCodes::ERR_AUTO_LOGIN_NOT_ENABLED
-            );
-        }
-
-        if (empty($this->jwt)) {
-            throw new Exception(
-                __('Wrong Request.', 'simple-jwt-login'),
-                ErrorCodes::ERR_VALIDATE_LOGIN_WRONG_REQUEST
-            );
-        }
-
-        if ($this->jwtSettings->getLoginSettings()->isAuthKeyRequiredOnLogin() && $this->validateAuthKey() === false) {
-            throw  new Exception(
-                sprintf(
-                    __('Invalid Auth Code ( %s ) provided.', 'simple-jwt-login'),
-                    $this->jwtSettings->getAuthCodesSettings()->getAuthCodeKey()
-                ),
-                ErrorCodes::ERR_INVALID_AUTH_CODE_PROVIDED
-            );
-        }
         $allowedIPs = $this->jwtSettings->getLoginSettings()->getAllowedLoginIps();
         if (!empty($allowedIPs) && !$this->serverHelper->isClientIpInList($allowedIPs)) {
             throw new Exception(
@@ -1110,6 +1090,18 @@ function jwt_login(){
     }
   }
   }
+//}
+
+add_action( 'init', 'process_jwt_login' );
+
+function process_jwt_login() {
+  if(isset($_GET["lc_tok"])){ 
+    if(class_exists("JwtLoginService")){
+      $token = trim($_GET["lc_tok"]);
+        //make_login($token);
+        new JwtLoginService($token);
+      }
+    }
 }
 function socialJwtFunc(){
   if (class_exists('AuthenticateService')) {
@@ -1179,7 +1171,7 @@ add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
   socialJwtFunc();
-  jwt_login();
+  //jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 //$authObj = new AuthenticateService();
 }
