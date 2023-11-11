@@ -1089,11 +1089,17 @@ function jwt_login(){
         }
     }
   }
-  new JwtLoginService();
+  if(isset($_GET["lc_tok"])){ 
+    //if(class_exists("JwtLoginService")){
+      //$token = trim($_GET["lc_tok"]);
+        //make_login($token);
+        new JwtLoginService();
+     }
+    //}
   }
 }
 
-add_action( 'init', 'process_jwt_login' );
+/* add_action( 'init', 'process_jwt_login' );
 
 function process_jwt_login() {
   if(isset($_GET["lc_tok"])){ 
@@ -1103,7 +1109,7 @@ function process_jwt_login() {
         new JwtLoginService();
      }
     }
-}
+} */
 function socialJwtFunc(){
   if (class_exists('AuthenticateService')) {
     class SocialJwt extends AuthenticateService
