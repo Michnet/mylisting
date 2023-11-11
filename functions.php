@@ -24,6 +24,17 @@ add_action( 'admin_init', 'edit_theme_caps');
 
 $frontend_link = 'https://lyvecity.com';
 
+function lc_disable_admin_bar() {
+  if (current_user_can('administrator') ) {
+    // user can view admin bar
+    show_admin_bar(true); // this line isn't essentially needed by default...
+  } else {
+    // hide admin bar
+    show_admin_bar(false);
+  }
+}
+add_action('after_setup_theme', 'lc_disable_admin_bar');
+
 
 // Allow Registration Only from @warrenchandler.com email addresses
 
