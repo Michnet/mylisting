@@ -281,6 +281,29 @@ function login_by_jwt(){
 				//return $jwt_login->getUserParameterValueFromPayload($decoded, $parameter);
         return getUserParameterValueFromPayload($decoded, $parameter);
 			}
+
+      function getUserDetails($userData, $jwtSettings, $wordPressData){
+        $login_settings = new \SimpleJWTLogin\Modules\Settings\LoginSettings();
+        
+        switch ($jwtSettings->getLoginSettings()->getJWTLoginBy()) {
+            case $login_settings::JWT_LOGIN_BY_EMAIL:
+                $user = $wordPressData->getUserDetailsByEmail($userData);
+                break;
+            case $login_settings::JWT_LOGIN_BY_USER_LOGIN:
+                $user = $wordPressData->getUserByUserLogin($userData);
+                break;
+            case $login_settings::JWT_LOGIN_BY_WORDPRESS_USER_ID:
+            default:
+                $user = $wordPressData->getUserDetailsById((int)$userData);
+                break;
+        }
+
+        if ($wordPressData->isInstanceOfuser($user) === false) {
+            return null;
+        }
+
+        return $user;
+    }
 		function make_login($tok){
 
 				$jwt_login = new \SimpleJWTLogin\Services\LoginService();
@@ -295,7 +318,7 @@ function login_by_jwt(){
 					$tok
 				);
 
-				$user = $jwt_login->getUserDetails($loginParameter);
+				$user = $jwt_login->getUserDetails($loginParameter, $jwtSettings, $wordPressData);
 				if ($user === null) {
 					throw new Exception(
 						__('User not found.', 'simple-jwt-login'),
