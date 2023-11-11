@@ -346,8 +346,8 @@ function login_by_jwt(){
 				}
 
 				$jwt_login-validateJwtRevoked(
+          //$jwt_login->jwt
 					$wordPressData->getUserProperty($user, 'ID'),
-					//$jwt_login->jwt
           $tok,
           $wordPressData, 
           $jwtSettings
