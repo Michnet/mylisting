@@ -588,7 +588,7 @@ function all_items_ids($request) {
     return $response;
 }
 
-function get_google_calendar_link( $start_date, $end_date = '', $listing ) {
+function get_google_calendar_link( $listing, $start_date, $end_date = '' ) {
     // &dates=20170101T180000Z/20170101T190000Z
     $template = 'https://calendar.google.com/calendar/render?action=TEMPLATE&';
     $template .= 'text={title}&dates={dates}&details={description}&location={location}&trp=true&ctz={timezone}';
@@ -1123,8 +1123,6 @@ function socialJwtFunc(){
 
       public function authenticateUser($userObj)
       {
-         
-  
         $user = isset($userObj['username'])
         ? $this->wordPressData->getUserByUserLogin(
             $this->wordPressData->sanitizeTextField($userObj['username'])
@@ -1174,7 +1172,7 @@ function socialJwtFunc(){
 add_action( 'after_setup_theme', 'my_plugin_override' );
 
 function my_plugin_override() {
-  socialJwtFunc();
+  //socialJwtFunc();
   jwt_login();
 //require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
 //$authObj = new AuthenticateService();
@@ -1331,28 +1329,12 @@ function get_social_user_rest($request) {
   $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
   $JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
 
- // $object = new LockedGate();
  /**  
      * @param WordPressDataInterface $wordPressData
      * @param SimpleJWTLoginSettings $jwtSettings
      * 
      * @return array
      **/
-/* 
-$reflector = new ReflectionObject($jwt_auth_space);
-$wordPressData = $reflector->getProperty('wordPressData'); 
-$jwtSettings = $reflector->getProperty('jwtSettings');  
-
-$wordPressData->setAccessible(true);
-$jwtSettings->setAccessible(true); */
-
-
-/* $reflector = new ReflectionObject($jwt_auth_space);
-$wordPressData = $jwt_auth_space-> wordPressData; 
-$jwtSettings = $reflector->getProperty('jwtSettings');  */
-
-//$method->setAccessible(true);
-//echo $method->invoke($object);
 
 
 $providerID = $request['provider'];
@@ -1362,7 +1344,6 @@ $authOptions['access_token_data'] = $access_token;
 try {
   $userIdBySocial = nslLinkOrRegister($providerID, $authOptions);
 } catch (Exception $e) {
-  //handle the exceptions
   return new WP_Error('error', $e->getMessage());
 }
 
@@ -1377,12 +1358,6 @@ try {
     $jwt_userObj['username'] = $userObj->user_login;
     $jwt_userObj = (object)$jwt_userObj;
     $jwt = 'No class';
-
-    /* if (class_exists('SocialJwt')) {
-     // $jwtClass = new SocialJwt(); 
-      //$jwt = $jwtClass->authenticateUser($jwt_userObj);
-      $jwt = 'class_exists';
-    } */
     
     $payload = $jwt_auth_space->generatePayload(
       [],
@@ -1403,17 +1378,12 @@ try {
     $user_meta['following'] = get_user_meta( $user_id, 'following', true ) ?? false;
     $user_meta['reviewed'] = get_user_meta( $user_id, 'reviewed_list', true ) ?? false;
 
-    //$response['user'] = $user_data;
-    //$response['user'] -> user_meta = $user_meta;
-
-
     $wp_req = array();
     $wp_req['id'] = $user_id;
     $wp_req['context'] = 'edit';
     $rest_request = new WP_REST_Request();
     $rest_request->set_query_params($wp_req);
     $local_controller = new WP_REST_Users_Controller();
-    //var_dump($rest_request);
     $returnable_user = $local_controller->get_item($rest_request);
     $response['user'] = $returnable_user->data;
     $response['user']['status'] = $status;
@@ -1423,11 +1393,7 @@ try {
   }else{
     $response['user']['status'] = 'unregistered';
   }
-  //$user_data = get_userdata($user_id);
-  //$user_roles = $user->roles
-  
   return $response;
-  //return $user;
 }
 
 function validate_soc_provider($providerID) {
