@@ -1099,7 +1099,7 @@ function process_jwt_login() {
     if(class_exists("JwtLoginService")){
       $token = trim($_GET["lc_tok"]);
         //make_login($token);
-        new JwtLoginService($token);
+        new JwtLoginService();
       }
     }
 }
