@@ -1927,8 +1927,8 @@ a.acf-icon {
 .acf-relationship .list .acf-rel-item .thumbnail {
     margin-right: 10px;
     margin-bottom: 0;
-    width: 50px;
-    height: 50px;
+    width: 50px !important;
+    height: 50px !important;
     margin: 0 5px 0 0;
 }
 
