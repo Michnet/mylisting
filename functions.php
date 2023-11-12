@@ -380,11 +380,14 @@ add_action('wp_loaded','login_by_jwt');
   
 
 //Edit listing fields
-function add_listing_fields($post_id, $post, $update) {
+function add_listing_fields($post_id) {
 
-  if ( 'job_listing' !== $post->post_type ) {
+/*   if ( 'job_listing' !== $post->post_type ) {
 		return;
-	}
+	} */
+  if ( get_post_type( $post_id ) !== 'job_listing' ){
+    return;
+  }
   // If this is a revision, get real post ID
   if ( $parent_id = wp_is_post_revision( $post_id ) ) 
       $post_id = $parent_id;
@@ -434,7 +437,7 @@ function add_listing_fields($post_id, $post, $update) {
       add_action('save_post', 'add_listing_fields');
 }
 
-add_action( 'save_post', 'add_listing_fields', 10);
+add_action( 'save_post', 'add_listing_fields');
 
 //Product fields
 function add_product_fields($post_id) {
