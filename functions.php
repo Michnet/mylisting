@@ -1877,6 +1877,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $_data['social'] = $social_links   ?? null;
     $_data['schedule'] = $hours   ?? null;
     $_data['acf'] = $acf_data ?? null;
+    $_data['whatsapp'] = $meta['_whatsapp-number'][0] ?? null;
     $_data['thumbnail'] = $thumbnail   ?? null;
     $_data['large_thumb'] = $large_thumbnail   ?? null;
 	  $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
