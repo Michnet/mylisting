@@ -846,7 +846,7 @@ section.elementor-section.bottom_menu {
 }
 
 .mobile-user-menu {
-    background: var(--accent)
+    background: #c4c6c4;
 }
 
 .bw .e-gallery-image {
@@ -4152,12 +4152,16 @@ input.acff-submit-button.acf-button:hover {
         background: #e2e2e2!important
     }
 
+.i-nav.mobile-menu-open .user-profile-dropdown .user-profile-name {
+    color: #3b3b3b !important;
+}
+
     .i-nav ul li {
         border: none
     }
 
     ul#menu-main-menu>li {
-        padding-left: 60px
+        padding-left: 30px;
     }
 
     ul#menu-main-menu>li>a {
@@ -4600,6 +4604,7 @@ input.acff-submit-button.acf-button:hover {
 
 
 @media screen and (max-width: 480px) {
+    .no-login-background .login-content{width: 300px !important}
     #acf_col .modal-content{
     width: 100%;
     margin-top: 58px;
