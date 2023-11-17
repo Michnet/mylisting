@@ -74,5 +74,4 @@ if ( ! defined('ABSPATH') ) {
 	</div>
 
 	<?php do_action( 'woocommerce_register_form_end' ); ?>
-	<?php echo do_shortcode('[nextend_social_login]') ?>
 </form>
