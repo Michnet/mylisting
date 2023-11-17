@@ -55,5 +55,7 @@ if ( ! defined('ABSPATH') ) {
 			<?php _e( 'Forgot password?', 'my-listing' ) ?>
 		</a>
 	</div>
-	<?php echo do_shortcode('[nextend_social_login]') ?>
+	<?php 
+	//echo do_shortcode('[nextend_social_login]') 
+	?>
 </form>
