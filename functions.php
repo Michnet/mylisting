@@ -2827,6 +2827,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
               'taxonomy' => 'job_listing_category',
               'field'    => 'term_id',
               'terms'    => [ $category ],
+              'include_children' => true
             ];
           }
 
@@ -2842,6 +2843,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
               'taxonomy' => 'region',
               'field'    => 'term_id',
               'terms'    => [ $location ],
+              'include_children' => true
             ];
           }
           
