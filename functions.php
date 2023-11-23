@@ -2825,7 +2825,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
 
             $custom_args['tax_query'][] = [
               'taxonomy' => 'job_listing_category',
-              'field'    => 'term_id',
+              'field'    => 'slug',
               'terms'    => [ $category ],
               'include_children' => true
             ];
@@ -2841,7 +2841,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
             $location  = $params['location'];
             $custom_args['tax_query'][] = [
               'taxonomy' => 'region',
-              'field'    => 'term_id',
+              'field'    => 'slug',
               'terms'    => [ $location ],
               'include_children' => true
             ];
