@@ -3836,6 +3836,27 @@ function get_listings_query($request) {
 			];
     }
 
+     // Location filter.
+     if (isset($params['location'] ) ) {
+      $location  = $params['location'];
+      $args['tax_query'][] = [
+        'taxonomy' => 'region',
+        'field'    => 'slug',
+        'terms'    => [ $location ],
+        'include_children' => true
+      ];
+    }
+    
+      // Tag filter.
+    if (isset($params['tags']) ) {
+      $tags  = $params['tags'];	
+      $args['tax_query'][] = [
+        'taxonomy' => 'case27_job_listing_tags',
+        'field'    => 'slug',
+        'terms' => array( $tags),
+      ];
+    }
+
 		if ( $context === 'term-search' ) {
 			$taxonomy = ! empty( $params['taxonomy'] ) ? sanitize_text_field( $params['taxonomy'] ) : false;
 			$term = ! empty( $params['term'] ) ? sanitize_text_field( $params['term'] ) : false;
@@ -3850,8 +3871,8 @@ function get_listings_query($request) {
 				'field' => 'slug',
 				'terms' => $term,
 				'operator' => $tax_query_operator,
-				'include_children' => $tax_query_operator !== 'AND',			
-        //
+				//'include_children' => $tax_query_operator !== 'AND',
+        'include_children' => true,			
 			];
 
 			// add support for nearby order in single term page
