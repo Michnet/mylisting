@@ -948,6 +948,12 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 
+    register_rest_route('m-api/v1', 'newsletter(?:/(?P<id>\d+))?',array(
+      'methods'  => 'POST',
+      'callback' => 'news_subscribe',
+      'permission_callback' => '__return_true',
+  ));
+
     register_rest_route('m-api/v1', 'activity(?:/(?P<id>\d+))?',array(
       'methods'  => 'GET',
       'callback' => 'public_activity',
@@ -1010,6 +1016,39 @@ function random_digits($length=10) {
   return $string;
 }
 
+
+function news_subscribe($request){
+  $params = $request->get_params();
+  $email = $params["email"] ?? null;
+  $first_name = $params["first_name"] ?? null;
+  $last_name = $params["last_name"] ?? null;
+
+  $data = new stdClass();
+
+  $args = array(
+    "firstname" => $first_name,
+    'email' => $email,
+  );
+  if($last_name){
+    $args["lastname"] = $last_name;
+  }
+
+  $subscriber_id = mailster('subscribers')->add($args);
+  if($subscriber_id){
+    $data->subscriber_id = $subscriber_id;
+    $data->success = true;
+
+    $to_list = mailster('subscribers')->assign_lists($subscriber_id, 2, false);
+    if($to_list){
+      $data->list_id = 2;
+    }
+
+  }else{
+    $data->success = false;
+  }
+
+  return $data;
+}
 
 //public activity rest api
 
@@ -1163,206 +1202,6 @@ function public_activity( $request ) {
 
   return $response;
 }
-
-//Auth social by JWT
-/* 
-function jwt_login(){
-  if (class_exists('LoginService')) {
-    class JwtLoginService extends LoginService
-{
-      public function token() {
-        if(isset($_GET["lc_tok"])){ 
-            $token = trim($_GET["lc_tok"]);
-              return $token;
-          }else{
-            return new WP_Error( 'no_token', 'No token was found' );
-          }
-      }
-    public function validateJWTAndGetUserValueFromPayload($parameter, $tok)
-    {
-
-     // $jwt_base  = new \SimpleJWTLogin\Services\BaseService();
-     // $JWT = new \SimpleJWTLogin\Libraries\JWT\JWT();
-      //$JwtKeyFactory = new \SimpleJWTLogin\Helpers\Jwt\JwtKeyFactory();
-
-
-      JWT::$leeway = self::JWT_LEEVAY;
-      $decoded = (array)JWT::decode(
-        $tok,
-        JwtKeyFactory::getFactory($this->jwtSettings)->getPublicKey(),
-        [$this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
-      );
-
-      return $this->getUserParameterValueFromPayload($decoded, $parameter);
-    }
-    /* protected function validateJWTAndGetUserValueFromPayload($parameter)
-    {
-        JWT::$leeway = self::JWT_LEEVAY;
-        $decoded = (array)JWT::decode(
-            $this->token(),
-            JwtKeyFactory::getFactory($this->jwtSettings)->getPublicKey(),
-            [$this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()]
-        );
-
-        return $this->getUserParameterValueFromPayload($decoded, $parameter);
-    } 
-    public function makeAction()
-    {
-        try {
-            return $this->makeActionInternal();
-        } catch (Exception $e) {
-            $redirectOnFail = $this->jwtSettings->getLoginSettings()->getAutologinRedirectOnFail();
-            if (!empty($redirectOnFail)) {
-                $redirectOnFail = $this->includeRequestParameters($redirectOnFail);
-                $redirectOnFail .= (strpos($redirectOnFail, '?') !== false ? '&' : '?')
-                    . http_build_query([
-                        'error_message' => $e->getMessage(),
-                        'error_code' => $e->getCode()
-                    ]);
-
-                return $this->wordPressData->redirect($redirectOnFail);
-            }
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    public function makeActionInternal()
-    {
-        $this->validateDoLogin();
-        $loginParameter = $this->validateJWTAndGetUserValueFromPayload(
-            $this->jwtSettings->getLoginSettings()->getJwtLoginByParameter(),
-            $this->token()
-        );
-
-        /** @var WP_User|null $user 
-        $user = $this->getUserDetails($loginParameter);
-        if ($user === null) {
-            throw new Exception(
-                __('User not found.', 'simple-jwt-login'),
-                ErrorCodes::ERR_DO_LOGIN_USER_NOT_FOUND
-            );
-        }
-
-        $this->validateJwtRevoked(
-            $this->wordPressData->getUserProperty($user, 'ID'),
-            $this->token()
-        );
-        $this->wordPressData->loginUser($user);
-        if ($this->jwtSettings->getHooksSettings()->isHookEnable(SimpleJWTLoginHooks::LOGIN_ACTION_NAME)) {
-            $this->wordPressData->triggerAction(SimpleJWTLoginHooks::LOGIN_ACTION_NAME, $user);
-        }
-
-        return (new RedirectService())
-            ->withSettings($this->jwtSettings)
-            ->withSession($this->session)
-            ->withCookies($this->cookie)
-            ->withRequest($this->request)
-            ->withUser($user)
-            ->withServerHelper($this->serverHelper)
-            ->makeAction();
-    }
-    private function validateDoLogin()
-    {
-        $allowedIPs = $this->jwtSettings->getLoginSettings()->getAllowedLoginIps();
-        if (!empty($allowedIPs) && !$this->serverHelper->isClientIpInList($allowedIPs)) {
-            throw new Exception(
-                sprintf(
-                    __('This IP[ %s ] is not allowed to auto-login.', 'simple-jwt-login'),
-                    $this->serverHelper->getClientIP()
-                ),
-                ErrorCodes::ERR_IP_IS_NOT_ALLOWED_TO_LOGIN
-            );
-        }
-    }
-  }
-    new JwtLoginService();
-  }
-} */
-
-//add_action( 'init', 'process_jwt_login' );
-/* 
-function process_jwt_login() {
-  //jwt_login();
-  if(isset($_GET["lc_tok"])){ 
-    if(class_exists("JwtLoginService")){
-      //$token = trim($_GET["lc_tok"]);
-        //make_login($token);
-        new JwtLoginService();
-     }
-    }
-} */
-/* function socialJwtFunc(){
-  if (class_exists('AuthenticateService')) {
-    class SocialJwt extends AuthenticateService
-  {
-      /**
-       * @param array $payload
-       * @param WordPressDataInterface $wordPressData
-       * @param SimpleJWTLoginSettings $jwtSettings
-       * @param WP_User $user
-       *
-       * @return array
-       
-    
-
-      public function authenticateUser($userObj)
-      {
-        $user = isset($userObj['username'])
-        ? $this->wordPressData->getUserByUserLogin(
-            $this->wordPressData->sanitizeTextField($userObj['username'])
-        )
-        : $this->wordPressData->getUserDetailsByEmail(
-            $this->wordPressData->sanitizeTextField($userObj['email'])
-        ); 
-  
-          if (empty($user)) {
-              throw new Exception(
-                  __('Wrong user credentials.', 'simple-jwt-login'),
-                  ErrorCodes::AUTHENTICATION_WRONG_CREDENTIALS
-              );
-          }
-  
-          //Generate payload
-          $payload = isset($this->userObj['payload'])
-              ? json_decode(
-                  stripslashes(
-                      $this->wordPressData->sanitizeTextField($this->userObj['payload'])
-                  ),
-                  true
-              )
-              : [];
-  
-          $payload = self::generatePayload(
-              $payload,
-              $this->wordPressData,
-              $this->jwtSettings,
-              $user
-          );
-  
-          $response = JWT::encode(
-                      $payload,
-                      JwtKeyFactory::getFactory($this->jwtSettings)->getPrivateKey(),
-                      $this->jwtSettings->getGeneralSettings()->getJWTDecryptAlgorithm()
-          );
-  
-          return $response;
-      }
-  }
-  new SocialJwt();
-  }
-} */
-
-/* 
-add_action( 'after_setup_theme', 'my_plugin_override' );
-
-function my_plugin_override() {
-  //socialJwtFunc();
-  //jwt_login();
-//require WP_PLUGIN_DIR.'/simple-jwt-login/src/Services/AuthenticateService.php';
-//$authObj = new AuthenticateService();
-} */
-
-
 
 //nsl handler
 function nslLinkOrRegister($providerID, $authOptions) {
@@ -3832,17 +3671,17 @@ function get_listings_query($request) {
 				'terms' => array( $category),
 				'operator' => 'IN',
 				'include_children' => true,			
-        //
 			];
     }
 
      // Location filter.
-     if (isset($params['location'] ) ) {
-      $location  = $params['location'];
+     if (isset($params['region'] ) ) {
+      $location  = $params['region'];
       $args['tax_query'][] = [
         'taxonomy' => 'region',
         'field'    => 'slug',
-        'terms'    => [ $location ],
+        'operator' => 'IN',
+        'terms' => array( $location ),
         'include_children' => true
       ];
     }
