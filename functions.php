@@ -1034,17 +1034,19 @@ function news_subscribe($request){
   }
 
   $subscriber_id = mailster('subscribers')->add($args);
-  if($subscriber_id){
+
+  if( ! is_wp_error( $subscriber_id)){
     $data->subscriber_id = $subscriber_id;
     $data->success = true;
 
-    $to_list = mailster('subscribers')->assign_lists($subscriber_id, 2, false);
+    $to_list = mailster('subscribers')->assign_lists($subscriber_id, 1, false);
     if($to_list){
-      $data->list_id = 2;
+      $data->list_id = 1;
     }
 
   }else{
     $data->success = false;
+    $data->error = $subscriber_id;
   }
 
   return $data;
