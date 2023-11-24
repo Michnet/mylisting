@@ -1025,29 +1025,34 @@ function news_subscribe($request){
 
   $data = new stdClass();
 
-  $args = array(
-    "firstname" => $first_name,
-    'email' => $email,
-  );
-  if($last_name){
-    $args["lastname"] = $last_name;
-  }
+  if( function_exists( 'mailster' ) ){
+      $args = array(
+        "firstname" => $first_name,
+        'email' => $email,
+      );
+      if($last_name){
+        $args["lastname"] = $last_name;
+      }
 
-  $subscriber_id = mailster('subscribers')->add($args);
+      $subscriber_id = mailster('subscribers')->add($args);
 
-  if( ! is_wp_error( $subscriber_id)){
-    $data->subscriber_id = $subscriber_id;
-    $data->success = true;
+      if( ! is_wp_error( $subscriber_id)){
+        $data->subscriber_id = $subscriber_id;
+        $data->success = true;
 
-    $to_list = mailster('subscribers')->assign_lists($subscriber_id, 1, false);
-    if($to_list){
-      $data->list_id = 1;
+        $to_list = mailster('subscribers')->assign_lists($subscriber_id, 1, false);
+        if($to_list){
+          $data->list_id = 1;
+        }
+
+      }else{
+        $data->success = false;
+        $data->error = $subscriber_id;
+      }
+    }else{ 
+      $data->success = false; 
+      $data->reason = 'no_function';
     }
-
-  }else{
-    $data->success = false;
-    $data->error = $subscriber_id;
-  }
 
   return $data;
 }
