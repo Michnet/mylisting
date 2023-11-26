@@ -1607,6 +1607,153 @@ function process_dates($listing){
     return $dates;
 }
 
+function process_field($field, $_data, $post_id, $meta){
+  switch ($field) {
+    case 'schedule':
+      $hours = get_post_meta($post_id, '_work_hours', true);
+      $_data['schedule'] = $hours   ?? null;
+      break;
+
+    case 'food_menu':
+      $food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
+      $_data['food_menu'] = $food_menu   ?? null;
+      break;
+
+    case 'event_date':
+      $listing_post = \MyListing\Src\Listing::get( $post_id);
+      $dates = process_dates($listing_post);
+      $_data['event_date'] = $dates   ?? null;
+      break;
+
+    case 'rating':
+      $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
+      break;
+
+    case 'acf':
+      $acf_data = get_fields($post_id) ?? null;
+      $_data['acf'] = $acf_data ?? null;
+      break;
+
+  case 'page_views':
+      $views = get_visits($post_id);
+      $_data['page_views'] = $views  ?? null;
+      break;
+
+  case 'level':
+      $_data['level'] =  $meta['_featured'][0] ? intval($meta['_featured'][0]) : 0;
+      break;
+
+  case 'category':
+      $cats = get_the_terms( $post_id, 'job_listing_category' );
+      $catIds = array();
+      if($cats){
+        foreach($cats as $cat){
+          $catIds[] = $cat->term_id;
+        }
+      }
+      if($catIds){
+          $category = get_term( $catIds[0], 'job_listing_category' );
+          $cat_meta = get_term_meta($catIds[0]);
+          $category->rl_awesome = $cat_meta['rl_awesome'][0]   ?? null;
+          $category->color = $cat_meta['color'][0]   ?? null;
+      }
+      $_data['category'] = $category  ?? null;
+      break;
+
+  case 'type':
+      $_data['type'] = $meta['_case27_listing_type'][0]  ?? null;
+      break;
+    
+  case 'xtra_large_thumb':
+    $xlarge_thumb = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+      $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
+      break;
+
+  case 'gallery':
+      $gallery = get_post_meta($post_id, '_job_gallery', true);
+      $_data['gallery'] = $gallery ?? null;
+      break;
+
+  case 'locations':
+      $locs = get_the_terms( $post_id, 'region' );
+      $_data['locations'] = $locs   ?? null;
+      break;
+
+  case 'categories':
+      $cats = get_the_terms( $post_id, 'job_listing_category' );
+      $_data['categories'] = $cats   ?? null;
+      break;
+
+  case 'large_thumb':
+      $large_thumbnail = get_the_post_thumbnail_url( $post_id, 'medium' );
+      $_data['large_thumb'] = $large_thumbnail   ?? null;
+      break;
+      
+  case 'thumbnail':
+      $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+      $_data['thumbnail'] = $thumbnail   ?? null;
+      break;
+
+  case 'logo':
+      $logo = get_post_meta($post_id, '_job_logo', true);
+      $_data['logo'] = $logo  ? $logo[0] : null;
+      break;
+
+  case 'ticket_min_price':
+      $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
+      break;
+
+  case 'ticket_min_price_html':
+      $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
+      break;
+
+  case 'item_min_price':
+      $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
+      break;
+
+  case 'item_min_price_html':
+      $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
+      break;
+      
+  case 'cover':
+      $cover = get_post_meta($post_id, '_job_cover', true);
+      $_data['cover'] = $cover  ? $cover[0] : null;
+  break;
+
+  case 'latitude':
+      $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
+      break;
+
+  case 'longitude':
+      $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
+      break;
+
+  case 'address':
+      $_data['address'] = $meta['_job_location'][0]  ?? null;
+      break;
+
+  case 'venue':
+      $_data['venue'] = $meta['_venue'][0]  ?? null;
+      break;
+
+  case 'event_type':
+      $_data['event_type'] = $meta['_event-type'][0] ?? null;
+      break;
+
+  case 'id':
+      $_data['id'] = $post_id;
+      break;
+      
+  case 'slug':
+      $_data['slug'] = get_post_field( 'post_name', $post_id );;
+      break;
+
+  case 'title':
+      $_data['title'] = get_the_title($post_id);
+      break;
+  }
+}
+
 function my_rest_prepare_listing( $data, $post, $request ) {
 
     $params = $request->get_query_params();
@@ -1615,125 +1762,126 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     $listing_post = \MyListing\Src\Listing::get( $post_id);
 
     //$category = get_the_category ( $post->ID );
-  	$acf_data = get_fields($post_id) ?? null;
-    $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
-    $large_thumbnail = get_the_post_thumbnail_url( $post_id, 'medium' );
-	  $xlarge_thumb = get_the_post_thumbnail_url( $post_id, 'medium_large' );
-  	$cats = get_the_terms( $post_id, 'job_listing_category' );
-    $locs = get_the_terms( $post_id, 'region' );
+
+    $meta = get_post_meta( $post_id );
 
     $fields = $params['_fields']  ?? null;
+
     if ( $fields && !empty( $fields ) ) {
+
       $fields_arr = explode (",", $fields);
       foreach ( $fields_arr as $field ) {
         $field = trim( $field );
+        process_field($field, $_data, $post_id, $meta);
       }
       $_data['fields'] = $fields ??  null;
-    }
     
-    $catIds = array();
-    if($cats){
-      foreach($cats as $cat){
-        $catIds[] = $cat->term_id;
+    }else{
+      
+      $acf_data = get_fields($post_id) ?? null;
+      $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+      $large_thumbnail = get_the_post_thumbnail_url( $post_id, 'medium' );
+      $xlarge_thumb = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+      $cats = get_the_terms( $post_id, 'job_listing_category' );
+      $locs = get_the_terms( $post_id, 'region' );
+  
+      $catIds = array();
+      if($cats){
+        foreach($cats as $cat){
+          $catIds[] = $cat->term_id;
+        }
       }
+  
+      $views = get_visits($post_id);
+  
+      if($catIds){
+        $category = get_term( $catIds[0], 'job_listing_category' );
+        $cat_meta = get_term_meta($catIds[0]);
+        $category->rl_awesome = $cat_meta['rl_awesome'][0]   ?? null;
+        $category->color = $cat_meta['color'][0]   ?? null;
+      }
+  
+      $excerpt = get_the_excerpt( $post_id);
+      $the_content = apply_filters('the_content', get_the_content());
+  
+      $hours = get_post_meta($post_id, '_work_hours', true);
+      $food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
+      $social_links = get_post_meta($post_id, '_links', true);
+      $phone = get_post_meta($post_id, '_job_phone', true);
+      $tagline = get_post_meta($post_id, '_job_tagline', true);
+      $cover = get_post_meta($post_id, '_job_cover', true);
+      $logo = get_post_meta($post_id, '_job_logo', true);
+      $gallery = get_post_meta($post_id, '_job_gallery', true);
+      $author = get_the_author_meta('ID');
+      $comment_num = get_comments_number($post_id);
+      $team = get_post_meta($post_id, '_team', true);
+      $gen_merch = get_post_meta( $post_id, 'general_merchandise', true);
+      $punchlines = get_post_meta( $post_id, '_punch_lines', true);
+      $why_us = get_post_meta( $post_id, '_why_choose_us', true);
+      $faq_us = get_post_meta( $post_id, '_frequently-asked-questions', true);
+  
+  
+      if($meta['_case27_listing_type'][0] == 'event'){
+        $special_guests = get_post_meta( $post_id, '_special-guests', true);
+        $performers = get_post_meta( $post_id, '_performers', true);
+        $tickets = get_post_meta( $post_id, 'tickets', true);
+        $dates = process_dates($listing_post);
+  
+        $_data['persons']['special_guests'] = $special_guests ?? null;
+        $_data['persons']['performers'] = $performers ?? null;
+        $_data['listing_store']['tickets'] =  $tickets  ?? null;   
+        $_data['event_date'] = $dates   ?? null;
+        $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
+        $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
+      }
+  
+      $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
+      $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
+      $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
+      $_data['food_menu'] = $food_menu   ?? null;
+      $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
+      $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
+      $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
+      $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
+      $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
+      $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
+      $_data['marketing']['wcu']['list'] = $why_us   ?? null;
+      $_data['about_us']['faqs'] = $faq_us ?? null;
+      $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
+      $_data['author_id'] = $author;
+      $_data['comment_num'] = $comment_num;
+      $_data['tagline'] = $tagline   ?? null; 
+      $_data['category'] = $category  ?? null;
+      $_data['home'] = $meta['_listing-home-page'][0] ?? null; 
+      $_data['community_id'] = $meta['community_id'][0] ?? null; 
+      $_data['phone'] = $phone  ?? null;
+      $_data['page_views'] = $views  ?? null;
+      $_data['content'] = $the_content ?? null;
+      $_data['persons']['team'] = $team ?? null;
+      $_data['short_desc'] = $excerpt;
+      $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
+      $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
+      $_data['address'] = $meta['_job_location'][0]  ?? null;
+      $_data['venue'] = $meta['_venue'][0]  ?? null;
+      $_data['event_type'] = $meta['_event-type'][0] ?? null;
+      $_data['greeting'] = $meta['_greeting'][0]  ?? null;
+      $_data['cover'] = $cover  ? $cover[0] : null;
+      $_data['gallery'] = $gallery ?? null;
+      $_data['logo'] = $logo  ? $logo[0] : null;
+      $_data['website'] = $meta['_job_website'][0]  ?? null;
+      $_data['type'] = $meta['_case27_listing_type'][0]  ?? null;
+      $_data['level'] =  $meta['_featured'][0] ? intval($meta['_featured'][0]) : 0;
+      $_data['social'] = $social_links   ?? null;
+      $_data['schedule'] = $hours   ?? null;
+      $_data['acf'] = $acf_data ?? null;
+      $_data['whatsapp'] = $meta['_whatsapp-number'][0] ?? null;
+      $_data['thumbnail'] = $thumbnail   ?? null;
+      $_data['large_thumb'] = $large_thumbnail   ?? null;
+      $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
+      $_data['categories'] = $cats   ?? null;
+      $_data['locations'] = $locs   ?? null;
     }
-
-    $views = get_visits($post_id);
-
-    if($catIds){
-      $category = get_term( $catIds[0], 'job_listing_category' );
-      $cat_meta = get_term_meta($catIds[0]);
-      $category->rl_awesome = $cat_meta['rl_awesome'][0]   ?? null;
-      $category->color = $cat_meta['color'][0]   ?? null;
-    }
-
-    $meta = get_post_meta( $post_id );
-    $excerpt = get_the_excerpt( $post_id);
-    $the_content = apply_filters('the_content', get_the_content());
-
-    $hours = get_post_meta($post_id, '_work_hours', true);
-    $food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
-    $social_links = get_post_meta($post_id, '_links', true);
-    $phone = get_post_meta($post_id, '_job_phone', true);
-    $tagline = get_post_meta($post_id, '_job_tagline', true);
-    $cover = get_post_meta($post_id, '_job_cover', true);
-    $logo = get_post_meta($post_id, '_job_logo', true);
-    $gallery = get_post_meta($post_id, '_job_gallery', true);
-    $author = get_the_author_meta('ID');
-    $comment_num = get_comments_number($post_id);
-    $team = get_post_meta($post_id, '_team', true);
-    $gen_merch = get_post_meta( $post_id, 'general_merchandise', true);
-    $punchlines = get_post_meta( $post_id, '_punch_lines', true);
-    $why_us = get_post_meta( $post_id, '_why_choose_us', true);
-    $faq_us = get_post_meta( $post_id, '_frequently-asked-questions', true);
-
-
-    if($meta['_case27_listing_type'][0] == 'event'){
-      $special_guests = get_post_meta( $post_id, '_special-guests', true);
-      $performers = get_post_meta( $post_id, '_performers', true);
-      $tickets = get_post_meta( $post_id, 'tickets', true);
-      $dates = process_dates($listing_post);
-
-      $_data['persons']['special_guests'] = $special_guests ?? null;
-      $_data['persons']['performers'] = $performers ?? null;
-      $_data['listing_store']['tickets'] =  $tickets  ?? null;   
-      $_data['event_date'] = $dates   ?? null;
-      $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
-      $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
-    }
-
     
-
-    $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
-    $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
-    $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
-    $_data['food_menu'] = $food_menu   ?? null;
-    $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
-    $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
-    $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
-    $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
-    $_data['landing']['greeting'] = $meta['_welcome_message'][0]   ?? null;
-    $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
-    $_data['marketing']['wcu']['list'] = $why_us   ?? null;
-    $_data['about_us']['faqs'] = $faq_us ?? null;
-    $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
-    $_data['author_id'] = $author;
-    $_data['comment_num'] = $comment_num;
-    $_data['tagline'] = $tagline   ?? null; 
-    $_data['category'] = $category  ?? null;
-    $_data['home'] = $meta['_listing-home-page'][0] ?? null; 
-    $_data['community_id'] = $meta['community_id'][0] ?? null; 
-    $_data['phone'] = $phone  ?? null;
-    $_data['page_views'] = $views  ?? null;
-    $_data['content'] = $the_content ?? null;
-    $_data['persons']['team'] = $team ?? null;
-    $_data['short_desc'] = $excerpt;
-    $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
-    $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
-    $_data['address'] = $meta['_job_location'][0]  ?? null;
-    $_data['venue'] = $meta['_venue'][0]  ?? null;
-    $_data['event_type'] = $meta['_event-type'][0] ??
-    $_data['greeting'] = $meta['_greeting'][0]  ?? null;
-    $_data['cover'] = $cover  ? $cover[0] : null;
-    $_data['gallery'] = $gallery ?? null;
-    $_data['logo'] = $logo  ? $logo[0] : null;
-    $_data['website'] = $meta['_job_website'][0]  ?? null;
-    $_data['type'] = $meta['_case27_listing_type'][0]  ?? null;
-    $_data['level'] =  $meta['_featured'][0] ? intval($meta['_featured'][0]) : 0;
-    $_data['social'] = $social_links   ?? null;
-    $_data['schedule'] = $hours   ?? null;
-    $_data['acf'] = $acf_data ?? null;
-    $_data['whatsapp'] = $meta['_whatsapp-number'][0] ?? null;
-    $_data['thumbnail'] = $thumbnail   ?? null;
-    $_data['large_thumb'] = $large_thumbnail   ?? null;
-	  $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
-  	$_data['categories'] = $cats   ?? null;
-    $_data['locations'] = $locs   ?? null;
-    $_data['fields'] = $params['_fields']  ?? null;
-
-    if(isset($params['_fields'])){
-      $_data['fields_ss'] = $params['_fields']  ?? null;
-    }
 
     $data->data = $_data;
     return $data;
