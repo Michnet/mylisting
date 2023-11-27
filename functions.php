@@ -1767,7 +1767,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     $fields = $params['_fields']  ?? null;
 
-    if ( $fields && !empty( $fields ) ) {
+    if ( isset($fields) && !empty( $fields ) ) {
 
       $fields_arr = explode (",", $fields);
       foreach ( $fields_arr as $field ) {
