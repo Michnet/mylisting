@@ -1767,7 +1767,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     $fields = $params['_fields']  ?? null;
 
-    if ( isset($fields) && !empty( $fields ) ) {
+    if ( $fields && !empty( $fields ) ) {
 
       $fields_arr = explode (",", $fields);
       foreach ( $fields_arr as $field ) {
@@ -2384,7 +2384,7 @@ function directory_query_args( $args = [] ) {
         'posts_per_page'    => 20,
         'orderby'           => 'date',
         'order'             => 'DESC',
-        'fields'            => 'all',
+        //'fields'            => 'ids',
         'post__in'          => [],
         'post__not_in'      => [],
         'meta_key'          => null,
