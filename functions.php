@@ -1769,11 +1769,11 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     if ( $fields && !empty( $fields ) ) {
 
-      $_data['test_fields'] = $fields ??  null;
+      //$_data['test_fields'] = $fields ??  null;
 
       $fields_arr = explode (",", $fields);
 
-      //$_data['test_fields'] = $fields_arr;
+      $_data['test_fields'] = $fields_arr;
 
       foreach ( $fields_arr as $field ) {
         $field = trim( $field );
