@@ -1752,6 +1752,8 @@ function process_field($field, $_data, $post_id, $meta){
       $_data['title'] = get_the_title($post_id);
       break;
   }
+
+  return $_data;
 }
 
 function my_rest_prepare_listing( $data, $post, $request ) {
@@ -1777,7 +1779,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
       foreach ( $fields_arr as $field ) {
         $trimed_field = trim( $field );
-        return process_field($trimed_field, $_data, $post_id, $meta);
+        process_field($trimed_field, $_data, $post_id, $meta);
       }
     
     }else{
