@@ -1661,7 +1661,7 @@ function process_field($field, $_data, $post_id, $meta){
       break;
 
   case 'type':
-      $_data['type'] = $meta['_case27_listing_type'][0]  ?? null;
+      $_data['type'] = 'the_type';
       break;
     
   case 'xtra_large_thumb':
@@ -1777,7 +1777,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['fields'] = $fields ??  null;
     
     }else{
-      
+
       $acf_data = get_fields($post_id) ?? null;
       $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
       $large_thumbnail = get_the_post_thumbnail_url( $post_id, 'medium' );
