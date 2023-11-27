@@ -1770,7 +1770,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     if ( $fields && !empty( $fields ) ) {
 
       $fields_arr = explode (",", $fields);
-      $_data['d_fields'] = $fields_arr ??  null;
+      $_data['test_fields'] = $fields_arr ??  null;
 
       foreach ( $fields_arr as $field ) {
         $field = trim( $field );
