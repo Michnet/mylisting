@@ -2496,11 +2496,11 @@ function directory_query_args( $args, $request ) {
     $rest_request = new WP_REST_Request();
     if($ids_result->posts && !empty($ids_result->posts)){
         //$query_args['include'] = $ids_result->posts;
-        $request->set_query_params(
+       /*  $request->set_query_params(
            array(
                 'include'	=> $ids_result->posts,
             ) 
-        );
+        ); */
         /* $rest_request->set_query_params(
             array(
                 'include'	=> $ids_result->posts,
