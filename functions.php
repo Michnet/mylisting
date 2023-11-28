@@ -2419,7 +2419,7 @@ function directory_query_args( $args = [] ) {
         'update_post_term_cache' => false,
         'update_post_meta_cache' => false,
         'cache_results'          => false,
-        'fields'                 => $args['fields'],
+        //'fields'                 => $args['fields'],
         'author'                 => $args['author'],
         'mylisting_orderby_rating' => $args['mylisting_orderby_rating'],
         'mylisting_ignore_priority' => $args['mylisting_ignore_priority'],
@@ -2490,8 +2490,9 @@ function directory_query_args( $args = [] ) {
 
     do_action( 'before_get_job_listings', $query_args, $args );
 
-    //$result = $query_args;
-    $ids_result = new \WP_Query( $query_args );
+    $args_for_ids = $query_args;
+    $args_for_ids['fields'] = 'ids';
+    $ids_result = new \WP_Query( $args_for_ids );
     $rest_request = new WP_REST_Request();
     if($ids_result->posts && !empty($ids_result->posts)){
         $query_args['include'] = $ids_result->posts;
@@ -3800,7 +3801,7 @@ function get_listings_query($request) {
 			'tax_query' => [],
 			'meta_query' => $meta_q,
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
-      'fields' =>  'ids',
+      //'fields' =>  'ids',
 			'recurring_dates' => [],
 		];
 
