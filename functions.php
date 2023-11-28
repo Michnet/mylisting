@@ -2491,11 +2491,11 @@ function directory_query_args( $args, $request ) {
     do_action( 'before_get_job_listings', $query_args, $args );
 
     $args_for_ids = $query_args;
-    //$args_for_ids['fields'] = 'ids';
+    $args_for_ids['fields'] = 'ids';
     $ids_result = new \WP_Query( $args_for_ids );
     $rest_request = new WP_REST_Request();
     if($ids_result->posts && !empty($ids_result->posts)){
-        $query_args['include'] = $ids_result->posts;
+        //$query_args['include'] = $ids_result->posts;
         $request->set_query_params(
            array(
                 'include'	=> $ids_result->posts,
@@ -2506,7 +2506,7 @@ function directory_query_args( $args, $request ) {
                 'include'	=> $ids_result->posts,
             )
         ); */
-        return $ids_result->posts;
+        //return $ids_result->posts;
     }else{
         return [];
     }
