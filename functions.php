@@ -2501,12 +2501,11 @@ function directory_query_args( $args, $request ) {
                 'include'	=> $ids_result->posts,
             ) 
         );
-        $rest_request->set_query_params(
-          $args
-           /*  array(
+        /* $rest_request->set_query_params(
+            array(
                 'include'	=> $ids_result->posts,
-            ) */
-        );
+            )
+        ); */
     }else{
         return [];
     }
