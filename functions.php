@@ -1765,7 +1765,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     $meta = get_post_meta( $post_id );
 
-    $fields = $params['fields']  ?? null;
+    $fields = $params['_fields']  ?? null;
+    $_data['params'] = $params;
 
     if ( $fields && !empty( $fields ) ) {
 
