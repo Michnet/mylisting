@@ -1754,7 +1754,7 @@ function process_field($field, $_data, $post_id, $meta){
   }
 }
 
-function another($field, $_data, $post_id, $meta){
+function another($field, &$_data, $post_id, $meta){
   $_data['test_fields'][''.$field.''] = $field;
 
 }
