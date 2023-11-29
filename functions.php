@@ -2509,7 +2509,7 @@ function directory_query_args( $args, $request ) {
         //return $ids_result->posts[0];
         return new WP_REST_Response(
           array(
-            'body_response' => $ids_result->posts
+            'body_response' => $ids_result
           )
         );
     }else{
