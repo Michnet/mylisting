@@ -1779,7 +1779,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
      // $_data['test_fields'] = $fields_arr;
 
-      foreach ( $fields_arr as $field ) {
+      foreach ( $fields_arr as $key => $field ) {
        $trimed_field = trim( $field );
        //$_data['test_fields'][''.$field.''] = $field;
        another($trimed_field, $_data, $post_id, $meta);
