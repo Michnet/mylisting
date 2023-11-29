@@ -2491,7 +2491,7 @@ function directory_query_args( $args, $request ) {
     do_action( 'before_get_job_listings', $query_args, $args );
 
     $args_for_ids = $query_args;
-    $args_for_ids['fields'] = 'ids';
+    //$args_for_ids['fields'] = 'ids';
     $ids_result = new \WP_Query( $args_for_ids );
     $rest_request = new WP_REST_Request();
     if($ids_result->posts && !empty($ids_result->posts)){
@@ -2506,7 +2506,7 @@ function directory_query_args( $args, $request ) {
                 'include'	=> $ids_result->posts,
             )
         ); */
-        //return $ids_result->posts;
+        return $ids_result->posts;
     }else{
         return [];
     }
@@ -2528,7 +2528,7 @@ function directory_query_args( $args, $request ) {
     remove_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby' ], 35 );
 
     //return $result;
-    return $request->get_params();
+   // return $request->get_params();
 }
 
 // Extend the `WP_REST_Posts_Controller` class
@@ -2731,7 +2731,7 @@ return ob_get_clean();
 
 
 // Extend the `WP_REST_Posts_Controller` class
-class Custom_Posts_Controller extends WP_REST_Posts_Controller
+class Custom_Listings_Controller extends WP_REST_Posts_Controller
 {
 
     // Override the register_routes() and add '/m-api/v1'
@@ -2922,7 +2922,7 @@ class Custom_Posts_Controller extends WP_REST_Posts_Controller
 
 }
 
-// Create an instance of `Custom_Posts_Controller` and call register_routes() methods
+// Create an instance of `Custom_Listings_Controller` and call register_routes() methods
 add_action('rest_api_init', function () {
   
   $tax_arr = array('job_listing_category', 'case27_job_listing_tags', 'region');
@@ -2931,7 +2931,7 @@ add_action('rest_api_init', function () {
       $controller_instance = new Custom_Terms_Controller($taxonomy);
       $controller_instance->register_routes();
     }
-    $listingsController = new Custom_Posts_Controller('job_listing');
+    $listingsController = new Custom_Listings_Controller('job_listing');
     $listingsController->register_routes();
 });
 
