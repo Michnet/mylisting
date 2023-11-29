@@ -1751,6 +1751,9 @@ function process_field($field, $_data, $post_id, $meta){
   case 'title':
       $_data['title'] = get_the_title($post_id);
       break;
+
+      default:
+      $_data['type'] = 'Try me man';
   }
 }
 
