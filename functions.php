@@ -1751,10 +1751,12 @@ function process_field($field, $_data, $post_id, $meta){
   case 'title':
       $_data['title'] = get_the_title($post_id);
       break;
-
-      default:
-      $_data['type'] = 'Try me man';
   }
+}
+
+function another($field, $_data, $post_id, $meta){
+  $_data['test_fields'][''.$field.''] = $field;
+
 }
 
 function my_rest_prepare_listing( $data, $post, $request ) {
@@ -1778,9 +1780,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
      // $_data['test_fields'] = $fields_arr;
 
       foreach ( $fields_arr as $field ) {
-       // $trimed_field = trim( $field );
-       $_data['test_fields'][''.$field.''] = $field;
-        process_field($field, $_data, $post_id, $meta);
+       $trimed_field = trim( $field );
+       //$_data['test_fields'][''.$field.''] = $field;
+       another($trimed_field, $_data, $post_id, $meta);
+       // process_field($trimed_field, $_data, $post_id, $meta);
       }
     
     }else{
