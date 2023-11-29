@@ -2506,12 +2506,17 @@ function directory_query_args( $args, $request ) {
                 'include'	=> $ids_result->posts,
             )
         ); */
-        return $ids_result->posts;
+        //return $ids_result->posts[0];
+        return new WP_REST_Response(
+          array(
+            'body_response' => $ids_result->posts
+          )
+        );
     }else{
         return [];
     }
     
-    //$result = $rest_control->get_items( $request );
+   // $result = $rest_control->get_items( $request );
 
     do_action( 'mylisting/explore/after-query' );
 
@@ -2527,7 +2532,7 @@ function directory_query_args( $args, $request ) {
     remove_filter( 'posts_join', [ $query_base_class, 'rating_field_join' ], 35 );
     remove_filter( 'posts_orderby', [ $query_base_class, 'rating_field_orderby' ], 35 );
 
-    //return $result;
+   // return $result;
    // return $request->get_params();
 }
 
