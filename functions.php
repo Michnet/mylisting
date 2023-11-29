@@ -1607,7 +1607,7 @@ function process_dates($listing){
     return $dates;
 }
 
-function process_field($field, $_data, $post_id, $meta){
+function process_field($field, &$_data, $post_id, $meta){
   switch ($field) {
     case 'schedule':
       $hours = get_post_meta($post_id, '_work_hours', true);
@@ -1782,8 +1782,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       foreach ( $fields_arr as $key => $field ) {
        $trimed_field = trim( $field );
        //$_data['test_fields'][''.$field.''] = $field;
-       another($trimed_field, $_data, $post_id, $meta);
-       // process_field($trimed_field, $_data, $post_id, $meta);
+       //another($trimed_field, $_data, $post_id, $meta);
+        process_field($trimed_field, $_data, $post_id, $meta);
       }
     
     }else{
