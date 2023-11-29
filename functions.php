@@ -1770,14 +1770,13 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     if ( $fields && !empty( $fields ) ) {
 
-      //$_data['test_fields'] = $fields ??  null;
-
       $fields_arr = explode (",", $fields);
 
-      $_data['test_fields'] = $fields_arr;
+     // $_data['test_fields'] = $fields_arr;
 
       foreach ( $fields_arr as $field ) {
        // $trimed_field = trim( $field );
+       $_data['test_fields'][''.$field.''] = $field;
         process_field($field, $_data, $post_id, $meta);
       }
     
@@ -2500,32 +2499,32 @@ function directory_query_args( $args, $request ) {
 
     // return results
     return new WP_REST_Response($posts, 200);
-    
+    /* 
     $args_for_ids = $query_args;
     //$args_for_ids['fields'] = 'ids';
     $ids_result = new \WP_Query( $args_for_ids );
     $rest_request = new WP_REST_Request();
     if($ids_result->posts && !empty($ids_result->posts)){
         //$query_args['include'] = $ids_result->posts;
-       /*  $request->set_query_params(
+        $request->set_query_params(
            array(
                 'include'	=> $ids_result->posts,
             ) 
-        ); */
-        /* $rest_request->set_query_params(
+        );
+        $rest_request->set_query_params(
             array(
                 'include'	=> $ids_result->posts,
             )
-        ); */
+        );
         //return $ids_result->posts[0];
         return new WP_REST_Response(
           array(
             'body_response' => $ids_result
           )
-        );
+        ); 
     }else{
         return [];
-    }
+    }*/
     
    // $result = $rest_control->get_items( $request );
 
