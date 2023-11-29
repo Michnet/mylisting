@@ -1661,7 +1661,7 @@ function process_field($field, &$_data, $post_id, $meta){
       break;
 
   case 'type':
-      $_data['type'] = 'the_type';
+      $_data['type'] = $meta['_case27_listing_type'][0]  ?? null;
       break;
     
   case 'xtra_large_thumb':
@@ -1754,11 +1754,6 @@ function process_field($field, &$_data, $post_id, $meta){
   }
 }
 
-function another($field, &$_data, $post_id, $meta){
-  $_data['test_fields'][''.$field.''] = $field;
-
-}
-
 function my_rest_prepare_listing( $data, $post, $request ) {
 
     $params = $request->get_query_params();
@@ -1777,12 +1772,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
       $fields_arr = explode (",", $fields);
 
-     // $_data['test_fields'] = $fields_arr;
-
       foreach ( $fields_arr as $key => $field ) {
        $trimed_field = trim( $field );
-       //$_data['test_fields'][''.$field.''] = $field;
-       //another($trimed_field, $_data, $post_id, $meta);
         process_field($trimed_field, $_data, $post_id, $meta);
       }
     
