@@ -2490,20 +2490,18 @@ function directory_query_args( $args, $request ) {
 
     do_action( 'before_get_job_listings', $query_args, $args );
 
-    $args_for_ids = $query_args;
+    $posts = array();
+    $q_posts = get_posts($query_args);
 
-    $posts = get_posts($query_args);
-
-    $controller = new WP_REST_Posts_Controller('job_listing');
-
-    foreach ( $posts as $post ) {
-       $data    = $controller->prepare_item_for_response( $post, $request );
-       $posts[] = $controller->prepare_response_for_collection( $data );
+    foreach ( $q_posts as $post ) {
+       $data    = $rest_control->prepare_item_for_response( $post, $request );
+       $posts[] = $rest_control->prepare_response_for_collection( $data );
     }
 
     // return results
     return new WP_REST_Response($posts, 200);
     
+    $args_for_ids = $query_args;
     //$args_for_ids['fields'] = 'ids';
     $ids_result = new \WP_Query( $args_for_ids );
     $rest_request = new WP_REST_Request();
