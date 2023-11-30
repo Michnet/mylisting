@@ -1740,13 +1740,13 @@ function process_field($field, &$_data, $post_id, $meta){
       $_data['event_type'] = $meta['_event-type'][0] ?? null;
       break;
 
-  case 'id':
+ /*  case 'id':
       $_data['id'] = $post_id;
       break;
       
   case 'slug':
       $_data['slug'] = get_post_field( 'post_name', $post_id );;
-      break;
+      break; */
 
   /* case 'title':
       $_data['title'] = get_the_title($post_id);
