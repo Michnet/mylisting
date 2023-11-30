@@ -1840,6 +1840,9 @@ function my_rest_prepare_listing( $data, $post, $request ) {
         $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
       }
   
+      $_data['what_we_do']['wwd_intro_title'] = $meta['_wwd_intro_title'][0] ?? null;
+      $_data['what_we_do']['wwd_intro_detail'] = $meta['_wwd_intro_detail'][0] ?? null;
+      $_data['what_we_do']['wwd_services'] = $meta['_wwd_services'][0] ?? null;
       $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
       $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
       $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
