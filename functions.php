@@ -1748,9 +1748,13 @@ function process_field($field, &$_data, $post_id, $meta){
       $_data['slug'] = get_post_field( 'post_name', $post_id );;
       break;
 
-  case 'title':
+  /* case 'title':
       $_data['title'] = get_the_title($post_id);
-      break;
+      break; */
+
+  case 'short_desc':
+    $_data['short_desc'] = get_the_excerpt( $post_id);
+    break;
   }
 }
 
