@@ -2373,7 +2373,7 @@ function location_address_join( $join, $query ) {
 
     return $join;
 }
-function directory_query_args( $args, $request ) {
+function directory_query_args( $args ) {
     global $wpdb;
     $query_base_class = new \MyListing\Src\Queries\Query();
     $rest_control = new WP_REST_Posts_Controller('job_listing');
