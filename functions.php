@@ -2373,7 +2373,7 @@ function location_address_join( $join, $query ) {
 
     return $join;
 }
-function directory_query_args( $args ) {
+function directory_query_args( $args, $request ) {
     global $wpdb;
     $query_base_class = new \MyListing\Src\Queries\Query();
     $rest_control = new WP_REST_Posts_Controller('job_listing');
@@ -2494,7 +2494,7 @@ function directory_query_args( $args ) {
     $q_posts = get_posts($query_args);
 
     foreach ( $q_posts as $post ) {
-       $data    = $rest_control->prepare_item_for_response( $post );
+       $data    = $rest_control->prepare_item_for_response( $post, $request );
        $posts[] = $rest_control->prepare_response_for_collection( $data );
     }
 
@@ -3823,7 +3823,7 @@ function get_listings_query($request) {
 			'meta_query' => $meta_q,
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       //'fields' =>  'ids',
-			'recurring_dates' => [],
+			//'recurring_dates' => [],
 		];
 
     if(isset($sort)){
@@ -3933,7 +3933,7 @@ function get_listings_query($request) {
 		 */
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
-    $listings = directory_query_args($args);
+    $listings = directory_query_args($args, $request);
 
 		return $listings;
 }
