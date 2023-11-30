@@ -2491,12 +2491,28 @@ function directory_query_args( $args, $request ) {
     do_action( 'before_get_job_listings', $query_args, $args );
 
     $posts = array();
-    $q_posts = get_posts($query_args);
+   // $q_posts = get_posts($query_args);
 
-    foreach ( $q_posts as $post ) {
+    $the_query = new WP_Query( $query_args );
+
+      // The Loop
+      if ( $the_query->have_posts() ) {
+        global $post;
+          while ( $the_query->have_posts() ) {
+              $the_query->the_post();
+              $data    = $rest_control->prepare_item_for_response( $post, $request );
+              $posts[] = $rest_control->prepare_response_for_collection( $data );
+          }
+      } else {
+          // no posts found
+      }
+      /* Restore original Post Data */
+      wp_reset_postdata();
+
+    /* foreach ( $q_posts as $post ) {
        $data    = $rest_control->prepare_item_for_response( $post, $request );
        $posts[] = $rest_control->prepare_response_for_collection( $data );
-    }
+    } */
 
     // return results
     return new WP_REST_Response($posts, 200);
