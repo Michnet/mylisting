@@ -1824,6 +1824,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $punchlines = get_post_meta( $post_id, '_punch_lines', true);
       $why_us = get_post_meta( $post_id, '_why_choose_us', true);
       $faq_us = get_post_meta( $post_id, '_frequently-asked-questions', true);
+      $wwd_services = get_post_meta($post_id, '_wwd_services', true);
   
   
       if($meta['_case27_listing_type'][0] == 'event'){
@@ -1842,7 +1843,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
   
       $_data['what_we_do']['wwd_intro_title'] = $meta['_wwd_intro_title'][0] ?? null;
       $_data['what_we_do']['wwd_intro_detail'] = $meta['_wwd_intro_detail'][0] ?? null;
-      $_data['what_we_do']['wwd_services'] = $meta['_wwd_services'][0] ?? null;
+      $_data['what_we_do']['wwd_services'] = $wwd_services ?? null;
       $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
       $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
       $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
