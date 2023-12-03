@@ -1894,7 +1894,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['locations'] = $locs   ?? null;
     }
     
-
     $data->data = $_data;
     return $data;
 }
