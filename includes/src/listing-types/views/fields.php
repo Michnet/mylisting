@@ -83,6 +83,7 @@
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('features')">Features</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('repeater-text')">Repeater Text</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('faqs')">Frequent Questions</div>
+			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('image-links')">Image Links</div>
 		</div>
 
 		<div v-if="state.custom_field_category === 'all' || state.custom_field_category === 'choice'">

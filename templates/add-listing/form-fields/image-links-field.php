@@ -33,18 +33,6 @@ if ( $uploaded_files ) {
 ?>
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-	<div class="form-group w100 col-12">
-		<label>Group Title</label>
-		<input type="text" maxlength="30" name="tm_title" placeholder="<?php esc_attr_e( 'E.g: Meet our team, Special performers of the night', 'my-listing' ) ?>">
-	</div>
-	<div class="form-group w100 col-12 margin-top-10">
-		<label>Group Description</label>
-		<textarea
-			cols="20" rows="2" class="input-text"
-			name="tm_description"
-			placeholder="<?php echo esc_attr_x( 'Brief description of this group of persons', 'General Repeater Description', 'my-listing' ) ?>">
-		</textarea>
-	</div>
 	<div class="repeater-list margin-top-10" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
 		<div data-repeater-item class="repeater-field-wrapper">
 
@@ -99,31 +87,21 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w50 col-md-6 col-12">
-					<label>First name </label>
-					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
+					<label>Name</label>
+					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'Name', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
-					<label>Last name </label>
-					<input type="text" name="last_name" placeholder="<?php esc_attr_e( 'Last Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-				    <label>Role </label>
-					<input type="text" name="job_title" placeholder="<?php esc_attr_e( 'Role e.g Guest of Honour, Instructor', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-				    <label>Qualifications/Credentials </label>
-					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications, credentials, etc', 'my-listing' ) ?>">
+					<label>Website </label>
+					<input type="text" name="img_link" placeholder="<?php esc_attr_e( 'https://.......', 'my-listing' ) ?>">
 				</div>
 			</div>
-				<label class="margin-top-10">Brief Intro</label>
+				<!-- <label class="margin-top-10">Brief Intro</label>
 				<textarea
 					cols="20" rows="2" class="input-text"
 					name="brief_description"
 					placeholder="<?php echo esc_attr_x( 'Introduce them to the world', 'General Repeater Description', 'my-listing' ) ?>">
-				</textarea>
+				</textarea> -->
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>

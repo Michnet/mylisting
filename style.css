@@ -3385,7 +3385,8 @@ body.single.single-job_listing .title-style-1 i {
 }
 
 #submit-job-form .field>input,#submit-job-form .field>textarea {
-    border-bottom: 1px solid #eee!important
+    border-bottom: 1px solid #eee!important;
+    padding: 15px;
 }
 
 .homeResults div#finderSearch {
@@ -3904,6 +3905,14 @@ td.child {
 #submit-job-form .small, #submit-job-form small, .field-head .description {
     color: var(--wc-secondary-text);
     font-size: 12px !important;
+}
+
+button.delete-repeater-item i {
+    color: #fff;
+}
+
+button.delete-repeater-item {
+    opacity: 0.4;
 }
 
 .acf-field.acf-field-message {
@@ -4668,6 +4677,8 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 .repeater-list.block_list .repeater-field-wrapper {
     max-width: 100%;
+    padding: 5px 12px;
+    border: none;
 }
 
 span.label_meta {
@@ -4743,4 +4754,21 @@ button.delete-repeater-item {
 }
 .woocommerce-account:not(.logged-in) .acff-edit-button.edit-button {
     display: none !important;
+}
+
+._logo.elementor-widget-image img {
+    max-height: 68px;
+    object-fit: contain;
+}
+
+input, textarea {
+    padding: 15px;
+}
+
+.mce-toolbar .mce-btn i {
+    color: #fff;
+}
+
+.mce-toolbar .mce-btn button, .qt-dfw {
+    border-radius: 3px;
 }
