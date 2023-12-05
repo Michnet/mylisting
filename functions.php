@@ -3532,7 +3532,7 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
 add_filter('acf/update_value/key=field_64cbdd20462a9', 'listing_pdts_edit', 10, 3);
 add_filter('acf/update_value/key=field_64cbcdca213b0', 'listing_pdts_edit', 10, 3);
 
-add_filter( 'mylisting\links-list', function( $links ) {
+/* add_filter( 'mylisting\links-list', function( $links ) {
   // Add new link
   $links['WhatsApp'] = [
       'name' => 'WhatsApp',
@@ -3545,12 +3545,13 @@ add_filter( 'mylisting\links-list', function( $links ) {
   unset( $links['Pinterest'] );
   unset( $links['DeviantArt'] );
   return $links;
-} );
+} ); */
 
 
 add_filter( 'mylisting/listing-types/register-fields', function( $fields ) {
   // Add new link
   $fields[] = \MyListing\Src\Forms\Fields\Team_Members_Field::class;
+  $fields[] = \MyListing\Src\Forms\Fields\Image_Links_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Features_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Repeater_Text_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Faqs_Field::class;
