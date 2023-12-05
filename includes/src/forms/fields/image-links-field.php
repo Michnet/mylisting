@@ -6,7 +6,7 @@ if ( ! defined('ABSPATH') ) {
 	exit;
 }
 
-class Team_Members_Field extends Base_Field {
+class Image_Links_Field extends Base_Field {
 
 	public function get_posted_value() {
 
@@ -57,7 +57,7 @@ class Team_Members_Field extends Base_Field {
 
 	public function field_props() {
 		// for backwards compatibility
-		$this->props['type'] = 'team-members';
+		$this->props['type'] = 'image-links';
 		
 	}
 
