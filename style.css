@@ -4706,8 +4706,6 @@ span.label_meta {
     display: grid;
 }
 
-span.product-type.tips.simple.wcicon-simple.text_tip {}
-
 table#wcfm-products thead, table#wcfm-products tfoot {
     display: none;
 }
@@ -4780,5 +4778,11 @@ input, textarea {
 }
 
 .job-manager-uploaded-files {
-    width: auto;
+    width: fit-content;
+}
+
+label span {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
 }

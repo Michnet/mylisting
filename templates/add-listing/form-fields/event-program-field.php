@@ -112,26 +112,6 @@ if ( $uploaded_files ) {
 					</textarea>
 				</div>
 
-				<div class="form-group col-12">
-				<div class="date-start date-empty">
-					<label>Time from event</label>
-					<div class="datepicker-wrapper">
-						<input
-							type="text"
-							class="input-datepicker mylisting-datepicker"
-							placeholder="<?php echo esc_attr( _ex( 'Click to set date', 'Recurring date field', 'my-listing' ) ) ?>"
-							name="{date}[start]"
-						>
-					</div>
-				</div>
-				</div>
-				<div class="datepicker-wrapper submit-listing-datepicker-wrapper time-picker">
-					<input
-						type="text" class="input-text input-datepicker mylisting-datepicker"
-						name="tyme"
-					>
-				</div>
-
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
 					<input type="time" name="time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
