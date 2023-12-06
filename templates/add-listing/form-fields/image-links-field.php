@@ -88,7 +88,7 @@ if ( $uploaded_files ) {
 
 				<div class="form-group w50 col-md-6 col-12">
 					<label>Name</label>
-					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'Name', 'my-listing' ) ?>">
+					<input required type="text" name="img_name" placeholder="<?php esc_attr_e( 'Name', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
@@ -96,12 +96,6 @@ if ( $uploaded_files ) {
 					<input type="text" name="img_link" placeholder="<?php esc_attr_e( 'https://.......', 'my-listing' ) ?>">
 				</div>
 			</div>
-				<!-- <label class="margin-top-10">Brief Intro</label>
-				<textarea
-					cols="20" rows="2" class="input-text"
-					name="brief_description"
-					placeholder="<?php echo esc_attr_x( 'Introduce them to the world', 'General Repeater Description', 'my-listing' ) ?>">
-				</textarea> -->
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>
