@@ -17,7 +17,7 @@
     --fontSize: 14px;
     --smFontSize: 12px
 }
-input::placeholder {
+input::placeholder, textarea::placeholder {
     color: var(--grayText);
     font-size: var(--smFontSize);
 }
@@ -4675,6 +4675,11 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     max-width: 400px;
 }
 
+.repeater-field-wrapper .form-group {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 .repeater-list.block_list .repeater-field-wrapper {
     max-width: 100%;
     padding: 5px 12px;
@@ -4721,6 +4726,7 @@ input.boldy {font-weight: 500;}
 .uploaded-files-list.review-gallery-images {
     display: flex;
     align-items: flex-end;
+    justify-items: flex-start;
 }
 
 .field-type-file.form-group .review-gallery-add {
@@ -4771,4 +4777,8 @@ input, textarea {
 
 .mce-toolbar .mce-btn button, .qt-dfw {
     border-radius: 3px;
+}
+
+.job-manager-uploaded-files {
+    width: auto;
 }

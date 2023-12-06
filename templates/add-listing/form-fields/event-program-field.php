@@ -90,7 +90,7 @@ if ( $uploaded_files ) {
 						<span>Which day of the event is this program item scheduled on?</span>
 					</label>
 					<input type="number" class="input-text" name="event_day"
-					    placeholder="Which day of the event is this program item scheduled on?"
+					    placeholder="1"
 						id=""
 						value="1"
 						min="1"
@@ -103,12 +103,34 @@ if ( $uploaded_files ) {
 					<input required type="text" name="title" placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
 				</div>
 
-				<label class="margin-top-10">Brief Description</label>
-				<textarea
-					cols="20" rows="2" class="input-text"
-					name="description"
-					placeholder="<?php echo esc_attr_x( 'Brief description of this program item', 'General Repeater Description', 'my-listing' ) ?>">
-				</textarea>
+				<div class="form-group col-12">
+					<label class="margin-top-10">Brief Description</label>
+					<textarea
+						cols="20" rows="2" class="input-text"
+						name="description"
+						>
+					</textarea>
+				</div>
+
+				<div class="form-group col-12">
+				<div class="date-start date-empty">
+					<label>Time from event</label>
+					<div class="datepicker-wrapper">
+						<input
+							type="text"
+							class="input-datepicker mylisting-datepicker"
+							placeholder="<?php echo esc_attr( _ex( 'Click to set date', 'Recurring date field', 'my-listing' ) ) ?>"
+							name="{date}[start]"
+						>
+					</div>
+				</div>
+				</div>
+				<div class="datepicker-wrapper submit-listing-datepicker-wrapper time-picker">
+					<input
+						type="text" class="input-text input-datepicker mylisting-datepicker"
+						name="tyme"
+					>
+				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
