@@ -85,13 +85,13 @@ if ( $uploaded_files ) {
 				<div class="fields-box row mx-0">
 				<div class="form-group col-12">
 					<label>Event day number
-						<span>Which day of the event is this program item scheduled on?</span>
+						<!-- <span>Which day of the event is this program item scheduled on?</span> -->
 					</label>
-					<!-- <input type="number" name="event_day"
+					<input type="number" name="event_day"
 						min="1"
 						max="100"
 						step="1"
-						> -->
+						>
 				</div>
 				<div class="form-group col-12">
 					<label>Title </label>
