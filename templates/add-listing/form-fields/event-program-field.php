@@ -87,14 +87,14 @@ if ( $uploaded_files ) {
 					<label>Event day number
 						<span>Which day of the event is this program item scheduled on?</span>
 					</label>
-					<input type="number" class="input-text" name="event_day"
+					<!-- <input type="number" class="input-text" name="event_day"
 					    placeholder="1"
 						id=""
 						value="1"
 						min="1"
 						max="100"
 						step="1"
-						>
+						> -->
 				</div>
 				<div class="form-group col-12">
 					<label>Title </label>
@@ -104,14 +104,14 @@ if ( $uploaded_files ) {
 					placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
 				</div>
 
-				<!-- <div class="form-group col-12">
+				<div class="form-group col-12">
 					<label class="margin-top-10">Brief Description</label>
 					<textarea
 						cols="20" rows="2" class="input-text"
 						name="item_description"
 						>
 					</textarea>
-				</div> -->
+				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
