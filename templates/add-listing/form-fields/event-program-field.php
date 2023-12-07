@@ -87,7 +87,7 @@ if ( $uploaded_files ) {
 					<label>Event day number
 						<span>Which day of the event is this program item scheduled on?</span>
 					</label>
-					<input type="number" class="input-text" name="event_day"
+					<input type="number" name="event_day"
 						min="1"
 						max="100"
 						step="1"
@@ -104,7 +104,7 @@ if ( $uploaded_files ) {
 				<div class="form-group col-12">
 					<label class="margin-top-10">Brief Description</label>
 					<textarea
-						cols="20" rows="2" class="input-text"
+						cols="20" rows="2"
 						name="item_description"
 						>
 					</textarea>
