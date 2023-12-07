@@ -33,22 +33,20 @@ if ( $uploaded_files ) {
 ?>
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-	<div class="form-group w100 col-12">
-		<label>Group Title</label>
-		<input type="text" maxlength="30" name="tm_title" placeholder="<?php esc_attr_e( 'E.g: Meet our team, Special performers of the night', 'my-listing' ) ?>">
-	</div>
-	<div class="form-group w100 col-12 margin-top-10">
-		<label>Group Description</label>
-		<textarea
-			cols="20" rows="2" class="input-text"
-			name="tm_description"
-			placeholder="<?php echo esc_attr_x( 'Brief description of this group of persons', 'General Repeater Description', 'my-listing' ) ?>">
-		</textarea>
-	</div>
 	<div class="repeater-list margin-top-10" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
-		<div data-repeater-item class="repeater-field-wrapper">
-
-		
+			<div class="form-group w100 col-12">
+				<label>Group Title</label>
+				<input type="text" maxlength="30" name="tm_title" placeholder="<?php esc_attr_e( 'E.g: Meet our team, Special performers of the night', 'my-listing' ) ?>">
+			</div>
+			<div class="form-group w100 col-12 margin-top-10">
+				<label>Group Description</label>
+				<textarea
+					cols="20" rows="2" class="input-text"
+					name="tm_description"
+					placeholder="<?php echo esc_attr_x( 'Brief description of this group of persons', 'General Repeater Description', 'my-listing' ) ?>">
+				</textarea>
+			</div>
+			<div data-repeater-item class="repeater-field-wrapper">
 				<div class="field-type-file form-group">
 					<div class="field ">	
 						<label>Photo</label>

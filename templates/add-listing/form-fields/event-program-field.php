@@ -99,7 +99,10 @@ if ( $uploaded_files ) {
 				</div>
 				<div class="form-group col-12">
 					<label>Title </label>
-					<input required type="text" name="item_title" placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
+					<input required 
+					type="text" 
+					name="item_title" 
+					placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group col-12">
@@ -116,8 +119,6 @@ if ( $uploaded_files ) {
 					<input type="text" name="item_time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
 				</div>
 			</div>
-				
-			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>
 		</div>
