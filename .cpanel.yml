@@ -1,0 +1,9 @@
+–––
+deployment:
+  tasks:
+    – export DEPLOYPATH=/home/lyvecityclub/public_html/staging/wp-content/themes/mylisting-city
+    /bin/cp -R includes $DEPLOYPATH
+    – /bin/cp -R sections $DEPLOYPATH
+    – /bin/cp -R templates $DEPLOYPATH
+    – /bin/cp functions.php $DEPLOYPATH
+    – /bin/cp styles.css $DEPLOYPATH
