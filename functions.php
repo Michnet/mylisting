@@ -1830,9 +1830,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       if($meta['_case27_listing_type'][0] == 'event'){
         $special_guests = get_post_meta( $post_id, '_special-guests', true);
         $performers = get_post_meta( $post_id, '_performers', true);
+        $sponsors = get_post_meta( $post_id, '_event-sponsors', true);
         $tickets = get_post_meta( $post_id, 'tickets', true);
         $dates = process_dates($listing_post);
-  
+        $_data['affiliates']['sponsors'] = $sponsors ?? null;
         $_data['persons']['special_guests'] = $special_guests ?? null;
         $_data['persons']['performers'] = $performers ?? null;
         $_data['listing_store']['tickets'] =  $tickets  ?? null;   
