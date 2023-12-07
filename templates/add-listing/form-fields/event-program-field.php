@@ -104,14 +104,14 @@ if ( $uploaded_files ) {
 					placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
 				</div>
 
-				<div class="form-group col-12">
+				<!-- <div class="form-group col-12">
 					<label class="margin-top-10">Brief Description</label>
 					<textarea
 						cols="20" rows="2" class="input-text"
 						name="item_description"
 						>
 					</textarea>
-				</div>
+				</div> -->
 
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
