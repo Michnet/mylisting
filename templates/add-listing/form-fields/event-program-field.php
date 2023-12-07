@@ -104,26 +104,20 @@ if ( $uploaded_files ) {
 					placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
 				</div>
 
-				<!-- <div class="form-group col-12">
+				<div class="form-group col-12">
 					<label class="margin-top-10">Brief Description</label>
 					<textarea
 						cols="20" rows="2" class="input-text"
 						name="item_description"
 						>
 					</textarea>
-				</div> -->
+				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
 					<input type="text" name="item_time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
 				</div>
 			</div>
-				<label class="margin-top-10">Brief Intro</label>
-				<textarea
-					cols="20" rows="2" class="input-text"
-					name="brief_description"
-					placeholder="<?php echo esc_attr_x( 'Introduce them to the world', 'General Repeater Description', 'my-listing' ) ?>">
-				</textarea>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>
