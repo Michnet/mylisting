@@ -100,21 +100,21 @@ if ( $uploaded_files ) {
 				</div>
 				<div class="form-group col-12">
 					<label>Title </label>
-					<input required type="text" name="title" placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
+					<input required type="text" name="item_title" placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group col-12">
 					<label class="margin-top-10">Brief Description</label>
 					<textarea
 						cols="20" rows="2" class="input-text"
-						name="description"
+						name="item_description"
 						>
 					</textarea>
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
-					<input type="time" name="time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
+					<input type="time" name="item_time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
 				</div>
 			</div>
 				
