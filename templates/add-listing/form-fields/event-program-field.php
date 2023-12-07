@@ -114,7 +114,7 @@ if ( $uploaded_files ) {
 
 				<div class="form-group w50 col-md-6 col-12">
 				    <label>Time </label>
-					<input type="time" name="item_time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
+					<input type="text" name="item_time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
 				</div>
 			</div>
 				
