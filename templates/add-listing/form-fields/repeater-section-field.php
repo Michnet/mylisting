@@ -34,7 +34,7 @@ if ( $uploaded_files ) {
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 			<div class="item-head">
-				<input type="text" name="{section}[title]" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
+				<input type="text" name="title" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
 					<div class="item-head">

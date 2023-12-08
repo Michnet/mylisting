@@ -49,17 +49,16 @@ class Repeater_Section_Field extends Base_Field {
 				$links[] = $file_value;
 			}
 
+		$obj = new stdClass();
 		$data = [];
 		$posted = $_POST[ $this->key ];
 
-		foreach ( $posted as $section ) {
-				$data[] = [
-					'title' => sanitize_text_field( $section['start'] ),
-					'subtitle' => sanitize_text_field( $section['sub_title'] ),
-					'descript' => sanitize_text_field( $section['descript'] ),
-					'list' => $value
-				];
-		}
+		$data[] = [
+			'title' => sanitize_text_field( $posted['title'] ),
+			'subtitle' => sanitize_text_field( $posted['sub_title'] ),
+			'descript' => sanitize_text_field( $posted['descript'] ),
+			'list' => $value
+		];
 
 		return $data;
 		//return array_filter( $links );
