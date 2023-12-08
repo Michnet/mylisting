@@ -26,7 +26,7 @@ if ( $uploaded_files ) {
 			$files[ $index ] = $value['mylisting_accordion_photo'];
 		}
 		
-		unset( $uploaded_files[ $index ]['mylisting_accordion_photo'] );
+		//unset( $uploaded_files[ $index ]['mylisting_accordion_photo'] );
 	}
 }
 
