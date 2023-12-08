@@ -33,9 +33,7 @@ if ( $uploaded_files ) {
 ?>
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-			
-	<div data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
-	<div class="item-head">
+<div class="item-head form-group">
 				<input type="text" name="title" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
@@ -50,6 +48,8 @@ if ( $uploaded_files ) {
 					placeholder="<?php echo esc_attr_x( 'Section Description', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
 				<?php endif ?>
 			</div>
+	<div data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+			
 		<div data-repeater-item class="repeater-field-wrapper">
 			
 		<div class="field-type-file form-group">
