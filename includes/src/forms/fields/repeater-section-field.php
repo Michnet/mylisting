@@ -11,7 +11,7 @@ class Repeater_Section_Field extends Base_Field {
 	public function get_posted_value() {
 
 		$value = ! empty( $_POST[ $this->key ] ) ? $_POST[ $this->key ] : [];
-		$title = ! empty( $_POST[ $this->key ] ) ? $_POST[ $this->key ]['title'] : 'nothing';
+		//$title = ! empty( $_POST[ $this->key ] ) ? $_POST[ $this->key ] : 'nothing';
 
 		$form_key = 'current_'.$this->key;
 		$files = isset( $_POST[ $form_key ] ) ?  $_POST[ $form_key ] : [];
@@ -55,7 +55,7 @@ class Repeater_Section_Field extends Base_Field {
 		$posted = $_POST[ $this->key ];
 
 		$data[] = [
-			'title' =>  $title,
+			'title' =>  sanitize_text_field( $posted['title'] ),
 			'subtitle' => sanitize_text_field( $posted['sub_title'] ),
 			'descript' => sanitize_text_field( $posted['descript'] ),
 			'list' => $posted
