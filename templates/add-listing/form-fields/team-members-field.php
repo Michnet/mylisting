@@ -85,8 +85,23 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w50 col-md-6 col-12">
-					<label>Test title </label>
-					<input required type="text" name="test_title" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
+					<label>First name </label>
+					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
+				</div>
+
+				<div class="form-group w50 col-md-6 col-12">
+					<label>Last name </label>
+					<input type="text" name="last_name" placeholder="<?php esc_attr_e( 'Last Name', 'my-listing' ) ?>">
+				</div>
+
+				<div class="form-group w50 col-md-6 col-12">
+				    <label>Role </label>
+					<input type="text" name="job_title" placeholder="<?php esc_attr_e( 'Role e.g Guest of Honour, Instructor', 'my-listing' ) ?>">
+				</div>
+
+				<div class="form-group w50 col-md-6 col-12">
+				    <label>Qualifications/Credentials </label>
+					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications, credentials, etc', 'my-listing' ) ?>">
 				</div>
 			</div>
 			

@@ -76,7 +76,7 @@ if ( $uploaded_files ) {
 								class="input-text review-gallery-input wp-job-manager-file-upload"
 								data-file_types="jpg|jpeg|jpe|gif|png|bmp|tiff|tif|webp|ico|heic"
 								name="mylisting_accordion_photo"
-								id="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>_mylisting_accordion_photo"
+								id="<?php echo esc_attr( (isset($field['name']) ? $field['name']['pics'] : $key) ) ?>_mylisting_accordion_photo"
 								style="display: none;"
 								>
 								<div class="uploaded-files-list review-gallery-images">
@@ -101,23 +101,8 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w50 col-md-6 col-12">
-					<label>First name </label>
-					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-					<label>Last name </label>
-					<input type="text" name="last_name" placeholder="<?php esc_attr_e( 'Last Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-				    <label>Role </label>
-					<input type="text" name="job_title" placeholder="<?php esc_attr_e( 'Role e.g Guest of Honour, Instructor', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-				    <label>Qualifications/Credentials </label>
-					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications, credentials, etc', 'my-listing' ) ?>">
+					<label>Test name </label>
+					<input required type="text" name="test_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
 				</div>
 			</div>
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i></button>
