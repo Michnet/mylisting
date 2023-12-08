@@ -48,7 +48,8 @@ class Repeater_Section_Field extends Base_Field {
 				$links[] = $file_value;
 			}
 		
-		return array_filter( $links );
+		//return array_filter( $links );
+		return $value;
 	}
 
 	public function validate() {
