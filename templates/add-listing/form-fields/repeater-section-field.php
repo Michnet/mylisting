@@ -34,7 +34,7 @@ if ( $uploaded_files ) {
 
 	
 	<div class="form-group">
-				<input type="text" name="<?php echo esc_attr( isset( $field['name'] ) ? $field['name']['title'] : $key ); ?>" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
+				<input type="text" name="<?php echo esc_attr( isset( $field['name'] ) ? $field['name'].'_title' : $key ); ?>" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
 					<div class="item-head">
