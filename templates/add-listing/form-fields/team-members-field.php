@@ -85,31 +85,10 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				<div class="form-group w50 col-md-6 col-12">
-					<label>First name </label>
-					<input required type="text" name="first_name" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-					<label>Last name </label>
-					<input type="text" name="last_name" placeholder="<?php esc_attr_e( 'Last Name', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-				    <label>Role </label>
-					<input type="text" name="job_title" placeholder="<?php esc_attr_e( 'Role e.g Guest of Honour, Instructor', 'my-listing' ) ?>">
-				</div>
-
-				<div class="form-group w50 col-md-6 col-12">
-				    <label>Qualifications/Credentials </label>
-					<input type="text" name="qualifications" placeholder="<?php esc_attr_e( 'Qualifications, credentials, etc', 'my-listing' ) ?>">
+					<label>Test title </label>
+					<input required type="text" name="test_title" placeholder="<?php esc_attr_e( 'First Name', 'my-listing' ) ?>">
 				</div>
 			</div>
-				<label class="margin-top-10">Brief Intro</label>
-				<textarea
-					cols="20" rows="2" class="input-text"
-					name="brief_description"
-					placeholder="<?php echo esc_attr_x( 'Introduce them to the world', 'General Repeater Description', 'my-listing' ) ?>">
-				</textarea>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>
