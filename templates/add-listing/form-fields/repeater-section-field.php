@@ -32,7 +32,6 @@ if ( $uploaded_files ) {
 
 ?>
 
-<div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 	
 	<div class="item-head form-group">
 				<input type="text" name="title" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
@@ -51,4 +50,4 @@ if ( $uploaded_files ) {
 			</div>
 	<input data-repeater-create type="button" value="<?php esc_attr_e( 'Add item', 'my-listing' ) ?>" id="add-menu-links-field">
 	<p><?php var_dump($field['value'] ); ?></p>
-</div>
+
