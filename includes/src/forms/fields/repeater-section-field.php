@@ -10,7 +10,7 @@ class Repeater_Section_Field extends Base_Field {
 
 	public function get_posted_value() {
 
-		$value = ! empty( $_POST[ $this->key ] ) ? (array) $_POST[ $this->key ] : [];
+		$value = ! empty( $_POST[ $this->key ] ) ? $_POST[ $this->key ] : [];
 
 		$form_key = 'current_'.$this->key;
 		$files = isset( $_POST[ $form_key ] ) ? (array) $_POST[ $form_key ] : [];
