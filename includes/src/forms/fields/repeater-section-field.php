@@ -45,11 +45,25 @@ class Repeater_Section_Field extends Base_Field {
 				$file_value['mylisting_accordion_photo'] = $file;
 				}
 
+
 				$links[] = $file_value;
 			}
-		
+
+		$data = [];
+		$posted = $_POST[ $this->key ];
+
+		foreach ( $posted as $section ) {
+				$data[] = [
+					'title' => sanitize_text_field( $section['start'] ),
+					'subtitle' => sanitize_text_field( $section['sub_title'] ),
+					'descript' => sanitize_text_field( $section['descript'] ),
+					'list' => $value
+				];
+		}
+
+		return $data;
 		//return array_filter( $links );
-		return $value;
+		//return $value;
 	}
 
 	public function validate() {

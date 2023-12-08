@@ -34,17 +34,17 @@ if ( $uploaded_files ) {
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 			<div class="item-head">
-				<input type="text" name="intro-title" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
+				<input type="text" name="{section}[title]" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
 					<div class="item-head">
-						<input type="text" name="intro-sub-title" placeholder="<?php esc_attr_e( 'Section Sub-title', 'my-listing' ) ?>">
+						<input type="text" name="{section}[sub_title]" placeholder="<?php esc_attr_e( 'Section Sub-title', 'my-listing' ) ?>">
 					</div>
 				<?php endif ?>
 				<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
 					<textarea
 					cols="20" rows="2" class="input-text"
-					name="intro-description"
+					name="{section}[descript]"
 					placeholder="<?php echo esc_attr_x( 'Section Description', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
 				<?php endif ?>
 			</div>
