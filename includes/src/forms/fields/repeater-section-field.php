@@ -55,7 +55,7 @@ class Repeater_Section_Field extends Base_Field {
 		$posted = $_POST[ $this->key ];
 
 		$data[] = [
-			'title' => sanitize_text_field( $title ),
+			'title' =>  $title,
 			'subtitle' => sanitize_text_field( $posted['sub_title'] ),
 			'descript' => sanitize_text_field( $posted['descript'] ),
 			'list' => $value
