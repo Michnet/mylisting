@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-wp_enqueue_script( 'mylisting-repeater-ajax-file-upload' );
+//wp_enqueue_script( 'mylisting-repeater-ajax-file-upload' );
 
 $og_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
 $uploaded_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
@@ -33,7 +33,7 @@ if ( $uploaded_files ) {
 ?>
 
 	
-	<div class="item-head form-group">
+	<div class="form-group">
 				<input type="text" name="title" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
