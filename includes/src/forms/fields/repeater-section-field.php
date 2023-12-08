@@ -49,7 +49,7 @@ class Repeater_Section_Field extends Base_Field {
 				$links[] = $file_value;
 			}
 
-		$obj = new stdClass();
+		//$obj = new stdClass();
 		$data = [];
 		$posted = $_POST[ $this->key ];
 
