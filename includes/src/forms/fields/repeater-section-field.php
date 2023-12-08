@@ -57,7 +57,7 @@ class Repeater_Section_Field extends Base_Field {
 
 	public function field_props() {
 		// for backwards compatibility
-		$this->props['type'] = 'general-repeater';
+		$this->props['type'] = 'repeater-section';
 		$this->props['allow_price'] = true;
 		$this->props['currency'] = '';
 		$this->props['allow_sub_title'] = true;
