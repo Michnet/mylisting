@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 wp_enqueue_script( 'mylisting-repeater-ajax-file-upload' );
 
 $og_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
-$uploaded_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
+$uploaded_files = ! empty( $field['value'] ) ? (array) $field['value']['list'] : [];
 
 $files = [];
 
