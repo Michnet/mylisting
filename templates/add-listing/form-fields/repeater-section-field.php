@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 wp_enqueue_script( 'mylisting-repeater-ajax-file-upload' );
 
 $og_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
-$uploaded_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
+$uploaded_files = ! empty( $field['value'] ) ? (array) $field['value'][0]['list'] : [];
 
 $files = [];
 
@@ -37,18 +37,21 @@ if ( $uploaded_files ) {
 				<input type="text" 
 					name="<?php echo esc_attr( $key.'_title' ); ?>" 
 					placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>"
-					value="<?php echo isset( $field['value']['title'] ) ? esc_attr( $field['value']['title'] ) : esc_attr( $field['value'][0]['title'] ); ?>"
+					value="<?php echo isset( $field['value'][0]['title'] ) ? esc_attr( $field['value'][0]['title'] ) : ''; ?>"
 					>
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
-					<div class="item-head">
-						<input type="text" name="<?php echo esc_attr( $key.'_sub_title' ); ?>" placeholder="<?php esc_attr_e( 'Section Sub-title', 'my-listing' ) ?>">
-					</div>
+					<input type="text" 
+						name="<?php echo esc_attr( $key.'_sub_title' ); ?>" 
+						placeholder="<?php esc_attr_e( 'Section Sub-title', 'my-listing' ) ?>"
+						value="<?php echo isset( $field['value'][0]['sub_title'] ) ? esc_attr( $field['value'][0]['sub_title'] ) : ''; ?>"
+						>
 				<?php endif ?>
 				<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
 					<textarea
 					cols="20" rows="2" class="input-text"
-					name="{section}[descript]"
+					name="<?php echo esc_attr( $key.'_descript' ); ?>"
+					value="<?php echo isset( $field['value'][0]['descript'] ) ? esc_attr( $field['value'][0]['sub_title'] ) : ''; ?>"
 					placeholder="<?php echo esc_attr_x( 'Section Description', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
 				<?php endif ?>
 			</div>
