@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 wp_enqueue_script( 'mylisting-repeater-ajax-file-upload' );
 
 $og_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
-$uploaded_files = ! empty( $field['value'] ) ? (array) $field['value']['list'] : [];
+$uploaded_files = ! empty( $field['value'] ) ? (array) $field['value'] : [];
 
 $files = [];
 
@@ -34,7 +34,11 @@ if ( $uploaded_files ) {
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 			<div class="form-group">
-				<input type="text" name="<?php echo esc_attr( $key.'_title' ); ?>" placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>">
+				<input type="text" 
+					name="<?php echo esc_attr( $key.'_title' ); ?>" 
+					placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>"
+					value="<?php echo isset( $field['value'] ) ? esc_attr( $field['value'] ) : ''; ?>"
+					>
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
 					<div class="item-head">
