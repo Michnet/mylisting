@@ -60,7 +60,7 @@ class Repeater_Section_Field extends Base_Field {
 			'descript' =>  $_POST[ $this->key.'_descript'],
 			//'subtitle' => sanitize_text_field( $posted['sub_title'] ),
 			//'descript' => sanitize_text_field( $posted['descript'] ),
-			'list' => $posted
+			'list' => array_filter( $links )
 		];
 
 		return $data;
