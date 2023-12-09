@@ -37,7 +37,7 @@ if ( $uploaded_files ) {
 				<input type="text" 
 					name="<?php echo esc_attr( $key.'_title' ); ?>" 
 					placeholder="<?php esc_attr_e( 'Section Title', 'my-listing' ) ?>"
-					value="<?php echo isset( $field['value']['title'] ) ? esc_attr( $field['value']['title'] ) : esc_attr( $field['value'][0] ); ?>"
+					value="<?php echo isset( $field['value']['title'] ) ? esc_attr( $field['value']['title'] ) : esc_attr( $field['value'][0]['title'] ); ?>"
 					>
 			
 				<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
