@@ -84,31 +84,23 @@ if ( $uploaded_files ) {
 
 			<div class="fields-box row mx-0">
 
-				<div class="form-group w50 col-md-6 col-12">
 					<label>Activity name</label>
 					<input required type="text" name="act_name" placeholder="<?php esc_attr_e( 'E.g: Keynote speech', 'my-listing' ) ?>">
-				</div>
 
-				<div class="form-group w50 col-md-6 col-12">
 					<label>Main individual(or group)</label>
 					<input type="text" name="act_person" placeholder="<?php esc_attr_e( 'John Doe', 'my-listing' ) ?>">
-				</div>
 
-				<div class="form-group w50 col-md-6 col-12">
 				    <label>Event Day 
 						<span>Which day of the event is this program item scheduled on</span>
 					</label>
 					<input type="text" name="act_day" max="30" min="1" steps='1'
 					placeholder="E.g: 1"
 					>
-				</div>
 
-				<div class="form-group w50 col-md-6 col-12">
 				    <label>Scheduled title</label>
 					<input type="text" name="act_time"
 					placeholder="E.g: 1400"
 					>
-				</div>
 			</div>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
