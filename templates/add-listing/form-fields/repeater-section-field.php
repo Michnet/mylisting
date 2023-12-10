@@ -34,7 +34,7 @@ if ( $uploaded_files ) {
 
 	<div class="section-form-group">
 		<label>Section Heading
-			<span>The heading for <?php !empty($field['plural_label']) ? $field['plural_label'] : 'this'?> section on the page</span>
+			<span>The heading for <?php esc_attr_e( !empty($field['plural_label']) ? 'the '.$field['plural_label'] : 'this', 'my-listing' ) ?> section on the page</span>
 		</label>
 		<input type="text" 
 			name="<?php echo esc_attr( $key.'_title' ); ?>" 

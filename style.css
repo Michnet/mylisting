@@ -4800,3 +4800,8 @@ label span {
     color: #acacac;
     margin-bottom: 12px;
 }
+
+
+.elementor-element.no_icons i {
+    display: none;
+}
