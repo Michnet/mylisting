@@ -86,12 +86,12 @@ if ( $uploaded_files ) {
 
 			<div class="fields-box row mx-0">
 
-				<div class="form-group w50 col-md-6 col-12">
+				<div class="form-group col-12">
 					<label>Name</label>
 					<input required type="text" name="img_name" placeholder="<?php esc_attr_e( 'Name', 'my-listing' ) ?>">
 				</div>
 
-				<div class="form-group w50 col-md-6 col-12">
+				<div class="form-group col-12">
 					<label>Website </label>
 					<input type="text" name="img_link" placeholder="<?php esc_attr_e( 'https://.......', 'my-listing' ) ?>">
 				</div>

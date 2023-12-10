@@ -95,7 +95,7 @@ if ( $uploaded_files ) {
 					<label>Subtitle <span class='label_meta'>Optional</span></label>
 					<input type="text" maxlength="50" name="ft_subtitle" placeholder="<?php esc_attr_e( 'Subtitle(Optional)', 'my-listing' ) ?>">
 				</div>
-			</div>
+				
 				<textarea
 				    required
 					cols="20" rows="2" class="input-text"
@@ -103,6 +103,7 @@ if ( $uploaded_files ) {
 					maxlength="180"
 					placeholder="<?php echo esc_attr_x( 'Brief Desecription', 'General Repeater Description', 'my-listing' ) ?>">
 				</textarea>
+			</div>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
 			</button>

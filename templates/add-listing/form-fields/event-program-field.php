@@ -83,8 +83,6 @@ if ( $uploaded_files ) {
 
 
 			<div class="fields-box row mx-0">
-
-				<div class="form-group w50 col-md-6 col-12">
 					<label>Activity name</label>
 					<input required type="text" name="act_name" placeholder="<?php esc_attr_e( 'E.g: Keynote speech', 'my-listing' ) ?>">
 
