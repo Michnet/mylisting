@@ -20,6 +20,7 @@
 input::placeholder, textarea::placeholder {
     color: var(--grayText);
     font-size: var(--smFontSize);
+    font-style: italic;
 }
 body.edit-listing-form.woocommerce-account .i-section .container, 
 body.edit-listing-form.woocommerce-account .mlduo-account-menu .container 
@@ -4650,8 +4651,8 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 .repeater-list label {
     font-weight: 500;
-    font-size: 14px;
-    color: #b4b3b3;
+    font-size: 13px;
+    color: #717070;
 }
 
 .repeater-list {
@@ -4766,7 +4767,8 @@ button.delete-repeater-item {
 }
 
 input, textarea {
-    padding: 15px;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .mce-toolbar .mce-btn i {
