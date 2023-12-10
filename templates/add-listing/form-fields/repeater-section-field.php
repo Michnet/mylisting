@@ -34,7 +34,7 @@ if ( $uploaded_files ) {
 
 	<div class="section-form-group">
 		<label>Section Heading
-			<span>The heading for <?php isset($field['singular_label']) ? $field['plural_label'] : 'this'?> section on the page</span>
+			<span>The heading for <?php !empty($field['plural_label']) ? $field['plural_label'] : 'this'?> section on the page</span>
 		</label>
 		<input type="text" 
 			name="<?php echo esc_attr( $key.'_title' ); ?>" 
@@ -146,5 +146,5 @@ if ( $uploaded_files ) {
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i></button>
 		</div>
 	</div>
-	<input data-repeater-create type="button" value="<?php esc_attr_e( isset($field['singular_label']) ? 'Add '.$field['singular_label'] : 'Add item', 'my-listing' ) ?>" id="add-menu-links-field">
+	<input data-repeater-create type="button" value="<?php esc_attr_e( !empty($field['singular_label']) ? 'Add '.$field['singular_label'] : 'Add item', 'my-listing' ) ?>" id="add-menu-links-field">
 </div>

@@ -2376,6 +2376,9 @@ section.code_sect #messages-modal-toggle i {
     flex: 0 200px;
     transition: all .2s
 }
+.mb-0{
+    margin-bottom: 0;
+}
 
 #wcfm-main-contentainer .wcfm_menu_toggle {
     flex: 0 0 60px;
