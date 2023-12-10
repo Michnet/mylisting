@@ -26,6 +26,12 @@ class Repeater_Text_Field extends Base_Field {
 					$url['mylisting_accordion_photo'] = reset($url['mylisting_accordion_photo']);
 				}
 
+				foreach($file_value as $field_name => $field_value){
+					if(isset($field_value) && $field_name != 'mylisting_accordion_photo'){
+						$file_value[$field_name] = sanitize_text_field( stripslashes($field_value) );
+					}
+				}
+
 				$prepared_files[ $key ] = $url['mylisting_accordion_photo'];
 			}
 		}

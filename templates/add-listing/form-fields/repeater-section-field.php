@@ -142,5 +142,4 @@ if ( $uploaded_files ) {
 		</div>
 	</div>
 	<input data-repeater-create type="button" value="<?php esc_attr_e( 'Add item', 'my-listing' ) ?>" id="add-menu-links-field">
-	<p><?php var_dump($field['value'] ); ?></p>
 </div>
