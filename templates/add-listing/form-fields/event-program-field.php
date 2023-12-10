@@ -83,20 +83,7 @@ if ( $uploaded_files ) {
 
 
 				<div class="fields-box row mx-0">
-				<div class="form-group col-12">
-					<label>Event day number
-						<span>Which day of the event is this program item scheduled on?</span>
-					</label>
-					<input type="number" name="event_day"
-						min="1"
-						max="100"
-						step="1"
-						>
-					<!-- <input required 
-						type="text" 
-						name="event_day" 
-						placeholder="Enter day number as a digit e.g: 1"> -->
-				</div>
+				
 				<div class="form-group col-12">
 					<label>Title </label>
 					<input required 
@@ -112,6 +99,20 @@ if ( $uploaded_files ) {
 						name="item_description"
 						>
 					</textarea>
+				</div>
+				<div class="form-group col-12">
+					<label>Event day number
+						<span>Which day of the event is this program item scheduled on?</span>
+					</label>
+					<input type="number" name="event_day"
+						min="1"
+						max="100"
+						step="1"
+						>
+					<!-- <input required 
+						type="text" 
+						name="event_day" 
+						placeholder="Enter day number as a digit e.g: 1"> -->
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
