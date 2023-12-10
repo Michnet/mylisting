@@ -82,38 +82,28 @@ if ( $uploaded_files ) {
 				</div>
 
 
-				<div class="fields-box row mx-0">
-				
-				<div class="form-group col-12">
-					<label>Title </label>
-					<input required 
-					type="text" 
-					name="item_title" 
-					placeholder="<?php esc_attr_e( 'E.g: Keynote Speech', 'my-listing' ) ?>">
-				</div>
+			<div class="fields-box row mx-0">
 
-				<div class="form-group col-12">
-					<label class="margin-top-10">Brief Description</label>
-					<textarea
-						cols="20" rows="2"
-						name="item_description"
-						>
-					</textarea>
-				</div>
-				<div class="form-group col-12">
-					<label>Event day number
-						<span>Which day of the event is this program item scheduled on?</span>
-					</label>
-					<input type="number" name="event_day"
-						min="1"
-						max="100"
-						step="1"
-						>
+				<div class="form-group w50 col-md-6 col-12">
+					<label>Activity name</label>
+					<input required type="text" name="act_name" placeholder="<?php esc_attr_e( 'E.g: Keynote speech', 'my-listing' ) ?>">
 				</div>
 
 				<div class="form-group w50 col-md-6 col-12">
-				    <label>Time </label>
-					<input type="text" name="item_time" placeholder="<?php esc_attr_e( 'The scheduled time for this program item', 'my-listing' ) ?>">
+					<label>Main individual(or group)</label>
+					<input type="text" name="act_person" placeholder="<?php esc_attr_e( 'John Doe', 'my-listing' ) ?>">
+				</div>
+
+				<div class="form-group w50 col-md-6 col-12">
+				    <label>Event Day 
+						<span>Which day of the event is this program item scheduled on</span>
+					</label>
+					<input type="number" name="job_title" max="30" min="1" steps='1'>
+				</div>
+
+				<div class="form-group w50 col-md-6 col-12">
+				    <label>Scheduled title</label>
+					<input type="time" name="act_time">
 				</div>
 			</div>
 			
