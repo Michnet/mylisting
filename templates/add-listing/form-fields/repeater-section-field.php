@@ -32,7 +32,7 @@ if ( $uploaded_files ) {
 
 ?>
 
-	<div class="form-group">
+	<div class="section-form-group">
 		<input type="text" 
 			name="<?php echo esc_attr( $key.'_title' ); ?>" 
 			placeholder="<?php esc_attr_e( 'Section Heading', 'my-listing' ) ?>"
@@ -57,7 +57,7 @@ if ( $uploaded_files ) {
 	</div>
     
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-	<div data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+	<div class="repeater-list" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
 		<div data-repeater-item class="repeater-field-wrapper">
 
 			<?php if ( isset( $field['allow_item_images'] ) && $field['allow_item_images'] === true ): ?>
@@ -110,11 +110,10 @@ if ( $uploaded_files ) {
 
 			<div class="fields-box row mx-0">
 
-				<div class="form-group w50 col-md-6 col-12">
-					<label>Title </label>
-					<input required type="text" 
-					name="item_title" placeholder="<?php esc_attr_e( 'Item name or title', 'my-listing' ) ?>">
-				</div>
+				
+				<label>Title </label>
+				<input required type="text" 
+				name="item_title" placeholder="<?php esc_attr_e( 'Item name or title', 'my-listing' ) ?>">
 
 				<?php if ( isset( $field['allow_item_sub_title'] ) && $field['allow_item_sub_title'] === true ): ?>
 					<label>Sub-title </label>
@@ -131,7 +130,7 @@ if ( $uploaded_files ) {
 				<?php endif ?>
 
 				<?php if ( isset( $field['allow_item_link'] ) && $field['allow_item_link'] === true ): ?>
-				<div class="item-head">
+				<div class="form-group">
 					<label><span>Add a link through this item to an external url</span></label>
 					<input type="text" name="link_label" placeholder="<?php esc_attr_e( 'Button Label', 'my-listing' ) ?>">
 					<input type="url" name="link_url" placeholder="<?php esc_attr_e( 'URL', 'my-listing' ) ?>">
