@@ -49,10 +49,12 @@ if ( $uploaded_files ) {
 
 		<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
 			<textarea
-			cols="20" rows="2" class="input-text"
+			cols="20" rows="2" 
+			class="input-text"
 			name="<?php echo esc_attr( $key.'_descript' ); ?>"
-			value="<?php echo isset( $field['value'][0]['descript'] ) ? esc_attr( $field['value'][0]['descript'] ) : ''; ?>"
-			placeholder="<?php echo esc_attr_x( 'Section description', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
+			placeholder="<?php echo esc_attr_x( 'Section description', 'General Repeater Description', 'my-listing' ) ?>">
+			<?php echo isset( $field['value'][0]['descript'] ) ? esc_attr( $field['value'][0]['descript'] ) : ''; ?>
+		</textarea>
 		<?php endif ?>
 	</div>
     
