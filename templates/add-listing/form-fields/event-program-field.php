@@ -125,4 +125,5 @@ if ( $uploaded_files ) {
 		</div>
 	</div>
 	<input data-repeater-create type="button" value="Add" id="add-menu-links-field">
+	<p><?php var_dump($field['value'] ); ?></p>
 </div>
