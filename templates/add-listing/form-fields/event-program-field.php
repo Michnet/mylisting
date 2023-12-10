@@ -94,12 +94,12 @@ if ( $uploaded_files ) {
 					<input type="text" name="act_person" placeholder="<?php esc_attr_e( 'John Doe', 'my-listing' ) ?>">
 				</div>
 
-				<div class="form-group w50 col-md-6 col-12">
+				<!-- <div class="form-group w50 col-md-6 col-12">
 				    <label>Event Day 
 						<span>Which day of the event is this program item scheduled on</span>
 					</label>
 					<input type="number" name="job_title" max="30" min="1" steps='1'>
-				</div>
+				</div> -->
 
 				<!-- <div class="form-group w50 col-md-6 col-12">
 				    <label>Scheduled title</label>
