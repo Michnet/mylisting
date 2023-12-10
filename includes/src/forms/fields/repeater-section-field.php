@@ -68,8 +68,6 @@ class Repeater_Section_Field extends Base_Field {
 	public function field_props() {
 		// for backwards compatibility
 		$this->props['type'] = 'repeater-section';
-		$this->props['allow_price'] = true;
-		$this->props['currency'] = '';
 		$this->props['allow_sub_title'] = true;
 		$this->props['allow_description'] = true;
 
@@ -89,7 +87,7 @@ class Repeater_Section_Field extends Base_Field {
 		$this->getKeyField();
 		$this->getPlaceholderField();
 		$this->getDescriptionField();
-		$this->allowPrice();
+		//$this->allowPrice();
 		$this->allowSubTitle();
 		$this->allowDescription();
 		$this->getRequiredField();
@@ -103,7 +101,7 @@ class Repeater_Section_Field extends Base_Field {
 		$this->allowItemLink();
 	}
 
-	public function allowPrice() { ?>
+	/* public function allowPrice() { ?>
 		<div class="form-group w50">
 			<label>Enable price?</label>
 			<label class="form-switch mb0">
@@ -117,7 +115,7 @@ class Repeater_Section_Field extends Base_Field {
 			<input type="text" v-model="field.currency" placeholder="E.g. $">
 		</div>
 		<?php
-	}
+	} */
 
 	public function allowSubTitle() { ?>
 		<div class="form-group w50">
@@ -134,7 +132,7 @@ class Repeater_Section_Field extends Base_Field {
 		<div class="form-group w50">
 			<label>Enable item subtitle?</label>
 			<label class="form-switch mb0">
-				<input type="checkbox" v-model="field.allow_sub_title">
+				<input type="checkbox" v-model="field.allow_item_sub_title">
 				<span class="switch-slider"></span>
 			</label>
 		</div>
@@ -145,7 +143,7 @@ class Repeater_Section_Field extends Base_Field {
 		<div class="form-group w50">
 			<label>Enable Item Link?</label>
 			<label class="form-switch mb0">
-				<input type="checkbox" v-model="field.allow_sub_title">
+				<input type="checkbox" v-model="field.allow_item_link">
 				<span class="switch-slider"></span>
 			</label>
 		</div>
@@ -167,7 +165,7 @@ class Repeater_Section_Field extends Base_Field {
 		<div class="form-group w50">
 			<label>Enable Item description?</label>
 			<label class="form-switch mb0">
-				<input type="checkbox" v-model="field.allow_description">
+				<input type="checkbox" v-model="field.allow_item_description">
 				<span class="switch-slider"></span>
 			</label>
 		</div>
@@ -178,7 +176,7 @@ class Repeater_Section_Field extends Base_Field {
 		<div class="form-group">
 			<label>Enable item images?</label>
 			<label class="form-switch mb0">
-				<input type="checkbox" v-model="field.allow_images">
+				<input type="checkbox" v-model="field.allow_item_images">
 				<span class="switch-slider"></span>
 			</label>
 		</div>
