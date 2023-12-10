@@ -116,9 +116,9 @@ if ( $uploaded_files ) {
 			<div class="fields-box row mx-0">
 
 				
-				<label>Title </label>
+				<label><?php esc_attr_e( !empty($field['singular_label']) ? ''.$field['singular_label'].' ' : '', 'my-listing' ) ?>Title </label>
 				<input required type="text" 
-				name="item_title" placeholder="<?php esc_attr_e( 'Item name or title', 'my-listing' ) ?>">
+				name="item_title">
 
 				<?php if ( isset( $field['allow_item_sub_title'] ) && $field['allow_item_sub_title'] === true ): ?>
 					<label>Sub-title </label>
