@@ -4652,10 +4652,11 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 .repeater-field-wrapper .field-type-file.form-group {
     padding-left: 0 !important;
 }
-.repeater-list label {
+.repeater-list label, .section-form-group label, label {
     font-weight: 500;
     font-size: 13px;
-    color: #717070;
+    color: #565555;
+    margin-bottom: 0;
 }
 
 .repeater-list {
@@ -4790,4 +4791,6 @@ label span {
     display: block;
     font-size: 12px;
     font-style: italic;
+    color: #acacac;
+    margin-bottom: 12px;
 }
