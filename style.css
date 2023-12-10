@@ -4678,7 +4678,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 .repeater-field-wrapper .form-group {
     padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-right: 5px !important;
 }
 
 .repeater-list.block_list .repeater-field-wrapper {

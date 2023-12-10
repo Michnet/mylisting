@@ -76,6 +76,8 @@ class Repeater_Section_Field extends Base_Field {
 		$this->props['type'] = 'repeater-section';
 		$this->props['allow_sub_title'] = true;
 		$this->props['allow_description'] = true;
+		$this->props['singular_label'] = '';
+		$this->props['plural_label'] = '';
 
 		$this->props['allow_item_sub_title'] = true;
 		$this->props['allow_item_link'] = true;
@@ -93,7 +95,7 @@ class Repeater_Section_Field extends Base_Field {
 		$this->getKeyField();
 		$this->getPlaceholderField();
 		$this->getDescriptionField();
-		//$this->allowPrice();
+		$this->allowLabels();
 		$this->allowSubTitle();
 		$this->allowDescription();
 		$this->getRequiredField();
@@ -107,21 +109,18 @@ class Repeater_Section_Field extends Base_Field {
 		$this->allowItemLink();
 	}
 
-	/* public function allowPrice() { ?>
+	public function allowLabels() { ?>
 		<div class="form-group w50">
-			<label>Enable price?</label>
-			<label class="form-switch mb0">
-				<input type="checkbox" v-model="field.allow_price">
-				<span class="switch-slider"></span>
-			</label>
+			<label>Plural label</label>
+			<input type="text" v-model="field.plural_label" placeholder="E.g. Reasons">
 		</div>
 
 		<div class="form-group w50">
-			<label>Currency</label>
-			<input type="text" v-model="field.currency" placeholder="E.g. $">
+			<label>Singular label</label>
+			<input type="text" v-model="field.singular_label" placeholder="E.g. Reason">
 		</div>
 		<?php
-	} */
+	}
 
 	public function allowSubTitle() { ?>
 		<div class="form-group w50">
