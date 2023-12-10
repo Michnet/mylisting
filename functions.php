@@ -1893,6 +1893,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['xtra_large_thumb'] = $xlarge_thumb   ?? null;
       $_data['categories'] = $cats   ?? null;
       $_data['locations'] = $locs   ?? null;
+      $_data['meta'] = $meta;
     }
     
     $data->data = $_data;
