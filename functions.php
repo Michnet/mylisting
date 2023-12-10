@@ -1841,6 +1841,12 @@ function my_rest_prepare_listing( $data, $post, $request ) {
         $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
         $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
       }
+
+      foreach($meta as $key => $value){
+        if(is_string($value) && str_contains($value,'a:1:')){
+          $meta[$key] = unserialize($value);
+        }
+      }
   
       
       $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
