@@ -3904,7 +3904,7 @@ td.child {
 }
 
 
-#submit-job-form .field-head {flex-direction: column;}
+#submit-job-form .field-head {flex-direction: column;margin-bottom: 10px;}
 
 #submit-job-form .small, #submit-job-form small, .field-head .description {
     color: var(--wc-secondary-text);
@@ -4659,6 +4659,10 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     margin-bottom: 0;
 }
 
+#submit-job-form .field-head label {
+    margin-bottom: 0;
+}
+
 .repeater-list {
     display: flex;
     flex-wrap: nowrap;
@@ -4670,6 +4674,8 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 .repeater-list.block_list {
     flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .repeater-field-wrapper {
