@@ -117,15 +117,15 @@ if ( $uploaded_files ) {
 
 				<?php if ( isset( $field['allow_item_sub_title'] ) && $field['allow_item_sub_title'] === true ): ?>
 					<label>Sub-title </label>
-					<input required type="text" 
-					name="item_title" placeholder="<?php esc_attr_e( 'Item sub-title', 'my-listing' ) ?>">
+					<input type="text" 
+					name="item_sub_title" placeholder="<?php esc_attr_e( 'Item sub-title', 'my-listing' ) ?>">
 				<?php endif ?>
 
 				<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
 					<label>Item description </label>
 					<textarea
 					cols="20" rows="2" class="input-text"
-					name="menu-description"
+					name="item_description"
 					placeholder="<?php echo esc_attr_x( 'A short description for this item', 'General Repeater Description', 'my-listing' ) ?>"></textarea>
 				<?php endif ?>
 

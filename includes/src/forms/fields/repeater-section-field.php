@@ -42,6 +42,12 @@ class Repeater_Section_Field extends Base_Field {
 					$file = reset( $file );
 				}
 
+				foreach($file_value as $field_name => $field_value){
+					if(isset($field_value) && $field_name != 'mylisting_accordion_photo'){
+						$file_value[$file_value] = sanitize_text_field( stripslashes($field_value) );
+					}
+				}
+
 				$file_value['mylisting_accordion_photo'] = $file;
 				}
 
