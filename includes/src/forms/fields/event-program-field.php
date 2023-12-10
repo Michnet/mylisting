@@ -41,6 +41,11 @@ class Event_Program_Field extends Base_Field {
 				if ( is_array( $file ) ) {
 					$file = reset( $file );
 				}
+				foreach($file_value as $field_name => $field_value){
+					if(isset($field_value) && $field_name != 'mylisting_accordion_photo'){
+						$file_value[$field_name] = sanitize_text_field( stripslashes($field_value) );
+					}
+				}
 
 				$file_value['mylisting_accordion_photo'] = $file;
 				}

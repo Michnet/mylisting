@@ -58,9 +58,9 @@ class Repeater_Section_Field extends Base_Field {
 		$data = [];
 
 		$data[] = [
-			'title' =>  $_POST[ $this->key.'_title'],
-			'sub_title' =>  $_POST[ $this->key.'_sub_title'],
-			'descript' =>  $_POST[ $this->key.'_descript'],
+			'title' =>  sanitize_text_field( stripslashes($_POST[ $this->key.'_title'])),
+			'sub_title' =>  sanitize_text_field( stripslashes($_POST[ $this->key.'_sub_title'])),
+			'descript' =>  sanitize_text_field( stripslashes($_POST[ $this->key.'_descript'])),
 			'list' => array_filter( $links )
 		];
 
