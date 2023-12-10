@@ -11,7 +11,6 @@ class Repeater_Section_Field extends Base_Field {
 	public function get_posted_value() {
 
 		$value = ! empty( $_POST[ $this->key ] ) ? $_POST[ $this->key ] : [];
-		//$title = ! empty( $_POST[ $this->key ] ) ? $_POST[ $this->key ] : 'nothing';
 
 		$form_key = 'current_'.$this->key;
 		$files = isset( $_POST[ $form_key ] ) ?  $_POST[ $form_key ] : [];
@@ -19,15 +18,15 @@ class Repeater_Section_Field extends Base_Field {
 
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $key => $url ) {
-				if ( ! isset( $url['image'] ) ) {
+				if ( ! isset( $url['mylisting_accordion_photo'] ) ) {
 					continue;
 				}
 
-				if ( is_array( $url['image'] ) ) {
-					$url['image'] = reset($url['image']);
+				if ( is_array( $url['mylisting_accordion_photo'] ) ) {
+					$url['mylisting_accordion_photo'] = reset($url['mylisting_accordion_photo']);
 				}
 
-				$prepared_files[ $key ] = $url['image'];
+				$prepared_files[ $key ] = $url['mylisting_accordion_photo'];
 			}
 		}
 		
@@ -43,29 +42,23 @@ class Repeater_Section_Field extends Base_Field {
 					$file = reset( $file );
 				}
 
-				$file_value['image'] = $file;
+				$file_value['mylisting_accordion_photo'] = $file;
 				}
 
 
 				$links[] = $file_value;
 			}
 
-		//$obj = new stdClass();
 		$data = [];
-		$posted = $_POST[ $this->key ];
 
 		$data[] = [
 			'title' =>  $_POST[ $this->key.'_title'],
 			'sub_title' =>  $_POST[ $this->key.'_sub_title'],
 			'descript' =>  $_POST[ $this->key.'_descript'],
-			//'subtitle' => sanitize_text_field( $posted['sub_title'] ),
-			//'descript' => sanitize_text_field( $posted['descript'] ),
 			'list' => array_filter( $links )
 		];
 
 		return $data;
-		//return array_filter( $links );
-		//return $value;
 	}
 
 	public function validate() {
@@ -79,7 +72,11 @@ class Repeater_Section_Field extends Base_Field {
 		$this->props['currency'] = '';
 		$this->props['allow_sub_title'] = true;
 		$this->props['allow_description'] = true;
-		$this->props['allow_images'] = true;
+
+		$this->props['allow_item_sub_title'] = true;
+		$this->props['allow_item_link'] = true;
+		$this->props['allow_item_description'] = true;
+		$this->props['allow_item_images'] = true;
 	}
 
 	public function update() {
@@ -95,11 +92,15 @@ class Repeater_Section_Field extends Base_Field {
 		$this->allowPrice();
 		$this->allowSubTitle();
 		$this->allowDescription();
-		$this->allowImages();
 		$this->getRequiredField();
 		$this->getShowInSubmitFormField();
 		$this->getShowInAdminField();
 		$this->getShowInCompareField();
+
+		$this->allowItemSubTitle();
+		$this->allowItemImages();
+		$this->allowItemDescription();
+		$this->allowItemLink();
 	}
 
 	public function allowPrice() { ?>
@@ -129,6 +130,28 @@ class Repeater_Section_Field extends Base_Field {
 		<?php
 	}
 
+	public function allowItemSubTitle() { ?>
+		<div class="form-group w50">
+			<label>Enable item subtitle?</label>
+			<label class="form-switch mb0">
+				<input type="checkbox" v-model="field.allow_sub_title">
+				<span class="switch-slider"></span>
+			</label>
+		</div>
+		<?php
+	}
+
+	public function allowItemLink() { ?>
+		<div class="form-group w50">
+			<label>Enable Item Link?</label>
+			<label class="form-switch mb0">
+				<input type="checkbox" v-model="field.allow_sub_title">
+				<span class="switch-slider"></span>
+			</label>
+		</div>
+		<?php
+	}
+
 	public function allowDescription() { ?>
 		<div class="form-group w50">
 			<label>Enable description?</label>
@@ -140,9 +163,20 @@ class Repeater_Section_Field extends Base_Field {
 		<?php
 	}
 
-	public function allowImages() { ?>
+	public function allowItemDescription() { ?>
+		<div class="form-group w50">
+			<label>Enable Item description?</label>
+			<label class="form-switch mb0">
+				<input type="checkbox" v-model="field.allow_description">
+				<span class="switch-slider"></span>
+			</label>
+		</div>
+		<?php
+	}
+
+	public function allowItemImages() { ?>
 		<div class="form-group">
-			<label>Enable images?</label>
+			<label>Enable item images?</label>
 			<label class="form-switch mb0">
 				<input type="checkbox" v-model="field.allow_images">
 				<span class="switch-slider"></span>
