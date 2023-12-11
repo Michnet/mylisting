@@ -1856,7 +1856,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       
       $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
       $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
-      $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating'][0]) : null;
+      $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating']) : null;
       $_data['food_menu'] = $food_menu   ?? null;
       $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
       $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
@@ -1864,11 +1864,11 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
       $_data['landing']['greeting'] = $meta['_welcome_message']   ?? null;
       $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
-      $_data['marketing']['wcu']['wcu_intro_title'] = $meta['_wcu_intro_title'][0] ?? null;
-      $_data['marketing']['wcu']['wcu_intro_detail'] = $meta['_wcu_intro_detail'][0] ?? null;
+      $_data['marketing']['wcu']['wcu_intro_title'] = $meta['_wcu_intro_title'] ?? null;
+      $_data['marketing']['wcu']['wcu_intro_detail'] = $meta['_wcu_intro_detail'] ?? null;
       $_data['marketing']['wcu']['list'] = $why_us   ?? null;
-      $_data['marketing']['what_we_do']['wwd_intro_title'] = $meta['_wwd_intro_title'][0] ?? null;
-      $_data['marketing']['what_we_do']['wwd_intro_detail'] = $meta['_wwd_intro_detail'][0] ?? null;
+      $_data['marketing']['what_we_do']['wwd_intro_title'] = $meta['_wwd_intro_title'] ?? null;
+      $_data['marketing']['what_we_do']['wwd_intro_detail'] = $meta['_wwd_intro_detail'] ?? null;
       $_data['marketing']['what_we_do']['wwd_services'] = $wwd_services ?? null;
       $_data['about_us']['faqs'] = $faq_us ?? null;
       $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
@@ -1888,7 +1888,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['address'] = $meta['_job_location']  ?? null;
       $_data['venue'] = $meta['_venue']  ?? null;
       $_data['event_type'] = $meta['_event-type'] ?? null;
-      $_data['greeting'] = $meta['_greeting'][0]  ?? null;
+      $_data['greeting'] = $meta['_greeting']  ?? null;
       $_data['cover'] = $cover  ? $cover[0] : null;
       $_data['gallery'] = $gallery ?? null;
       $_data['logo'] = $logo  ? $logo[0] : null;
