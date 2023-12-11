@@ -104,6 +104,10 @@ if ( $uploaded_files ) {
 						placeholder="E.g: 1400"
 						>
 					</div>
+					<div class="form-group w100 col-12">
+					<label>Activity description</label>
+					<textarea name="act_descript" placeholder='A brief description of this item on the activity program' cols="20" rows="2" class="input-text">
+				</div>
 			</div>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>

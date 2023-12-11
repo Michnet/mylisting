@@ -43,7 +43,7 @@ if ( $uploaded_files ) {
 				</div>
 				<div class="form-group w100 col-12">
 					<label>Answer</label>
-					<input required type="text" name="faq_answer">
+					<textarea name="faq_answer" placeholder='Answer' cols="20" rows="2" class="input-text">
 				</div>
 			</div>
 			

@@ -1810,9 +1810,9 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $the_content = apply_filters('the_content', get_the_content());
   
       $hours = get_post_meta($post_id, '_work_hours', true);
-      $food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
-      $social_links = get_post_meta($post_id, '_links', true);
-      $phone = get_post_meta($post_id, '_job_phone', true);
+      //$food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
+      //$social_links = get_post_meta($post_id, '_links', true);
+      //$phone = get_post_meta($post_id, '_job_phone', true);
       $tagline = get_post_meta($post_id, '_job_tagline', true);
       $cover = get_post_meta($post_id, '_job_cover', true);
       $logo = get_post_meta($post_id, '_job_logo', true);
@@ -1854,10 +1854,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       }
   
       
-      $_data['item_min_price'] = $meta['item_min_price'][0] ??  null;
-      $_data['item_min_price_html'] = $meta['item_min_price_html'][0] ??  null;
+      $_data['item_min_price'] = $meta['item_min_price'] ??  null;
+      $_data['item_min_price_html'] = $meta['item_min_price_html'] ??  null;
       $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating']) : null;
-      $_data['food_menu'] = $food_menu   ?? null;
+      $_data['food_menu'] = $meta['_food-drinks-menu']   ?? null;
       $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
       $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
       $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
@@ -1878,7 +1878,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['category'] = $category  ?? null;
       $_data['home'] = $meta['_listing-home-page'][0] ?? null; 
       $_data['community_id'] = $meta['community_id'] ?? null; 
-      $_data['phone'] = $phone  ?? null;
+      $_data['phone'] = $meta['_job_phone']  ?? null;
       $_data['page_views'] = $views  ?? null;
       $_data['content'] = $the_content ?? null;
       $_data['persons']['team'] = $team ?? null;
@@ -1895,7 +1895,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['website'] = $meta['_job_website']  ?? null;
       $_data['type'] = $meta['_case27_listing_type']  ?? null;
       $_data['level'] =  $meta['_featured'][0] ? intval($meta['_featured'][0]) : 0;
-      $_data['social'] = $social_links   ?? null;
+      $_data['social'] = $meta['_links']   ?? null;
       $_data['schedule'] = $hours   ?? null;
       $_data['acf'] = $acf_data ?? null;
       $_data['whatsapp'] = $meta['_whatsapp-number'] ?? null;
