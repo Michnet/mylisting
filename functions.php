@@ -1843,8 +1843,13 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       }
 
       foreach($meta as $key => $value){
-        if(is_string($value) && str_contains($value,'a:1:')){
-          $meta[$key] = unserialize($value);
+        $val = $value[0];
+        if(is_string($val)){
+          if(str_starts_with($val,'a:')){
+            $meta[$key] = unserialize($val);
+          }else{
+            $meta[$key] = $val;
+          }
         }
       }
   
