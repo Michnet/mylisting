@@ -3377,7 +3377,8 @@ body.single.single-job_listing .title-style-1 i {
 
 .add-listing-nav a i {
     height: 15px;
-    width: 15px
+    width: 15px;
+    border: 1px solid lightgrey;
 }
 
 .add-listing-nav li.active i>span {
@@ -3385,7 +3386,7 @@ body.single.single-job_listing .title-style-1 i {
 }
 
 .add-listing-nav a i>span {
-    background: var(--lightTheme)
+    background: var(--lightTheme) !important;
 }
 
 #submit-job-form .field>input,#submit-job-form .field>textarea {
@@ -3989,6 +3990,177 @@ input.acff-submit-button.acf-button:hover {
 .add-listing-nav a {
     white-space: nowrap;
 }
+.add-listing-step .job-manager-error, .edit-listing-form .job-manager-error, .edit-listing-form .job-manager-info, .edit-listing-form .job-manager-message {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    left: auto;
+    z-index: 2;
+}
+
+.wcfm-product-feature-upload, #gallery_img, #wcfm_360_images, .wcfm-product-feature-upload .placeHolder, .wcfm-product-feature-upload img{width: 100%}
+
+
+#submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
+
+.repeater-field-wrapper .field-type-file.form-group {
+    padding-left: 0 !important;
+}
+.repeater-list label, .section-form-group label, label {
+    font-weight: 500;
+    font-size: 13px;
+    color: #565555;
+    margin-bottom: 0;
+}
+
+#submit-job-form .field-head label {
+    margin-bottom: 0;
+}
+
+.repeater-list {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    grid-column-gap: 10px;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.repeater-list.block_list {
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.repeater-field-wrapper {
+    width: auto;
+    flex-basis: auto;
+    min-width: 250px;
+    overflow: hidden;
+    max-width: 400px;
+}
+
+.repeater-field-wrapper .form-group {
+    padding-left: 0 !important;
+    padding-right: 5px !important;
+}
+
+.repeater-list.block_list .repeater-field-wrapper {
+    max-width: 100%;
+    padding: 5px 12px;
+    border: none;
+}
+
+span.label_meta {
+    display: block;
+    color: var(--wc-subtext);
+    font-size: 11px;
+}
+
+#item_products .acff-edit-button.edit-button {
+    position: fixed;
+    left: 28px;
+    bottom: 30px;
+    color: #fff;
+}
+
+#wcfm-products {
+    display: block;
+}
+
+#wcfm-main-contentainer table.display tbody {
+    display: grid;
+}
+
+table#wcfm-products thead, table#wcfm-products tfoot {
+    display: none;
+}
+
+.uploaded-file.uploaded-image.review-gallery-image.job-manager-uploaded-file {
+    height: 100px;
+    width: 100px;
+}
+
+.repeater-list input {
+    border: none;
+}
+
+input.boldy {font-weight: 500;}
+
+.uploaded-files-list.review-gallery-images {
+    display: flex;
+    align-items: flex-end;
+    justify-items: flex-start;
+}
+
+.field-type-file.form-group .review-gallery-add {
+    order: 2;
+    height: 50px;
+    width: 50px;
+}
+
+button.delete-repeater-item {
+    bottom: 5px;
+    right: 0px;
+    left: auto;
+}
+
+#wcfm-main-contentainer a.add_new_wcfm_ele_dashboard, #wcfm-main-contentainer a.wcfm_import_export {
+    border-radius: 30px;
+}
+
+#wcfm-main-contentainer .wp-media-buttons .insert-media {
+    font-size: 12px;
+    border-radius: 22px;
+}
+
+#wcfm_menu .wcfm_menu_home {
+    margin-top: 0;
+}
+
+.wcfm_menu_items {
+    margin: 0;
+    border: none;
+}
+.woocommerce-account:not(.logged-in) .acff-edit-button.edit-button {
+    display: none !important;
+}
+
+._logo.elementor-widget-image img {
+    max-height: 68px;
+    object-fit: contain;
+}
+
+input, textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.mce-toolbar .mce-btn i {
+    color: #fff;
+}
+
+.mce-toolbar .mce-btn button, .qt-dfw {
+    border-radius: 3px;
+}
+
+.job-manager-uploaded-files {
+    width: fit-content;
+}
+
+label span {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    color: #acacac;
+    margin-bottom: 12px;
+}
+
+
+.elementor-element.no_icons i {
+    display: none;
+}
+
 
 /*media qs start*/
 
@@ -4413,6 +4585,9 @@ input.acff-submit-button.acf-button:hover {
 }
 
 @media screen and (max-width: 768px) {
+    #item_products .acff-edit-button.edit-button, .add-listing-step .job-manager-error, .edit-listing-form .job-manager-error, .edit-listing-form .job-manager-info, .edit-listing-form .job-manager-message {
+    bottom: 70px;
+}
     #wcfm_menu .wcfm_menu_items{
     height: 50px;
 }
@@ -4644,164 +4819,3 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 
 /*media qs end*/
-.wcfm-product-feature-upload, #gallery_img, #wcfm_360_images, .wcfm-product-feature-upload .placeHolder, .wcfm-product-feature-upload img{width: 100%}
-
-
-#submit-job-form .form-group .form-group {padding-left: 10px;padding-right: 10px;}
-
-.repeater-field-wrapper .field-type-file.form-group {
-    padding-left: 0 !important;
-}
-.repeater-list label, .section-form-group label, label {
-    font-weight: 500;
-    font-size: 13px;
-    color: #565555;
-    margin-bottom: 0;
-}
-
-#submit-job-form .field-head label {
-    margin-bottom: 0;
-}
-
-.repeater-list {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    grid-column-gap: 10px;
-    overflow: hidden;
-    overflow-x: auto;
-}
-
-.repeater-list.block_list {
-    flex-direction: column;
-    margin-left: 0;
-    margin-right: 0;
-}
-
-.repeater-field-wrapper {
-    width: auto;
-    flex-basis: auto;
-    min-width: 250px;
-    overflow: hidden;
-    max-width: 400px;
-}
-
-.repeater-field-wrapper .form-group {
-    padding-left: 0 !important;
-    padding-right: 5px !important;
-}
-
-.repeater-list.block_list .repeater-field-wrapper {
-    max-width: 100%;
-    padding: 5px 12px;
-    border: none;
-}
-
-span.label_meta {
-    display: block;
-    color: var(--wc-subtext);
-    font-size: 11px;
-}
-
-#item_products .acff-edit-button.edit-button {
-    position: fixed;
-    left: 10px;
-    bottom: 76px;
-}
-
-#wcfm-products {
-    display: block;
-}
-
-#wcfm-main-contentainer table.display tbody {
-    display: grid;
-}
-
-table#wcfm-products thead, table#wcfm-products tfoot {
-    display: none;
-}
-
-.uploaded-file.uploaded-image.review-gallery-image.job-manager-uploaded-file {
-    height: 100px;
-    width: 100px;
-}
-
-.repeater-list input {
-    border: none;
-}
-
-input.boldy {font-weight: 500;}
-
-.uploaded-files-list.review-gallery-images {
-    display: flex;
-    align-items: flex-end;
-    justify-items: flex-start;
-}
-
-.field-type-file.form-group .review-gallery-add {
-    order: 2;
-    height: 50px;
-    width: 50px;
-}
-
-button.delete-repeater-item {
-    bottom: 5px;
-    right: 0px;
-    left: auto;
-}
-
-#wcfm-main-contentainer a.add_new_wcfm_ele_dashboard, #wcfm-main-contentainer a.wcfm_import_export {
-    border-radius: 30px;
-}
-
-#wcfm-main-contentainer .wp-media-buttons .insert-media {
-    font-size: 12px;
-    border-radius: 22px;
-}
-
-#wcfm_menu .wcfm_menu_home {
-    margin-top: 0;
-}
-
-.wcfm_menu_items {
-    margin: 0;
-    border: none;
-}
-.woocommerce-account:not(.logged-in) .acff-edit-button.edit-button {
-    display: none !important;
-}
-
-._logo.elementor-widget-image img {
-    max-height: 68px;
-    object-fit: contain;
-}
-
-input, textarea {
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.mce-toolbar .mce-btn i {
-    color: #fff;
-}
-
-.mce-toolbar .mce-btn button, .qt-dfw {
-    border-radius: 3px;
-}
-
-.job-manager-uploaded-files {
-    width: fit-content;
-}
-
-label span {
-    display: block;
-    font-size: 12px;
-    font-style: italic;
-    color: #acacac;
-    margin-bottom: 12px;
-}
-
-
-.elementor-element.no_icons i {
-    display: none;
-}
