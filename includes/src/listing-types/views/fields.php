@@ -85,6 +85,7 @@
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('repeater-section')">Repeater Section</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('faqs')">Frequent Questions</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('image-links')">Image Links</div>
+			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('statistics')">Listing Stats</div>
 			<div class="btn btn-secondary btn-block mb10" @click="addCustomField('event-program')">Event Program</div>
 		</div>
 

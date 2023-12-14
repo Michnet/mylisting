@@ -3568,6 +3568,7 @@ add_filter( 'mylisting/listing-types/register-fields', function( $fields ) {
   $fields[] = \MyListing\Src\Forms\Fields\Image_Links_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Features_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Repeater_Text_Field::class;
+  $fields[] = \MyListing\Src\Forms\Fields\Statistics_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Repeater_Section_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Faqs_Field::class;
   $fields[] = \MyListing\Src\Listing_Types\Content_Blocks\General_Repeater_Block::class;
