@@ -1769,19 +1769,8 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     $meta = get_post_meta( $post_id );
 
-    $fields = $params['_fields']  ?? null;
+    //$fields = $params['_fields']  ?? null;
     $_data['params'] = $params;
-
-    if ( $fields && !empty( $fields ) ) {
-
-      $fields_arr = explode (",", $fields);
-
-      foreach ( $fields_arr as $key => $field ) {
-       $trimed_field = trim( $field );
-        process_field($trimed_field, $_data, $post_id, $meta);
-      }
-    
-    }else{
 
       $acf_data = get_fields($post_id) ?? null;
       $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
@@ -1809,34 +1798,17 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $excerpt = get_the_excerpt( $post_id);
       $the_content = apply_filters('the_content', get_the_content());
   
-      $hours = get_post_meta($post_id, '_work_hours', true);
-      //$food_menu = get_post_meta($post_id, '_food-drinks-menu', true);
-      //$social_links = get_post_meta($post_id, '_links', true);
-      //$phone = get_post_meta($post_id, '_job_phone', true);
-      $tagline = get_post_meta($post_id, '_job_tagline', true);
-      $cover = get_post_meta($post_id, '_job_cover', true);
-      $logo = get_post_meta($post_id, '_job_logo', true);
-      $gallery = get_post_meta($post_id, '_job_gallery', true);
       $author = get_the_author_meta('ID');
       $comment_num = get_comments_number($post_id);
-      $team = get_post_meta($post_id, '_team', true);
-      $gen_merch = get_post_meta( $post_id, 'general_merchandise', true);
-      $punchlines = get_post_meta( $post_id, '_punch_lines', true);
-      $why_us = get_post_meta( $post_id, '_why_choose_us', true);
-      $faq_us = get_post_meta( $post_id, '_frequently-asked-questions', true);
-      $wwd_services = get_post_meta($post_id, '_wwd_services', true);
   
   
       if($meta['_case27_listing_type'][0] == 'event'){
-        $special_guests = get_post_meta( $post_id, '_special-guests', true);
-        $performers = get_post_meta( $post_id, '_performers', true);
-        $sponsors = get_post_meta( $post_id, '_event-sponsors', true);
-        $tickets = get_post_meta( $post_id, 'tickets', true);
         $dates = process_dates($listing_post);
-        $_data['affiliates']['sponsors'] = $sponsors ?? null;
-        $_data['persons']['special_guests'] = $special_guests ?? null;
-        $_data['persons']['performers'] = $performers ?? null;
-        $_data['listing_store']['tickets'] =  $tickets  ?? null;   
+        
+        $_data['affiliates']['sponsors'] = $meta['_event-sponsors'] ?? null;
+        $_data['persons']['special_guests'] = $meta['_special-guests'] ?? null;
+        $_data['persons']['performers'] = $meta['_performers'] ?? null;
+        $_data['listing_store']['tickets'] =  $meta['tickets']  ?? null;   
         $_data['event_date'] = $dates   ?? null;
         $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
         $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
@@ -1863,25 +1835,25 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
       $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
       $_data['landing']['greeting'] = $meta['_welcome_message']   ?? null;
-      $_data['marketing']['punch_lines'] = $punchlines   ?? null; 
+      $_data['marketing']['punch_lines'] = $meta['_punch_lines']   ?? null; 
       $_data['marketing']['wcu']['wcu_intro_title'] = $meta['_wcu_intro_title'] ?? null;
       $_data['marketing']['wcu']['wcu_intro_detail'] = $meta['_wcu_intro_detail'] ?? null;
-      $_data['marketing']['wcu']['list'] = $why_us   ?? null;
+      $_data['marketing']['wcu']['list'] = $meta['_why_choose_us']   ?? null;
       $_data['marketing']['what_we_do']['wwd_intro_title'] = $meta['_wwd_intro_title'] ?? null;
       $_data['marketing']['what_we_do']['wwd_intro_detail'] = $meta['_wwd_intro_detail'] ?? null;
-      $_data['marketing']['what_we_do']['wwd_services'] = $wwd_services ?? null;
-      $_data['about_us']['faqs'] = $faq_us ?? null;
-      $_data['listing_store']['general_merchandise'] =  $gen_merch  ?? null;
+      $_data['marketing']['what_we_do']['wwd_services'] = $meta['_wwd_services'] ?? null;
+      $_data['about_us']['faqs'] = $meta['_frequently-asked-questions'] ?? null;
+      $_data['listing_store']['general_merchandise'] =  $meta['general_merchandise']  ?? null;
       $_data['author_id'] = $author;
       $_data['comment_num'] = $comment_num;
-      $_data['tagline'] = $tagline   ?? null; 
+      $_data['tagline'] = $meta['_job_tagline'] ?? null; 
       $_data['category'] = $category  ?? null;
       $_data['home'] = $meta['_listing-home-page'][0] ?? null; 
       $_data['community_id'] = $meta['community_id'] ?? null; 
       $_data['phone'] = $meta['_job_phone']  ?? null;
       $_data['page_views'] = $views  ?? null;
       $_data['content'] = $the_content ?? null;
-      $_data['persons']['team'] = $team ?? null;
+      $_data['persons']['team'] = $meta['_team'] ?? null;
       $_data['short_desc'] = $excerpt;
       $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
       $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
@@ -1889,14 +1861,14 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['venue'] = $meta['_venue']  ?? null;
       $_data['event_type'] = $meta['_event-type'] ?? null;
       $_data['greeting'] = $meta['_greeting']  ?? null;
-      $_data['cover'] = $cover  ? $cover[0] : null;
-      $_data['gallery'] = $gallery ?? null;
-      $_data['logo'] = $logo  ? $logo[0] : null;
+      $_data['cover'] = $meta['_job_cover'][0] ??  null;
+      $_data['gallery'] = $meta['_job_gallery'] ?? null;
+      $_data['logo'] = $meta['_job_logo'][0] ?? null;
       $_data['website'] = $meta['_job_website']  ?? null;
       $_data['type'] = $meta['_case27_listing_type']  ?? null;
       $_data['level'] =  $meta['_featured'][0] ? intval($meta['_featured'][0]) : 0;
       $_data['social'] = $meta['_links']   ?? null;
-      $_data['schedule'] = $hours   ?? null;
+      $_data['schedule'] = $meta['_work_hours']   ?? null;
       $_data['acf'] = $acf_data ?? null;
       $_data['whatsapp'] = $meta['_whatsapp-number'] ?? null;
       $_data['thumbnail'] = $thumbnail   ?? null;
@@ -1905,7 +1877,6 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['categories'] = $cats   ?? null;
       $_data['locations'] = $locs   ?? null;
       $_data['meta'] = $meta;
-    }
     
     $data->data = $_data;
     return $data;
