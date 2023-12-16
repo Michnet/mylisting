@@ -33,7 +33,7 @@ if ( $uploaded_files ) {
 ?>
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
-	<div class="repeater-list row block_list" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+	<div class="repeater-list row" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
 		<div data-repeater-item class="repeater-field-wrapper col-12 col-sm-6">
 
 			<div class="fields-box row mx-0">
@@ -43,7 +43,7 @@ if ( $uploaded_files ) {
 				</div>
 				<div class="form-group w100 col-12">
 					<label>Statistic number</label>
-					<input name="stat_numer" type="number" step="1" class="input-text"/>
+					<input required name="stat_numer" type="text" step="1" class="input-text"/>
 				</div>
 			</div>
 			

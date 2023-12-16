@@ -34,6 +34,7 @@ if ( $uploaded_files ) {
 
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 	<div class="repeater-list margin-top-10" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+
 			<div data-repeater-item class="repeater-field-wrapper">
 				<div class="field-type-file form-group">
 					<div class="field ">	
@@ -105,9 +106,9 @@ if ( $uploaded_files ) {
 						>
 					</div>
 					<div class="form-group w100 col-12">
-					<label>Activity description</label>
-					<textarea name="act_descript" placeholder='A brief description of this item on the activity program' cols="20" rows="2" class="input-text">
-				</div>
+						<label>Activity description</label>
+						<textarea name="act_descript" placeholder='A brief description of this item on the activity program' cols="20" rows="2" class="input-text"></textarea>
+					</div>
 			</div>
 			
 			<button data-repeater-delete type="button" aria-label="<?php echo esc_attr( _ex( 'Delete repeater item', 'Repeater field -> Delete item', 'my-listing' ) ) ?>" class="delete-repeater-item buttons button-5 icon-only small"><i class="material-icons delete"></i>
