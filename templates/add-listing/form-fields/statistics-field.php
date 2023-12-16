@@ -43,7 +43,7 @@ if ( $uploaded_files ) {
 				</div>
 				<div class="form-group w100 col-12">
 					<label>Statistic number</label>
-					<input required name="stat_numer" type="text" step="1" class="input-text"/>
+					<input required name="stat_number" type="text"  class="input-text"/>
 				</div>
 			</div>
 			
