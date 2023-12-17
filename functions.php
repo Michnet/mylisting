@@ -1769,6 +1769,17 @@ function my_rest_prepare_listing( $data, $post, $request ) {
 
     $meta = get_post_meta( $post_id );
 
+    foreach($meta as $key => $value){
+      $val = $value[0];
+      if(is_string($val)){
+        if(str_starts_with($val,'a:')){
+          $meta[$key] = unserialize($val);
+        }else{
+          $meta[$key] = $val;
+        }
+      }
+    }
+
     //$fields = $params['_fields']  ?? null;
     $_data['params'] = $params;
 
@@ -1813,19 +1824,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
         $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
         $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
       }
-
-      foreach($meta as $key => $value){
-        $val = $value[0];
-        if(is_string($val)){
-          if(str_starts_with($val,'a:')){
-            $meta[$key] = unserialize($val);
-          }else{
-            $meta[$key] = $val;
-          }
-        }
-      }
-  
-      
+ 
       $_data['item_min_price'] = $meta['item_min_price'] ??  null;
       $_data['item_min_price_html'] = $meta['item_min_price_html'] ??  null;
       $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating']) : null;
