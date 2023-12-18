@@ -1813,7 +1813,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $comment_num = get_comments_number($post_id);
   
   
-      if($meta['_case27_listing_type'][0] == 'event'){
+      if($meta['_case27_listing_type'] == 'event'){
         $dates = process_dates($listing_post);
         
         $_data['affiliates']['sponsors'] = $meta['_event-sponsors'] ?? null;
@@ -1821,18 +1821,18 @@ function my_rest_prepare_listing( $data, $post, $request ) {
         $_data['persons']['performers'] = $meta['_performers'] ?? null;
         $_data['listing_store']['tickets'] =  $meta['tickets']  ?? null;   
         $_data['event_date'] = $dates   ?? null;
-        $_data['ticket_min_price'] = $meta['ticket_min_price'][0] ??  null;
-        $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'][0] ??  null;
+        $_data['ticket_min_price'] = $meta['ticket_min_price'] ??  null;
+        $_data['ticket_min_price_html'] = $meta['ticket_min_price_html'] ??  null;
       }
  
       $_data['item_min_price'] = $meta['item_min_price'] ??  null;
       $_data['item_min_price_html'] = $meta['item_min_price_html'] ??  null;
       $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating']) : null;
       $_data['food_menu'] = $meta['_food-drinks-menu']   ?? null;
-      $_data['about_us']['our_history'] = $meta['_our-history'][0]   ?? null; 
-      $_data['about_us']['our_vision'] = $meta['_our-vision'][0]   ?? null;
-      $_data['about_us']['opening_date'] = $meta['_date-we-started'][0]   ?? null; 
-      $_data['about_us']['our_mission'] = $meta['_our-mission'][0]   ?? null;
+      $_data['about_us']['our_history'] = $meta['_our-history']   ?? null; 
+      $_data['about_us']['our_vision'] = $meta['_our-vision']   ?? null;
+      $_data['about_us']['opening_date'] = $meta['_date-we-started']   ?? null; 
+      $_data['about_us']['our_mission'] = $meta['_our-mission']   ?? null;
       $_data['landing']['greeting'] = $meta['_welcome_message']   ?? null;
       $_data['marketing']['punch_lines'] = $meta['_punch_lines']   ?? null; 
       $_data['marketing']['wcu']['wcu_intro_title'] = $meta['_wcu_intro_title'] ?? null;
@@ -1847,15 +1847,15 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['comment_num'] = $comment_num;
       $_data['tagline'] = $meta['_job_tagline'] ?? null; 
       $_data['category'] = $category  ?? null;
-      $_data['home'] = $meta['_listing-home-page'][0] ?? null; 
+      $_data['home'] = $meta['_listing-home-page'] ?? null; 
       $_data['community_id'] = $meta['community_id'] ?? null; 
       $_data['phone'] = $meta['_job_phone']  ?? null;
       $_data['page_views'] = $views  ?? null;
       $_data['content'] = $the_content ?? null;
       $_data['persons']['team'] = $meta['_team'] ?? null;
       $_data['short_desc'] = $excerpt;
-      $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat'][0]) : null;
-      $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long'][0]) : null;
+      $_data['latitude'] = $meta['geolocation_lat'] ? floatval($meta['geolocation_lat']) : null;
+      $_data['longitude'] = $meta['geolocation_long'] ? floatval($meta['geolocation_long']) : null;
       $_data['address'] = $meta['_job_location']  ?? null;
       $_data['venue'] = $meta['_venue']  ?? null;
       $_data['event_type'] = $meta['_event-type'] ?? null;
@@ -1865,7 +1865,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['logo'] = $meta['_job_logo'][0] ?? null;
       $_data['website'] = $meta['_job_website']  ?? null;
       $_data['type'] = $meta['_case27_listing_type']  ?? null;
-      $_data['level'] =  $meta['_featured'][0] ? intval($meta['_featured'][0]) : 0;
+      $_data['level'] =  $meta['_featured'] ? intval($meta['_featured']) : 0;
       $_data['social'] = $meta['_links']   ?? null;
       $_data['schedule'] = $meta['_work_hours']   ?? null;
       $_data['acf'] = $acf_data ?? null;

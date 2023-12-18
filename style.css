@@ -151,6 +151,10 @@ div#wcfm_products_manage_form_booking_options_head,
     scrollbar-width: none
 }
 
+.elementor-nav-menu .elementor-item i {
+    margin-right: 8px;
+}
+
 .mx-0 {
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -2374,7 +2378,8 @@ section.code_sect #messages-modal-toggle i {
 #wcfm_menu {
     width: 200px;
     flex: 0 200px;
-    transition: all .2s
+    transition: all .2s;
+    background: #fff;
 }
 .mb-0{
     margin-bottom: 0;
@@ -4411,12 +4416,16 @@ label span {
 @media screen and (max-width: 1052px) {
     #wcfm_menu {
         position:fixed;
-        top: 115px;
+        top: 0;
         bottom: 0;
         box-shadow: hsl(0deg 0% 0% / 16%) 0 0 17px 3px;
         overflow: hidden;
         overflow-y: auto;
-        padding-bottom: 30px
+        padding-bottom: 30px;
+        left: auto;
+        right: 0;
+        z-index: 99;
+        height: 100vh;
     }
 
     #wcfm-content .wcfm-collapse .wcfm-collapse-content {
@@ -4426,7 +4435,7 @@ label span {
     #wcfm-content .wcfm-collapse .wcfm-page-headig {
         position: fixed;
         top: 60px;
-        z-index: 99
+        z-index: 9;
     }
 
     #wcfm-content .wcfm-collapse {
@@ -4616,7 +4625,9 @@ label span {
 }
 
     #wcfm_menu {
-        width: 200px
+        width: 200px;
+        top: 0 !important;
+        bottom: 0;
     }
 
     #wcfm-main-contentainer .wcfm_menu_toggler {
@@ -4819,3 +4830,25 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 
 /*media qs end*/
+
+.woocommerce form.sign-in-form .form-group label {padding: 0 5px;margin-left: 5px;}
+
+.woocommerce form.sign-in-form .form-group input:-webkit-autofill~label, .woocommerce form.sign-in-form .form-group input:focus~label {
+    background: #fff;
+}
+
+#wcfm_menu .wcfm_menu_items a.active {
+    background: var( --e-global-color-primary );
+}
+
+.wcfm_dashboard_stats_block .wcfmfa {
+    background: var(--e-global-color-secondary);
+}
+
+.page_collapsible, .wcfm-collapse a.page_collapsible_dummy {
+    background: #818282;
+}
+
+.wcfm-store-name-heading-text a {
+    color: var( --e-global-color-primary );
+}
