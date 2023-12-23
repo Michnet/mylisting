@@ -151,6 +151,11 @@ div#wcfm_products_manage_form_booking_options_head,
     scrollbar-width: none
 }
 
+.page_collapsible, .wcfm-collapse a.page_collapsible_dummy {
+    color: #202020;
+    font-weight: 600;
+}
+
 .elementor-nav-menu .elementor-item i {
     margin-right: 8px;
 }
@@ -4269,7 +4274,7 @@ label span {
 }
 
 @media screen and (max-width: 1200px) {
-    .user-profile-dropdown .user-profile-name{color: rgb(216, 216, 216) !important}
+    .user-profile-dropdown .user-profile-name{color: rgb(40 40 40) !important;}
 .user-profile-dropdown .user-profile-name .avatar, .user-area div.avatar img{
     height: 32px !important;
 }
@@ -4553,7 +4558,7 @@ label span {
 
 @media screen and (min-width: 769px) and (max-width:1200px) {
     .container {
-        width:100%
+        width: 95%;
     }
 }
 
@@ -4846,9 +4851,14 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 
 .page_collapsible, .wcfm-collapse a.page_collapsible_dummy {
-    background: #818282;
+    background: #e1dfdf;
 }
 
 .wcfm-store-name-heading-text a {
     color: var( --e-global-color-primary );
+}
+
+ol {
+    list-style-type: decimal;
+    padding-left: 25px;
 }
