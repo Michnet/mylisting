@@ -966,6 +966,12 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 
+    register_rest_route('m-api/v1', 'user-auth(?:/(?P<id>\d+))?',array(
+      'methods'  => 'POST',
+      'callback' => 'rest_user_auth',
+      'permission_callback' => '__return_true',
+  ));
+
     register_rest_route('m-api/v1', 'product-attribute-taxonomy(?:/(?P<id>\d+))?',array(
       'methods'  => 'GET',
       'callback' => 'get_pdt_attribute_tax',
@@ -1016,7 +1022,31 @@ function random_digits($length=10) {
   return $string;
 }
 
+function rest_user_auth ( WP_REST_Request $request ) {
 
+  $user = wp_signon(
+    [
+      'user_login' => $request['login'],
+      'user_password' => $request['password'],
+      'remember' => true,
+    ],
+    false
+  );
+
+  if ( is_wp_error( $user ) ) {
+    $msg = $user->get_error_message();
+    $status = false;
+  }else{
+    wp_clear_auth_cookie();
+    wp_set_current_user ( $user->ID ); // Set the current user detail
+    wp_set_auth_cookie  ( $user->ID ); // Set auth details in cookie
+    $msg = "Logged in successfully"; 
+    $status = true;
+  }
+  $user->message = $msg;
+  $user->success = $status;
+  wp_send_json( $user );
+}
 function news_subscribe($request){
   $params = $request->get_params();
   $email = $params["email"] ?? null;
