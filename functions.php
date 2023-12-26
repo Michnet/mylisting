@@ -3830,6 +3830,7 @@ function get_listings_query($request) {
 			'posts_per_page' => $per_page,
 			'tax_query' => [],
 			'meta_query' => $meta_q,
+      'search_keywords' => isset($params['search_keywords']) ? $params['search_keywords'] : ''
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       //'fields' =>  'ids',
 			//'recurring_dates' => [],
