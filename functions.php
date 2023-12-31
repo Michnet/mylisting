@@ -489,6 +489,14 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
  return $response;
 }, 10, 2);
 
+add_action('simple_jwt_login_generate_payload', function(array $payload, $user){
+  if($user){
+    $payload['picture'] = get_avatar_url( $user->ID);
+    $payload['name'] = $user->display_name;
+  }
+  return $payload;
+ }, 10, 2);
+
 
 /* 
 function after_social_login($user_id, $provider) {
