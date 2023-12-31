@@ -1068,9 +1068,10 @@ function get_user_rest( WP_REST_Request $request ) {
   $params = $request->get_params();
   $inner_req = array();
 
-  if($params['name']){
-    $user_name = $params['name'];
-    $user_obj = get_user_by('login', $user_name);
+  if($params['name'] || $params['email']){
+    $user_name = $params['name'] ?? null;
+    $user_email = $params['email'] ?? null;
+    $user_obj = get_user_by($user_name ? 'login' : 'email', $user_name ?? $user_email);
     $user_meta = [];
     $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
     $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
