@@ -1085,8 +1085,8 @@ function get_user_rest( WP_REST_Request $request ) {
     $local_controller = new WP_REST_Users_Controller();
     //var_dump($rest_request);
     $returnable_user = $local_controller->get_item($rest_request);
-    $response->user = $returnable_user->data;
-    $response->user->user_meta = $user_meta;
+    $response['user'] = $returnable_user->data;
+    $response['user']['user_meta'] = $user_meta;
   }
 
   return $response;
