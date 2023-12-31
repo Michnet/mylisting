@@ -980,6 +980,13 @@ add_action('rest_api_init', function () {
       'permission_callback' => '__return_true',
   ));
 
+  register_rest_route('m-api/v1', 'get-user(?:/(?P<id>\d+))?',array(
+    'methods'  => 'GET',
+    'callback' => 'get_user_rest',
+    'permission_callback' => '__return_true',
+  ));
+
+
     register_rest_route('m-api/v1', 'product-attribute-taxonomy(?:/(?P<id>\d+))?',array(
       'methods'  => 'GET',
       'callback' => 'get_pdt_attribute_tax',
@@ -1055,6 +1062,35 @@ function rest_user_auth ( WP_REST_Request $request ) {
   $user->success = $status;
   wp_send_json( $user );
 }
+
+function get_user_rest( WP_REST_Request $request ) {
+  $response = new stdClass();
+  $params = $request->get_params();
+  $inner_req = array();
+
+  if($params['name']){
+    $user_name = $params['name'];
+    $user_obj = get_user_by('login', $user_name);
+    $user_meta = [];
+    $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
+    $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
+    $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
+    //$avatar = get_avatar_url($user_obj->ID);
+    //$user_obj->avatar = $avatar;
+    $inner_req['id'] = $user_obj->ID;
+    $inner_req['context'] = 'edit';
+    $rest_request = new WP_REST_Request();
+    $rest_request->set_query_params($inner_req);
+    $local_controller = new WP_REST_Users_Controller();
+    //var_dump($rest_request);
+    $returnable_user = $local_controller->get_item($rest_request);
+    $response->user = $returnable_user->data;
+    $response['user']['user_meta'] = $user_meta;
+  }
+
+  return $response;
+}
+
 function news_subscribe($request){
   $params = $request->get_params();
   $email = $params["email"] ?? null;
