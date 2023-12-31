@@ -4916,3 +4916,6 @@ ol {
 .mtkb_knowledge-list2 li.post_title::before, .mtkb_knowledge-list1 li.post_title::before, .mtkb_knowledge-list-most li.post_title::before{
     color: var(--e-global-color-373c43b);
 }
+.single-mtkb-knowledgebase .row.high-padding, .single-mtkb-potfolio .row.high-padding{
+    padding: 25px 15px;
+}
