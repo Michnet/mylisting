@@ -32,6 +32,10 @@ body.edit-listing-form.woocommerce-account .mlduo-account-menu .container
 
 .edit-listing-form .elementor-widget-wrap, .edit-listing-form .elementor-widget, .edit-listing-form .elementor-column {position: initial;}
 
+.edit-listing-form .elementor-widget .modal-content {
+    margin: 0 auto !important;
+}
+
 body:not(.edit-listing-form) .edit_row #acf_col {display: none;}
 
 body:not(.edit-listing-form) .edit_row .mylisting_col {width: 100% !important;}
@@ -1918,7 +1922,7 @@ span.acf-rel-item {
 }
 
 .acf-relationship .list {
-    height: 240px;
+    height: 240px !important;
     border: none !important;
 }
 
@@ -1955,7 +1959,7 @@ a.acf-icon {
 .acf-relationship .list .acf-rel-item {
     padding: 5px;
     position: relative;
-    display: flex;
+    display: flex !important;
     font-size: 12px;
 }
 
@@ -3381,8 +3385,8 @@ body.single.single-job_listing .title-style-1 i {
 }
 
 .add-listing-nav li.active i {
-    border-color: var(--accent);
-    background: red
+    border-color: var(--e-global-color-373c43b);
+    background: var(--e-global-color-373c43b);
 }
 
 .add-listing-nav a i {
@@ -3922,6 +3926,14 @@ td.child {
     font-size: 12px !important;
 }
 
+button.delete-repeater-item {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    background: var(--e-global-color-35fc8a9);
+    border: none;
+}
+
 button.delete-repeater-item i {
     color: #fff;
 }
@@ -3946,15 +3958,15 @@ button.delete-repeater-item {
 
 .acf-field textarea {height: fit-content;}
 
-input.acff-submit-button.acf-button {
-    background: linear-gradient(45deg, #cfe2ff, #dac5ff);
+.modal-content input.acff-submit-button.acf-button {
+    background: linear-gradient(45deg, #2673ea, #6d1aff);
     /* color: #fff; */
     min-width: 120px;
     box-shadow: #0000003b 1px 2px 9px 3px;
     margin-top: 15px;
     font-weight: bold;
     position: fixed;
-    bottom: 28px;
+    bottom: 21px;
     z-index: 10;
     right: 70px;
 }
@@ -4873,8 +4885,6 @@ ol {
     object-fit: contain;
 }
 
-.elementor-element.elementor-element-b48dd7a.absolute_title.elementor-widget.elementor-widget-elementskit-heading.animated.fadeInUp {}
-
 
 .absolute_title .elementskit-section-title {
     position: relative;
@@ -4889,5 +4899,14 @@ ol {
 .absolute_title .elementskit-section-title span {
     position: absolute;
     z-index: -1;
-    opacity: 0.7;
+    opacity: 0.5;
+}
+
+.woocommerce-MyAccount-navigation ul li.current-menu-item a, .woocommerce-MyAccount-navigation ul li.is-active a{
+    background: var(--e-global-color-d49ac81);
+    color: #fff;
+}
+
+.woocommerce-MyAccount-navigation ul li.current-menu-item a>i {
+    color: var(--e-global-color-373c43b);
 }
