@@ -4910,3 +4910,9 @@ ol {
 .woocommerce-MyAccount-navigation ul li.current-menu-item a>i {
     color: var(--e-global-color-373c43b);
 }
+.mtkb-portfolio-button, .mtkb_knowledge-list2 a.count-link, .mtkb_knowledge-list1 h3.heading:before, .mtkb-knowledge-search button#mtkb_searchsubmit, .mtkb-knowledgebase-shortcode-archive-ordered ul.mtkb-knowledgebase-list li, .mtkb_knowledge-list-most .mtkb-knowledgebase-count, .mtkb_knowledge-list-most .count-link{
+    background: var(--e-global-color-d49ac81);
+}
+.mtkb_knowledge-list2 li.post_title::before, .mtkb_knowledge-list1 li.post_title::before, .mtkb_knowledge-list-most li.post_title::before{
+    color: var(--e-global-color-373c43b);
+}
