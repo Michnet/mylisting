@@ -2449,7 +2449,7 @@ function directory_query_args( $args, $request ) {
 
     $args = wp_parse_args( $args, [
         'search_location'   => '',
-        //'search_keywords'   => '',
+        'search_keywords'   => '',
         'offset'            => 0,
         'posts_per_page'    => 20,
         'orderby'           => 'date',
@@ -2478,7 +2478,6 @@ function directory_query_args( $args, $request ) {
         'offset'                 => absint( $args['offset'] ),
         'posts_per_page'         => intval( $args['posts_per_page'] ),
         'orderby'                => $args['orderby'],
-        'search_keywords'        => $args['search_keywords'],
         'order'                  => $args['order'],
         'tax_query'              => $args['tax_query'],
         'meta_query'             => $args['meta_query'],
@@ -2581,7 +2580,7 @@ function directory_query_args( $args, $request ) {
     } */
 
     // return results
-    return new WP_REST_Response($posts, 200);
+    return new WP_REST_Response($query_args, 200);
     /* 
     $args_for_ids = $query_args;
     //$args_for_ids['fields'] = 'ids';
