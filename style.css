@@ -3948,10 +3948,6 @@ button.delete-repeater-item {
     margin: 0 10px;
 }
 
-.acf-fields>.acf-field-group.acfe-field-group-layout-block.acfe-seamless-style:not([data-acfe-group-modal="1"])>.acf-input, .acf-fields>.acf-field-group.acfe-field-group-layout-row.acfe-seamless-style:not([data-acfe-group-modal="1"])>.acf-input {
-    /* margin: 0; */
-}
-
 .acf-field textarea, .acf-field input[type=text] {
     padding-left: 0;
 }
