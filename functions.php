@@ -2478,6 +2478,7 @@ function directory_query_args( $args, $request ) {
         'offset'                 => absint( $args['offset'] ),
         'posts_per_page'         => intval( $args['posts_per_page'] ),
         'orderby'                => $args['orderby'],
+        'search_keywords'        => $args['search_keywords'],
         'order'                  => $args['order'],
         'tax_query'              => $args['tax_query'],
         'meta_query'             => $args['meta_query'],
