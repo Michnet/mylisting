@@ -2581,7 +2581,7 @@ function directory_query_args( $args, $request ) {
     } */
 
     // return results
-    return new WP_REST_Response($query_args, 200);
+    return new WP_REST_Response($request, 200);
     /* 
     $args_for_ids = $query_args;
     //$args_for_ids['fields'] = 'ids';
