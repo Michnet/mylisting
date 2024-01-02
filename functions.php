@@ -2485,7 +2485,7 @@ function directory_query_args( $args, $request ) {
         'update_post_term_cache' => false,
         'update_post_meta_cache' => false,
         'cache_results'          => false,
-        'fields'                 => $args['fields'],
+        //'fields'                 => $args['fields'],
         'author'                 => $args['author'],
         'mylisting_orderby_rating' => $args['mylisting_orderby_rating'],
         'mylisting_ignore_priority' => $args['mylisting_ignore_priority'],
@@ -2581,7 +2581,7 @@ function directory_query_args( $args, $request ) {
     } */
 
     // return results
-    return new WP_REST_Response($request, 200);
+    return new WP_REST_Response($query_args, 200);
     /* 
     $args_for_ids = $query_args;
     //$args_for_ids['fields'] = 'ids';
