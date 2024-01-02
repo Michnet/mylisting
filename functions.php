@@ -4022,7 +4022,7 @@ function get_listings_query($request) {
 
     $listings = directory_query_args($args, $request);
 
-		return $listings;
+		return $$args;
 }
 
 //User Reviews
