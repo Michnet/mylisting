@@ -4001,13 +4001,13 @@ function get_listings_query($request) {
 					$args['search_location'] = '';
 				}
 			}
-		}/*  else {
+		} else {
             if($type){
 			foreach ( (array) $type->get_advanced_filters() as $filter ) {
 				$args = $filter->apply_to_query( $args, $params );
 			}
         }
-		} */
+		}
 
 		$result = [];
 		$listing_wrap = ! empty( $params['listing_wrap'] ) ? sanitize_text_field( $params['listing_wrap'] ) : '';
@@ -4020,7 +4020,7 @@ function get_listings_query($request) {
 		 */
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
-    $listings = directory_query_args($args, $request);
+    //$listings = directory_query_args($args, $request);
 
 		return $$args;
 }
