@@ -2582,7 +2582,7 @@ function directory_query_args( $args, $request ) {
     } */
 
     // return results
-    return new WP_REST_Response($query_args, 200);
+    return new WP_REST_Response($posts, 200);
     /* 
     $args_for_ids = $query_args;
     //$args_for_ids['fields'] = 'ids';
@@ -4021,9 +4021,14 @@ function get_listings_query($request) {
 		 */
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
-    //$listings = directory_query_args($args, $request);
-    $params['_fields'] = 'testing';
-		return $params;
+   if(isset($params['fields'])){
+    $params['_fields'] = $params['fields'];
+    $request->set_query_params($params);
+   }
+
+    $listings = directory_query_args($args, $request);
+    
+		return $listings;
 }
 
 //User Reviews
