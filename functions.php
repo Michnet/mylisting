@@ -4018,7 +4018,7 @@ function get_listings_query($request) {
 		 *
 		 * @since 1.7.0
 		 */
-		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
+		//do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
     //$listings = directory_query_args($args, $request);
 
