@@ -2563,6 +2563,7 @@ function directory_query_args( $args, $request ) {
 
       // The Loop
       if ( $the_query->have_posts() ) {
+
         global $post;
           while ( $the_query->have_posts() ) {
               $the_query->the_post();
@@ -4021,7 +4022,7 @@ function get_listings_query($request) {
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
     //$listings = directory_query_args($args, $request);
-
+    $params['_fields'] = 'testing';
 		return $params;
 }
 
