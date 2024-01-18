@@ -74,10 +74,17 @@ function is_valid_email_domain($login, $email, $errors ){
 
 add_action( 'init', 'custom_theme_setup' );
 function custom_theme_setup() {
-  $sizes_arr = ['2048x2048', '1536x1536', 'woocommerce_thumbnail', 'shop_catalog', 'woocommerce_gallery_thumbnail', 'woocommerce_single' ];
-  foreach($sizes_arr as $size){
+  //$sizes_arr = ['2048x2048', '1536x1536', 'woocommerce_thumbnail', 'shop_catalog', 'woocommerce_gallery_thumbnail', 'woocommerce_single' ];
+  /* foreach($sizes_arr as $size){
   remove_image_size( $size );
-  }
+  } */
+
+  $sizes_arr = array( 'thumbnail', 'medium', 'medium_large', 'large', 'big_thumb' );
+  foreach ( get_intermediate_image_sizes() as $size ) {
+    if ( !in_array( $size, $sizes_arr ) ) {
+        remove_image_size( $size );
+    }
+}
   add_image_size( 'big_thumb', 400, 400, false );
 }
 
