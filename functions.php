@@ -2806,7 +2806,7 @@ function statistics_showcase( $atts ) {
 //Link to users post
 add_shortcode( 'users_post_link', 'users_site_link' );
 function users_site_link( $atts ) {
-	echo '<a class="btn" href="https://lyvecity.com/events/'. get_post()->post_name . '">Go to Listing</a>';
+	echo '<div><p class="_instructions">This step is important. Click the button to make create/update your page for the public</p><a class="btn _action" href="https://lyvecity.com/authors/refresh?path=/events/'. get_post()->post_name . '">Publish your page</a></div>';
 }
 
 //Login/out button
