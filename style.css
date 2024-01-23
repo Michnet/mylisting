@@ -4010,9 +4010,7 @@ input.acff-submit-button.acf-button:hover {
 }
 #submit-job-form.c27-submit-listing-form .active.form-section-wrapper {}
 
-.add-listing-nav a {
-    white-space: nowrap;
-}
+
 .add-listing-step .job-manager-error, .edit-listing-form .job-manager-error, .edit-listing-form .job-manager-info, .edit-listing-form .job-manager-message {
     position: fixed;
     right: 30px;
@@ -4707,6 +4705,9 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 
 
 @media screen and (max-width: 768px) {
+    .add-listing-nav a {
+    white-space: nowrap;
+}
     form .listing-form-submit-btn button[type=submit].preview-btn{
     margin-bottom: 10px;
 }
