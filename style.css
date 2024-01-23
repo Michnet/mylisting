@@ -2038,7 +2038,7 @@ a.acf-icon {
     line-height: 24px
 }
 
-.profile-cover~.tab-content {
+.final_step {
     z-index: 2
 }
 
@@ -4654,6 +4654,7 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 @media screen and (max-width: 992px) {
     .profile-header {
         box-shadow: rgb(0 0 0 / 28%) 0 0 27px 1px;
+        display: none;
     }
     .tab-content.listing-tabs>section>.container {
         padding: 0
@@ -4944,3 +4945,27 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 
 /*media qs end*/
+
+.final_step {
+    padding: 50px 30px;
+}
+
+.final_step ._instructions {
+    max-width: 420px;
+    margin-bottom: 26px;
+}
+
+.final_step .btn._action {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 20px;
+}
+
+.final_step .btn._action:hover {
+    background: #202020;
+}
+
+.tab-content.listing-tabs .block-type-code {
+    display: none;
+}
