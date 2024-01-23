@@ -1778,7 +1778,8 @@ ul.extra-details {
 }
 
 .type-event section.featured-section.profile-cover {
-    filter: grayscale(1)
+    /* filter: grayscale(1); */
+    background: #fff;
 }
 
 .elementor-location-footer {
@@ -2903,7 +2904,7 @@ ul#menu-main-menu>li:before {
     background-position: bottom;
     background-size: contain;
     background-repeat: no-repeat;
-    position: absolute;
+    /* position: absolute; */
     bottom: 0
 }
 
@@ -4589,7 +4590,8 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
     }
 
     .main-info-mobile {
-        flex: 0 0 100%
+        flex: 0 0 100%;
+        display: none;
     }
 
     #c27-single-listing {
@@ -4966,6 +4968,6 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     background: #202020;
 }
 
-.tab-content.listing-tabs .block-type-code {
+.profile-header,  .container.qla-container,  .tab-content.listing-tabs .block-type-code, .listing-main-info {
     display: none;
 }
