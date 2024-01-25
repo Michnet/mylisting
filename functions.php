@@ -1091,6 +1091,8 @@ function get_user_rest( WP_REST_Request $request ) {
     //var_dump($rest_request);
     $returnable_user = $local_controller->get_item($rest_request);
     $user = $returnable_user->data;
+
+    unset($user['capabilities']);
     
     if($params['with_meta'] == true){
       $user_meta = [];
