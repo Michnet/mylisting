@@ -1078,13 +1078,9 @@ function get_user_rest( WP_REST_Request $request ) {
   if($params['key'] && $params['val']){
     $key = $params['key'] ?? null;
     $val = $params['val'] ?? null;
-    
+
     $user_obj = get_user_by($key, $val);
 
-    $user_meta = [];
-    $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
-    $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
-    $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
     //$avatar = get_avatar_url($user_obj->ID);
     //$user_obj->avatar = $avatar;
     $inner_req['id'] = $user_obj->ID;
@@ -1095,7 +1091,15 @@ function get_user_rest( WP_REST_Request $request ) {
     //var_dump($rest_request);
     $returnable_user = $local_controller->get_item($rest_request);
     $user = $returnable_user->data;
-    $user['user_meta'] = $user_meta; 
+    
+    if($params['with_meta'] == true){
+      $user_meta = [];
+      $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
+      $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
+      $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
+      $user['user_meta'] = $user_meta; 
+    }
+
     $response->user = $user;
   }
 
