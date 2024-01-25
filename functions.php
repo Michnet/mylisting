@@ -2185,9 +2185,9 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
 
     $meta_arr = array();
 
-    if (!function_exists('inherit_meta')) {
+    if (!function_exists('inherit_cat_meta')) {
 
-        function inherit_meta($new_id, $tax_slug)
+        function inherit_cat_meta($new_id, $tax_slug)
         {
             $ansestor_arr = get_ancestors($new_id, $tax_slug);
             if ($ansestor_arr) {
@@ -2196,7 +2196,7 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
                 if ($ans_meta['image'][0]) {
                     return $ans_meta;
                 } else {
-                    return inherit_meta($ans_id, $tax_slug);
+                    return inherit_cat_meta($ans_id, $tax_slug);
                 }
             }
         }
@@ -2207,7 +2207,7 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
     if (isset($cat_meta['image'][0]) && !empty($cat_meta['image'][0]) && $cat_meta['color'][0] && $cat_meta['cover_photo'][0]) {
         return;
     } else {
-        $borrowed_meta = inherit_meta($term_id, 'job_listing_category');
+        $borrowed_meta = inherit_cat_meta($term_id, 'job_listing_category');
         if ($borrowed_meta) {
             $meta_arr['color'] = $cat_meta['color'] ? $cat_meta['color'] : $borrowed_meta['color'];
             $meta_arr['image'] = $cat_meta['image'] ? $cat_meta['image'] : $borrowed_meta['image'];
@@ -2218,7 +2218,7 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
     //$total_meta = array_replace_recursive($cat_meta, $meta_arr);
 
 
-    remove_action('saved_term', 'inherit_cat_tax_meta');
+  //  remove_action('saved_term', 'inherit_cat_tax_meta');
     //wp_update_post( $my_args );
     if ($meta_arr['color'][0]) {
         update_term_meta($term_id, 'color', $meta_arr['color'][0]);
@@ -2230,9 +2230,9 @@ function inherit_cat_tax_meta($term_id, $tt_id, $taxonomy, $update, $args)
         update_term_meta($term_id, 'rl_awesome', $meta_arr['rl_awesome'][0]);
     }
 
-    add_action('saved_term', 'inherit_cat_tax_meta');
+  //  add_action('saved_term', 'inherit_cat_tax_meta');
 }
-add_action('saved_term', 'inherit_cat_tax_meta', 10, 5);
+add_action('saved_term', 'inherit_cat_tax_meta', 11, 5);
 
 
 //term meta inheritance
