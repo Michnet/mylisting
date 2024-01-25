@@ -1092,7 +1092,12 @@ function get_user_rest( WP_REST_Request $request ) {
     $returnable_user = $local_controller->get_item($rest_request);
     $user = $returnable_user->data;
 
-    unset($user['capabilities']);
+
+    foreach($user as $p_key => $p_val){
+      if(!in_array($p_key, array('avatar_urls', 'description', 'name', 'registered_date', 'yoast_head_json', 'email', 'id'))){
+        unset($user[$p_key]);
+      }
+    }
     
     if($params['with_meta'] == true){
       $user_meta = [];
@@ -3923,10 +3928,10 @@ function get_listings_query($request) {
 			'posts_per_page' => $per_page,
 			'tax_query' => [],
 			'meta_query' => $meta_q,
-      'search_keywords' => $params['search_keywords'] ?? ''
+      'search_keywords' => $params['search_keywords'] ?? '',
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       //'fields' =>  'ids',
-			//'recurring_dates' => [],
+			'recurring_dates' => $params['event-dates'] ?? [],
 		];
 
     if(isset($sort)){
