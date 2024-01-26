@@ -3917,21 +3917,23 @@ function get_listings_query($request) {
     $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
     $page = absint( isset($params['page']) ? $params['page'] - 1 : 0 );
 
-    $meta_q = [];
+    //$meta_q = [];
 		$per_page = absint( isset($params['per_page']) ? $params['per_page'] : c27()->get_setting('general_explore_listings_per_page', 9));
 		$orderby = sanitize_text_field( isset($params['orderby']) ? $params['orderby'] : 'date' );
 		$context = sanitize_text_field( isset( $params['context'] ) ? $params['context'] : 'advanced-search' );
+
 		$args = [
 			'order' => sanitize_text_field( isset($params['order']) ? $params['order'] : 'DESC' ),
 			'offset' => $page * $per_page,
 			'orderby' => $orderby,
 			'posts_per_page' => $per_page,
 			'tax_query' => [],
-			'meta_query' => $meta_q,
-      'search_keywords' => $params['search_keywords'] ?? '',
+			'meta_query' => [],
+      //'search_keywords' => $params['search_keywords'] ?? '',
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       //'fields' =>  'ids',
-			'recurring_dates' => $params['event-dates'] ?? [],
+			//'recurring_dates' => $params['event-date'] ?? [],
+      'recurring_dates' => []
 		];
 
     if(isset($sort)){
@@ -4022,13 +4024,13 @@ function get_listings_query($request) {
 					$args['search_location'] = '';
 				}
 			}
-		} /* else {
+		} else {
             if($type){
 			foreach ( (array) $type->get_advanced_filters() as $filter ) {
 				$args = $filter->apply_to_query( $args, $params );
 			}
         }
-		} */
+		}
 
 		$result = [];
 		$listing_wrap = ! empty( $params['listing_wrap'] ) ? sanitize_text_field( $params['listing_wrap'] ) : '';
