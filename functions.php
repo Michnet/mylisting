@@ -800,7 +800,7 @@ function all_items_ids($request) {
     return $response;
 }
 
-function get_google_calendar_link(  $start_date, $end_date = '', $listing  ) {
+function get_google_calendar_link($listing, $start_date, $end_date = '') {
     // &dates=20170101T180000Z/20170101T190000Z
     $template = 'https://calendar.google.com/calendar/render?action=TEMPLATE&';
     $template .= 'text={title}&dates={dates}&details={description}&location={location}&trp=true&ctz={timezone}';
@@ -866,7 +866,7 @@ function get_event_dates($request){
             $dates[] = [
                 'start' => $date,
                 'end' => '',
-                'gcal_link' => get_google_calendar_link( $date, '', $listing ),
+                'gcal_link' => get_google_calendar_link($listing, $date, '' ),
                 'is_over' => $now->getTimestamp() > strtotime( $date, $now->getTimestamp() ),
             ];
         }
@@ -879,7 +879,7 @@ function get_event_dates($request){
         );
 
         foreach ( $dates as $key => $date ) {
-            $dates[$key]['gcal_link'] = get_google_calendar_link( $date['start'], $date['end'], $listing);
+            $dates[$key]['gcal_link'] = get_google_calendar_link($listing, $date['start'], $date['end']);
             $dates[$key]['is_over'] = $now->getTimestamp() > strtotime( $date['end'], $now->getTimestamp() );
         }
     }
@@ -1682,7 +1682,7 @@ function process_dates($listing){
             $dates[] = [
                 'start' => $date,
                 'end' => '',
-                'gcal_link' => get_google_calendar_link( $date, '', $listing ),
+                'gcal_link' => get_google_calendar_link($listing, $date, ''),
                 'is_over' => $now->getTimestamp() > strtotime( $date, $now->getTimestamp() ),
             ];
         }
@@ -1695,7 +1695,7 @@ function process_dates($listing){
         );
 
         foreach ( $dates as $key => $date ) {
-            $dates[$key]['gcal_link'] = get_google_calendar_link( $date['start'], $date['end'], $listing);
+            $dates[$key]['gcal_link'] = get_google_calendar_link($listing, $date['start'], $date['end']);
             $dates[$key]['is_over'] = $now->getTimestamp() > strtotime( $date['end'], $now->getTimestamp() );
         }
     }
@@ -1868,10 +1868,14 @@ function my_rest_prepare_listing( $data, $post, $request ) {
     foreach($meta as $key => $value){
       $val = $value[0];
       if(is_string($val)){
-        if(str_starts_with($val,'a:')){
-          $meta[$key] = unserialize($val);
+        if(str_starts_with($val,'field_')){
+          unset( $meta[$key] );
         }else{
-          $meta[$key] = $val;
+          if(str_starts_with($val,'a:')){
+            $meta[$key] = unserialize($val);
+          }else{
+            $meta[$key] = $val;
+          }
         }
       }
     }
