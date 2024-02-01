@@ -5014,3 +5014,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     padding: 10px 20px;
     border-radius: 10px;
 }
+
+.form-row-wide input, .form-row-wide textarea, .form-row-wide select{
+    width: 100% !important
+}
