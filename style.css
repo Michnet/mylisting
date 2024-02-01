@@ -26,6 +26,10 @@ body.edit-listing-form.woocommerce-account .i-section .container,
 body.edit-listing-form.woocommerce-account .mlduo-account-menu .container 
 {width : 100%;box-sizing: border-box;}
 
+body.edit-listing-form.woocommerce-account .i-section .container {
+    padding-bottom: 40px;
+}
+
 .edit-listing-form .edit_row > .elementor-container {padding-top: 80px;position: relative;}
 
 .edit-listing-form .mlduo-account-menu {position: absolute;top: 0;right: 0;left: 0;}
@@ -5025,4 +5029,10 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 .login-content .form-group .woocommerce-password-strength {
     order: 0;
     margin-top: 0;
+}
+
+
+span.woocommerce-help-text {
+    color: #a7a7a7;
+    font-size: 12px;
 }
