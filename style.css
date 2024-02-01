@@ -4926,7 +4926,7 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 
 
 @media screen and (max-width: 480px) {
-    .no-login-background .login-content{width: 300px !important}
+    .no-login-background .login-content{width: 300px !important;border: none;padding: 0;}
     #acf_col .modal-content{
     width: 100%;
     margin-top: 58px;
@@ -4946,6 +4946,11 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     }
 }
 
+@media screen and (max-width: 320px) {
+.login-tabs{
+    margin-bottom :20px;
+}
+}
 /*media qs end*/
 
 .final_step {
@@ -4970,4 +4975,42 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 
 .profile-header,  .container.qla-container,  .tab-content.listing-tabs .block-type-code, .listing-main-info {
     display: none;
+}
+
+.login-content .login-tabs a {
+    color: #fff;
+    background: var(--accent);
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    box-shadow: #00000061 2px 2px 9px 1px;
+}
+
+.login-content .login-tabs a:hover {
+    box-shadow: #00000061 2px 2px 3px 1px;
+    color: #fff;
+}
+
+.login-content .login-tabs li.active a {
+    color: #3c3c3c;
+    background: transparent;
+    border-color: #b3b1b1;
+    box-shadow: none;
+}
+
+.login-content .login-tabs li {
+    opacity: 1;
+}
+
+.login-content .form-group {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.login-content {
+    border: 1px solid #d1d0d0;
+    padding: 10px 20px;
+    border-radius: 10px;
 }
