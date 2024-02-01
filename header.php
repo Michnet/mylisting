@@ -4,7 +4,7 @@
 	<meta charset="<?php esc_attr( bloginfo( 'charset' ) ) ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<link rel="pingback" href="<?php esc_attr( bloginfo( 'pingback_url' ) ) ?>">
-	<script type="module"> import hotwiredTurbo from "https://cdn.skypack.dev/@hotwired/turbo"; </script> 
+	<!-- <script type="module"> import hotwiredTurbo from "https://cdn.skypack.dev/@hotwired/turbo"; </script>  -->
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>

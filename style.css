@@ -5018,3 +5018,11 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 .form-row-wide input, .form-row-wide textarea, .form-row-wide select{
     width: 100% !important
 }
+.login-content .form-group > * {
+    order: 1;
+}
+
+.login-content .form-group .woocommerce-password-strength {
+    order: 0;
+    margin-top: 0;
+}
