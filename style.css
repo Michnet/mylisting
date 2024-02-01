@@ -2406,12 +2406,22 @@ section.code_sect #messages-modal-toggle i {
 }
 
 #wcfm-main-contentainer .wcfm-page-headig,#wcfm-main-contentainer .wcfm-page-headig .wcfmfa,.wcfm_menu_logo,.wcfm_menu_logo h4,.wcfm_menu_logo h4 a,.wcfm_menu_no_logo {
-    color: var(--themecolor)
+    color: #181847;
+}
+
+.wcfm_menu_toggler.wcfmfa:before {
+    color: var(--accent);
+    font-size: 20px;
+    border: 1px solid var(--accent);
+    padding: 2px 5px;
+    border-radius: 5px;
+    box-shadow: #0000005c 0px 1px 7px 1px;
 }
 
 #wcfm-main-contentainer .wcfm_menu_toggler,#wcfm-main-contentainer .wcfm_responsive_menu_toggler {
     padding: 0 9px;
-    width: 50px
+    width: 50px;
+    text-align: center;
 }
 
 #wcfm-main-contentainer .wcfm-checklist-group,#wcfm-main-contentainer .wcfm-radio-group,#wcfm-main-contentainer .wp-picker-container,#wcfm-main-contentainer input[type=number].wcfm-text,#wcfm-main-contentainer input[type=password].wcfm-text,#wcfm-main-contentainer input[type=text].wcfm-text,#wcfm-main-contentainer input[type=time].wcfm-text,#wcfm-main-contentainer select.wcfm-select,#wcfm-main-contentainer textarea.wcfm-textarea,.wcfm_popup_form input[type=text].wcfm-text,.wcfm_popup_form select.wcfm-select {
@@ -4528,6 +4538,11 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 }
 
 @media screen and (max-width: 1052px) {
+    div#wcfm-content{
+    padding-right: 60px;
+}
+    .wcfm_menu_logo{
+}
     #wcfm_menu {
         position:fixed;
         top: 0;
@@ -4540,6 +4555,7 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
         right: 0;
         z-index: 99;
         height: 100vh;
+        padding-top: 60px;
     }
 
     #wcfm-content .wcfm-collapse .wcfm-collapse-content {
@@ -4712,6 +4728,9 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 
 
 @media screen and (max-width: 768px) {
+    div#wcfm-content{
+    padding-right: 0;
+}
     .add-listing-nav a {
     white-space: nowrap;
 }
@@ -4755,10 +4774,11 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
         width: 200px;
         top: 0 !important;
         bottom: 0;
+        padding-top: 60px;
     }
 
     #wcfm-main-contentainer .wcfm_menu_toggler {
-        /* display: block; */
+        display: block;
     }
 
     #submit-job-form .select2-container--default .select2-selection--single .select2-selection__rendered {
