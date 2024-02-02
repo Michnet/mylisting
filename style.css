@@ -4205,10 +4205,14 @@ label span {
 
 
 
-.woocommerce form.sign-in-form .form-group label {padding: 0 5px;margin-left: 5px;}
+.woocommerce form.sign-in-form .form-group label {padding: 0;margin-left: 3px;}
 
 .woocommerce form.sign-in-form .form-group input:-webkit-autofill~label, .woocommerce form.sign-in-form .form-group input:focus~label {
     background: #fff;
+}
+
+.woocommerce form.sign-in-form .form-group input:-webkit-autofill~label, .woocommerce form.sign-in-form .form-group input:focus~label {
+    top: 0;
 }
 
 #wcfm_menu .wcfm_menu_items a.active {
@@ -5001,7 +5005,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     display: none;
 }
 
-.login-content .login-tabs a {
+.login-content .login-tabs a, .login-tabs li a:focus, .login-tabs li a:hover, .login-tabs li a:visited {
     color: #fff;
     background: var(--accent);
     padding: 3px 10px;
@@ -5050,6 +5054,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 .login-content .form-group .woocommerce-password-strength {
     order: 0;
     margin-top: 0;
+    width: 100%;
 }
 
 
@@ -5078,4 +5083,8 @@ form .listing-form-submit-btn .preview-btn{
 
 .iti__country-list {
     z-index: 3;
+}
+
+.woocommerce form .form-row {
+    margin-bottom: 0;
 }
