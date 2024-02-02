@@ -5026,11 +5026,12 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     opacity: 1;
 }
 
-.login-content .form-group {
+.login-content .form-group, .woocommerce form.sign-in-form .form-group {
     display: flex;
     flex-direction: column-reverse;
     align-items: flex-start;
     gap: 10px;
+    margin-bottom: 0;
 }
 
 .login-content {
@@ -5059,4 +5060,22 @@ span.woocommerce-help-text {
 
 form .listing-form-submit-btn .preview-btn{
 	display: none !important;
+}
+
+
+.woocommerce form.sign-in-form .form-group input {
+    z-index: 1;
+}
+
+.woocommerce form.sign-in-form .form-group input:placeholder-shown~label {
+    top: 0;
+}
+
+.woocommerce form.sign-in-form .form-group label {
+    position: relative;
+    z-index: 1;
+}
+
+.iti__country-list {
+    z-index: 3;
 }
