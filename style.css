@@ -4732,6 +4732,7 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 
 
 @media screen and (max-width: 768px) {
+    .user-area .open>ul.dropdown-menu{top: 58px !important}
     div#wcfm-content{
     padding-right: 0;
 }
@@ -5072,7 +5073,7 @@ form .listing-form-submit-btn .preview-btn{
     z-index: 1;
 }
 
-.woocommerce form.sign-in-form .form-group input:placeholder-shown~label {
+.woocommerce form.sign-in-form .form-group input:placeholder-shown~label, .woocommerce form.sign-in-form .form-group label {
     top: 0;
 }
 
@@ -5087,4 +5088,48 @@ form .listing-form-submit-btn .preview-btn{
 
 .woocommerce form .form-row {
     margin-bottom: 0;
+}
+
+.user-area .menu-list {text-align: left;/* padding: 20px 28px 0; *//* border-left: 3px solid var(--accent); */}
+
+.user-area .menu-list .menu-item {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.user-area .menu-list .menu-item a {
+    display: grid;
+    grid-template-columns: 34px auto;
+    font-size: 16px;
+    column-gap: 15px;
+    flex-wrap: nowrap;
+    width: fit-content;
+    align-items: center;
+}
+
+.user-area .menu-list .menu-item a:hover {
+    color: var(--accent);
+}
+
+.user-area .menu-list .menu-item a i {
+    text-align: center;
+    border: 1px solid #d1d0d0;
+    height: 32px;
+    line-height: 32px;
+    width: 32px;
+    font-size: 22px;
+    color: var(--e-global-color-a2c0d56);
+}
+
+._access.user-area {
+    /* display: flex; */
+    padding: 0 5%;
+}
+
+._access.user-area .user-profile-name {
+    color: #444444;
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    padding: 15px 0;
 }
