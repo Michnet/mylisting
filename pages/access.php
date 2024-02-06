@@ -30,7 +30,7 @@
 						</div>
 					</div>
 <?php else: ?>
-					<div class="user-area signin-area">
+					<div class="user-area">
                     <?php require locate_template( 'templates/dashboard/form-login.php' ) ?>
 					</div>
 
