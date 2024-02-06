@@ -4,21 +4,21 @@ wp_print_styles( 'mylisting-header' );
 
 $data = c27()->merge_options([
 	'logo'                    => c27()->get_site_logo(),
-    'skin'                    => c27()->get_setting('header_skin', 'dark'),
-    'style'                   => c27()->get_setting('header_style', 'default'),
-    'width'                   => c27()->get_setting('header_width', 'full-width'),
-    'boxed_width'             => c27()->get_setting('boxed_header_width', 1120),
-	'fixed'                   => c27()->get_setting('header_fixed', true),
-    'scroll_skin'             => c27()->get_setting('header_scroll_skin', 'dark'),
-    'scroll_logo'             => c27()->get_setting('header_scroll_logo') ? c27()->get_setting('header_scroll_logo')['sizes']['medium'] : false,
-	'border_color'            => c27()->get_setting('header_border_color', 'rgba(29, 29, 31, 0.95)'),
-	'menu_location'           => c27()->get_setting('header_menu_location', 'right'),
-	'background_color'        => c27()->get_setting('header_background_color', 'rgba(29, 29, 31, 0.95)'),
-	'show_search_form'        => c27()->get_setting('header_show_search_form', true),
-	'show_call_to_action'     => c27()->get_setting('header_show_call_to_action_button', false),
-	'scroll_border_color'     => c27()->get_setting('header_scroll_border_color', 'rgba(29, 29, 31, 0.95)'),
-	'search_form_placeholder' => c27()->get_setting('header_search_form_placeholder', 'Type your search...'),
-	'scroll_background_color' => c27()->get_setting('header_scroll_background_color', 'rgba(29, 29, 31, 0.95)'),
+    'skin'                    => 'light',
+    'style'                   => 'default',
+    'width'                   => 'full-width',
+    'boxed_width'             => 1120,
+	'fixed'                   => true,
+    'scroll_skin'             => 'light',
+    'scroll_logo'             => false,
+	'border_color'            =>  'rgb(255 255 255)',
+	'menu_location'           => 'right',
+	'background_color'        => 'rgb(255 255 255)',
+	'show_search_form'        => false,
+	'show_call_to_action'     => true,
+'scroll_border_color'     =>  'rgb(255 255 255)',
+	'search_form_placeholder' => 'Type your search...',
+	'scroll_background_color' => 'rgb(255 255 255)',
 	'blend_to_next_section'   => false,
     'is_edit_mode'            => false,
 ], $data);
@@ -34,9 +34,9 @@ if ($data['width'] && $data['width'] === 'boxed') {
 	$GLOBALS['case27_custom_styles'] .= '@media screen and (min-width: 1201px) { .header-width-boxed .header-container { width: ' . $data['boxed_width'] . 'px !important; } }';
 }
 
-$GLOBALS['case27_custom_styles'] .= '.c27-main-header .logo img { height: ' . c27()->get_setting( 'header_logo_height', 38 ) . 'px; }';
-$GLOBALS['case27_custom_styles'] .= '@media screen and (max-width: 1200px) { .c27-main-header .logo img { height: ' . c27()->get_setting( 'header_logo_height_tablet', 50 ) . 'px; } }';
-$GLOBALS['case27_custom_styles'] .= '@media screen and (max-width: 480px) { .c27-main-header .logo img { height: ' . c27()->get_setting( 'header_logo_height_mobile', 40 ) . 'px; } }';
+$GLOBALS['case27_custom_styles'] .= '.c27-main-header .logo img { height: 60px; }';
+$GLOBALS['case27_custom_styles'] .= '@media screen and (max-width: 1200px) { .c27-main-header .logo img { height: 60px; } }';
+$GLOBALS['case27_custom_styles'] .= '@media screen and (max-width: 480px) { .c27-main-header .logo img { height: 40px; } }';
 
 if ($data['background_color']) {
 	if (!isset($GLOBALS['case27_custom_styles'])) $GLOBALS['case27_custom_styles'] = '';
@@ -239,18 +239,13 @@ if ($data['scroll_border_color']) {
 				<?php else: ?>
 					<div class="user-area signin-area">
 						<i class="mi person user-area-icon"></i>
-						<a href="<?php echo esc_url( '/my-account') ?>">
+						<a href="<?php echo esc_url( '/access') ?>">
 							<?php _e( 'Sign in', 'my-listing' ) ?>
 						</a>
-						<?php if ( get_option( 'woocommerce_enable_myaccount_registration' ) === 'yes' ): ?>
-							<span><?php _e( 'or', 'my-listing' ) ?></span>
-							<a href="<?php echo esc_url( \MyListing\get_register_url() ) ?>">
-								<?php _e( 'Register', 'my-listing' ) ?>
-							</a>
-						<?php endif ?>
+						
 					</div>
 					<div class="mob-sign-in">
-						<a aria-label="<?php echo esc_attr( _e( 'Mobile sign in button', 'my-listing' ) ) ?>" href="<?php echo esc_url('/my-account') ?>"><i class="mi person"></i></a>
+						<a aria-label="<?php echo esc_attr( _e( 'Mobile sign in button', 'my-listing' ) ) ?>" href="<?php echo esc_url('/access') ?>"><i class="mi person"></i></a>
 					</div>
 
 					<?php if ( c27()->get_setting( 'header_show_cart', true ) !== false ): ?>
