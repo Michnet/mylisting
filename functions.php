@@ -3166,7 +3166,7 @@ function record_visit($request ) {
     	$ref = $visitor->get_referrer();
     	$os = $visitor->get_os();
     	$location = $visitor->get_location();
-
+      $city = $visitor->get_visit_city();
 		add_visit( [
 			'listing_id' => $post_id,
 			'fingerprint' => $visitor->get_fingerprint(),
@@ -3178,8 +3178,8 @@ function record_visit($request ) {
 			'device' => $os ? $os['device'] : null,
 			'browser' => $visitor->get_browser(),
 			'http_user_agent' => $visitor->get_user_agent(),
-			'country_code' => $location ?: null,
-			'city' => null,
+			'country_code' => $location ?? null,
+			'city' => $city,
 		] );
 }
 
@@ -4589,3 +4589,20 @@ add_action( 'woocommerce_created_customer', function( $customer_id ) {
 	}
 
 }, 10, 1 );
+
+  add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $ajax_handler ) {
+    // validate email format
+    /* if ( ! is_email( $field['value'] ) ) {
+      $ajax_handler->add_error( $field['id'], 'Invalid Email address, it must be in the format XX@XX.XX' );
+      return;
+    } */
+  
+    $valid_domains = array("gmail.com","yahoo.com","hotmail.com","live.com","aol.com","outlook.com");
+  
+    $email_domain = explode( '@', $field['value'] )[1];
+  
+    if ( !in_array( $email_domain, $valid_domains ) ) {
+      $ajax_handler->add_error( $field['id'], 'Invalid Email address, emails from the domain ' . $email_domain . ' are not allowed.' );
+      return;
+    }
+  }, 10, 3 );
