@@ -229,6 +229,7 @@ class Visitor {
 		}
 
 		$response = \WC_Geolocation::geolocate_ip( $ip_address );
+		var_dump($response);
 		$city = $response['city'];
 
 		// Store location in cookie, so we don't have to request it on every page visit.
@@ -236,7 +237,7 @@ class Visitor {
 
 		mlog()->warn( 'Retrieved user city from query. (IP geolocation).'."[$city]" );
 		//return $location;
-		return $city ?? null;
+		return $city;
 	}
 
 	
