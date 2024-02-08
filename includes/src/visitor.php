@@ -214,7 +214,7 @@ class Visitor {
 
 	public function get_visit_city() {
 		// If it's available in session, get location data from there.
-		$cookie = \MyListing\get_cookie( md5( 'mylisting_visitor_location' ) );
+		$cookie = \MyListing\get_cookie( md5( 'mylisting_visitor_city' ) );
 		if ( ! empty( $cookie ) ) {
 			// mlog( 'Retrieved user location from cookie (IP geolocation).'."[$cookie]" );
 			return $cookie;
@@ -229,7 +229,6 @@ class Visitor {
 		}
 
 		$response = \WC_Geolocation::geolocate_ip( $ip_address );
-		var_dump($response);
 		$city = $response['city'];
 
 		// Store location in cookie, so we don't have to request it on every page visit.

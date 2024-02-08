@@ -3994,6 +3994,23 @@ function get_listings_query($request) {
       ];
     }
 
+  // add support for nearby order everywhere
+    if ( isset( $params['proximity'], $params['lat'], $params['lng'] ) ) {
+      $proximity = absint( $params['proximity'] );
+      //$location = isset( $params['search_location'] ) ? sanitize_text_field( stripslashes( $params['search_location'] ) ) : false;
+      $lat = (float) $params['lat'];
+      $lng = (float) $params['lng'];
+      $units = isset($params['proximity_units']) && $params['proximity_units'] == 'mi' ? 'mi' : 'km';
+      if ( $lat && $lng && $proximity /* && $location */ ) {
+        $earth_radius = $units == 'mi' ? 3959 : 6371;
+        $sql = $wpdb->prepare( \MyListing\Helpers::get_proximity_sql(), $earth_radius, $lat, $lng, $lat, $proximity );
+        $post_ids = (array) $wpdb->get_results( $sql, OBJECT_K );
+        if ( empty( $post_ids ) ) { $post_ids = ['none']; }
+        $args['post__in'] = array_keys( (array) $post_ids );
+        $args['search_location'] = '';
+      }
+    }
+
 		if ( $context === 'term-search' ) {
 			$taxonomy = ! empty( $params['taxonomy'] ) ? sanitize_text_field( $params['taxonomy'] ) : false;
 			$term = ! empty( $params['term'] ) ? sanitize_text_field( $params['term'] ) : false;
