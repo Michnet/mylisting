@@ -3160,13 +3160,14 @@ function record_visit($request ) {
     
     $parameters = $request->get_params();
     $post_id = $parameters['listing_id'];
+    $city_name = isset($parameters['city']) ? $parameters['city'] : null;
 
 		// Get visitor data and insert visit.
     	$visitor = \MyListing\Src\Visitor::instance();
     	$ref = $visitor->get_referrer();
     	$os = $visitor->get_os();
     	$location = $visitor->get_location();
-      $city = $visitor->get_visit_city();
+      //$city = $visitor->get_visit_city();
 		add_visit( [
 			'listing_id' => $post_id,
 			'fingerprint' => $visitor->get_fingerprint(),
@@ -3179,7 +3180,7 @@ function record_visit($request ) {
 			'browser' => $visitor->get_browser(),
 			'http_user_agent' => $visitor->get_user_agent(),
 			'country_code' => $location ?? null,
-			'city' => $city,
+			'city' => $city_name,
 		] );
 }
 
