@@ -5074,7 +5074,11 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     max-width: 100%;
 }
 
-.form-group.row {
+.form-group.row.terms-and-conditions {
+    margin: 15px 0;
+}
+
+.login-content .form-group, .woocommerce form.sign-in-form .form-group.row {
     margin-left: 0;
     margin-right: 0;
     flex-direction: row;
@@ -5129,11 +5133,19 @@ input[name="password"] {
 
 .password-toggle-icon {
     position: absolute;
-    right: 10px;
+    right: 0;
     height: 40px;
+    width: 40px;
     line-height: 40px;
     bottom: 10px;
     z-index: 2;
+}
+
+.password-toggle-icon i {
+    width: inherit;
+    height: inherit;
+    line-height: inherit;
+    text-align: center;
 }
 
 .login-content .form-group .woocommerce-password-strength {
