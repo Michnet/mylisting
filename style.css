@@ -5078,7 +5078,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     margin: 15px 0;
 }
 
-.login-content .form-group, .woocommerce form.sign-in-form .form-group.row {
+.woocommerce form.sign-in-form .form-group.row {
     margin-left: 0;
     margin-right: 0;
     flex-direction: row;

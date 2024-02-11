@@ -245,7 +245,7 @@ if ($data['scroll_border_color']) {
 						
 					</div>
 					<div class="mob-sign-in">
-						<a aria-label="<?php echo esc_attr( _e( 'Mobile sign in button', 'my-listing' ) ) ?>" href="<?php echo esc_url('/access') ?>"><i class="mi person"></i></a>
+						<a aria-label="<?php echo esc_attr( _e( 'Mobile sign in button', 'my-listing' ) ) ?>" href="<?php echo esc_url('/my-account') ?>"><i class="mi person"></i></a>
 					</div>
 
 					<?php if ( c27()->get_setting( 'header_show_cart', true ) !== false ): ?>
