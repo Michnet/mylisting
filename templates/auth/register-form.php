@@ -62,6 +62,7 @@ if ( ! defined('ABSPATH') ) {
 				type="checkbox"
 				name="terms_and_conditions"
 				id="terms_and_conditions"
+				value = 'yes'
 			>
 			<label for="terms_and_conditions">I've read and accept the <a href="/terms-of-service">Terms of Service</a></label>
 		</div>
