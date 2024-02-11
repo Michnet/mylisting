@@ -1471,7 +1471,8 @@ div#wcfm-main-content {
 }
 
 div#wcfm-content {
-    border: none
+    border: none;
+    position: relative;
 }
 
 .mlduo-account-menu {
@@ -2394,6 +2395,7 @@ section.code_sect #messages-modal-toggle i {
     flex: 0 200px;
     transition: all .2s;
     background: #fff;
+    /* height: fit-content; */
 }
 .mb-0{
     margin-bottom: 0;
@@ -2470,8 +2472,7 @@ section.code_sect #messages-modal-toggle i {
 
 .wcfm-tabWrap-content {
     display: flex;
-    flex-direction: row;
-    height: 50px;
+    flex-direction: column;
 }
 
 .wcfm-collapse .wcfm-tabWrap .wcfm-container,.wcfm-tabWrap .page_collapsible+.wcfm-container {
@@ -4720,6 +4721,14 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 }
 
 @media screen and (min-width: 769px) {
+    #wcfm_menu{
+    /* position: sticky; */
+    /* top: 70px; */
+}
+    #wcfm-main-contentainer .wcfm-collapse{
+    overflow: visible;
+    height: fit-content;
+}
     #wcfm-content .wcfm-collapse .wcfm-collapse-content{
         padding-left: 10px;
     }
@@ -5183,4 +5192,8 @@ form .listing-form-submit-btn .preview-btn{
 .wcfm_module_boxes {
     /* margin: 0; */
     padding: 0;
+}
+
+.wcfm_product_manager_cats_checklist_fields, .product_tags_ele, .wcfm_fetch_tag_cloud, .wcfm_add_new_category, .wcfm_new_tax_ele, .wcfm_new_parent_taxt_ele, .wcfm_add_new_taxonomy_form, .catalog_visibility_ele {
+    max-width: 100% !important;
 }
