@@ -239,7 +239,7 @@ if ($data['scroll_border_color']) {
 				<?php else: ?>
 					<div class="user-area signin-area">
 						<i class="mi person user-area-icon"></i>
-						<a href="<?php echo esc_url( '/access') ?>">
+						<a href="<?php echo esc_url( '/my-account') ?>">
 							<?php _e( 'Sign in', 'my-listing' ) ?>
 						</a>
 						
