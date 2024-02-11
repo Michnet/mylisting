@@ -5068,10 +5068,24 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     display: flex;
     flex-direction: column-reverse;
     align-items: flex-start;
-    gap: 10px;
+    gap: 5px;
     margin-bottom: 0;
     position: relative;
 }
+
+.form-group:has(.iti--show-flags) label {
+    position: relative;
+    visibility: hidden;
+}
+
+.form-group:has(.iti--show-flags) label:after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "Phone Number";
+}
+.form-group {}
 
 .login-content {
     border: 1px solid #d1d0d0;
@@ -5084,6 +5098,10 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
 }
 .login-content .form-group > * {
     order: 1;
+}
+
+.iti.iti--allow-dropdown.iti--separate-dial-code.iti--show-flags {
+    width: 100%;
 }
 
 .login-content .form-group input {
@@ -5100,6 +5118,7 @@ input[name="password"] {
     height: 40px;
     line-height: 40px;
     bottom: 10px;
+    z-index: 2;
 }
 
 .login-content .form-group .woocommerce-password-strength {
@@ -5196,4 +5215,8 @@ form .listing-form-submit-btn .preview-btn{
 
 .wcfm_product_manager_cats_checklist_fields, .product_tags_ele, .wcfm_fetch_tag_cloud, .wcfm_add_new_category, .wcfm_new_tax_ele, .wcfm_new_parent_taxt_ele, .wcfm_add_new_taxonomy_form, .catalog_visibility_ele {
     max-width: 100% !important;
+}
+
+.iti__flag-container {
+    z-index: 2;
 }
