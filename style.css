@@ -5071,21 +5071,36 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     gap: 5px;
     margin-bottom: 0;
     position: relative;
+    max-width: 100%;
+}
+
+.form-group.row {
+    margin-left: 0;
+    margin-right: 0;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+:before {}
+
+.form-group.row:before {
+    display: none;
 }
 
 .form-group:has(.iti--show-flags) label {
-    position: relative;
-    visibility: hidden;
+    /*position: relative;
+    visibility: hidden;*/
 }
 
 .form-group:has(.iti--show-flags) label:after {
-    visibility: visible;
+   /* visibility: visible;
     position: absolute;
     top: 0;
     left: 0;
-    content: "Phone Number";
+    content: "Phone Number";*/
 }
-.form-group {}
 
 .login-content {
     border: 1px solid #d1d0d0;

@@ -55,6 +55,16 @@ if ( ! defined('ABSPATH') ) {
 			>
 			<label>Phone Number</label>
 		</div>
+		<div class="form-group row terms-and-conditions">
+			<input
+				checked
+				required
+				type="checkbox"
+				name="terms_and_conditions"
+				id="terms_and_conditions"
+			>
+			<label for="terms_and_conditions">I've read and accept the <a href="/terms-of-service">Terms of Service</a></label>
+		</div>
 	</div>
 
 	<?php if ( mylisting()->get('roles.secondary.enabled') ): ?>
