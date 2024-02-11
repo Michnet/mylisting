@@ -2429,7 +2429,15 @@ section.code_sect #messages-modal-toggle i {
 }
 
 #wcfm_menu .wcfm_menu_item span,#wcfm_menu span.wcfm_sub_menu_items a,.wcfm_menu_no_logo h4,.wcfm_menu_no_logo h4 a {
-    color: #90a1ad
+    color: #383f43;
+}
+
+#wcfm_menu .wcfm_menu_item span.wcfmfa {
+    border: 1px solid #c2c2c2;
+    height: 26px;
+    width: 26px;
+    line-height: 26px;
+    text-align: center;
 }
 
 #wcfm_menu .wcfm_menu_item span.text {
@@ -2442,7 +2450,9 @@ section.code_sect #messages-modal-toggle i {
 }
 
 .wcfm-tabWrap {
-    display: flex;
+    /* display: flex; */
+    height: fit-content !important;
+    padding: 10px 0;
 }
 
 #wcfm-main-contentainer .wcfm-collapse {
@@ -2454,8 +2464,8 @@ section.code_sect #messages-modal-toggle i {
     height: 15px;
     z-index: 2;
     white-space: nowrap;
-    border-radius: 30px;
-    margin: 10px 5px;
+    border-radius: 5px;
+    margin: 5px 10px;
 }
 
 .wcfm-tabWrap-content {
@@ -2471,8 +2481,8 @@ section.code_sect #messages-modal-toggle i {
 
 .wcfm-collapse .wcfm-tabWrap .wcfm-container {
     padding: 16px 18px;
-    margin-top: 50px;
-    position: absolute;
+    margin-top: 0;
+    position: relative;
     left: 0;
     right: 0;
     top: 0;
@@ -3887,7 +3897,8 @@ td.child {
 
 
 #wcfm-main-contentainer div.wcfm-content {
-    margin: 0
+    margin: 0;
+    padding: 0;
 }
 
 #wcfm_products_listing_expander span.product-type.text_tip {
@@ -4216,7 +4227,11 @@ label span {
 }
 
 #wcfm_menu .wcfm_menu_items a.active {
-    background: var( --e-global-color-primary );
+    background: var( --accent);
+}
+
+#wcfm_menu .wcfm_menu_items a.active .text, #wcfm_menu .wcfm_menu_items a.active span {
+    color: #fff;
 }
 
 .wcfm_dashboard_stats_block .wcfmfa {
@@ -4224,7 +4239,13 @@ label span {
 }
 
 .page_collapsible, .wcfm-collapse a.page_collapsible_dummy {
-    background: #e1dfdf;
+    background: transparent;
+    border: 1px solid #cfdef5;
+}
+
+.page_collapsible.collapse-open {
+    background: var(--accent);
+    color: #fff;
 }
 
 .wcfm-store-name-heading-text a {
@@ -4732,6 +4753,8 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
 
 
 @media screen and (max-width: 768px) {
+    #wcfm_menu .wcfm_menu_items a.wcfm_menu_item{
+}
     .user-area .open>ul.dropdown-menu{top: 58px !important}
     div#wcfm-content{
     padding-right: 0;
@@ -4748,8 +4771,8 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
     #item_products .acff-edit-button.edit-button, .add-listing-step .job-manager-error, .edit-listing-form .job-manager-error, .edit-listing-form .job-manager-info, .edit-listing-form .job-manager-message {
     bottom: 70px;
 }
-    #wcfm_menu .wcfm_menu_items{
-    height: 50px;
+    #wcfm_menu .wcfm_menu_items, #wcfm_menu .wcfm_menu_items a.wcfm_menu_item{
+    height: 44px;
 }
     #wcfm-main-contentainer .wcfm_menu_toggle{
     width: 0;
@@ -4780,6 +4803,7 @@ form .listing-form-submit-btn button[type=submit].preview-btn {
         top: 0 !important;
         bottom: 0;
         padding-top: 60px;
+        padding-bottom: 60px;
     }
 
     #wcfm-main-contentainer .wcfm_menu_toggler {
@@ -5037,6 +5061,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     align-items: flex-start;
     gap: 10px;
     margin-bottom: 0;
+    position: relative;
 }
 
 .login-content {
@@ -5052,10 +5077,30 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
     order: 1;
 }
 
+.login-content .form-group input {
+    height: 40px;
+}
+
+input[name="password"] {
+    padding-right: 32px;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    height: 40px;
+    line-height: 40px;
+    bottom: 10px;
+}
+
 .login-content .form-group .woocommerce-password-strength {
-    order: 0;
+    order: 1;
     margin-top: 0;
     width: 100%;
+}
+
+.login-content .form-group .woocommerce-password-strength:empty {
+    display: none !important;
 }
 
 
@@ -5132,4 +5177,10 @@ form .listing-form-submit-btn .preview-btn{
     margin-bottom: 10px;
     font-weight: 600;
     padding: 15px 0;
+}
+
+
+.wcfm_module_boxes {
+    /* margin: 0; */
+    padding: 0;
 }

@@ -43,6 +43,18 @@ if ( ! defined('ABSPATH') ) {
 					<?php $field->get_form_markup() ?>
 				</div>
 		<?php endforeach ?>
+
+		<div class="form-group">
+			<input
+				required
+				type="tel"
+				name="billing_phone"
+				id="billing_phone"
+				value=""
+				placeholder=""
+			>
+			<label>Phone Number</label>
+		</div>
 	</div>
 
 	<?php if ( mylisting()->get('roles.secondary.enabled') ): ?>

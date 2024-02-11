@@ -3,6 +3,7 @@
 // Enqueue child theme style.css
 add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_style( 'child-style', get_stylesheet_uri() );
+    wp_enqueue_script( 'child-script', get_stylesheet_directory_uri() . '/assets/script.js'/*,  ['c27-main'], \MyListing\get_assets_version(), true  */);
 
     if ( is_rtl() ) {
     	wp_enqueue_style( 'mylisting-rtl', get_template_directory_uri() . '/rtl.css', [], wp_get_theme()->get('Version') );
@@ -4461,144 +4462,9 @@ class Bookings_REST_Booking_Controller extends WC_Bookings_REST_Booking_Controll
 //Woocommerce register fields
 
 // Add Billing Fields To Registration Form
-add_action( 'woocommerce_register_form_start', function() {
-
-	$countries = new WC_Countries();
-	$billingfields = $countries->get_address_fields();
-	unset( $billingfields['billing_email'] );
-
-  foreach($billingfields as $f_key => $f_val){
-    
-    if(!in_array($f_key, array('billing_phone'))){
-      unset( $billingfields[$f_key]);
-    }
-    
-  } 
-	$fields = apply_filters( 'woocommerce_billing_fields', $billingfields );
-
-	foreach( $fields as $key => $field_args ) {
-		woocommerce_form_field( $key, $field_args );
-	}
-
-}, 15 );
-
-// Billing Fields Registration Validation
-add_action( 'woocommerce_register_post', function( $username, $email, $validation_errors ) {
-/* 
-	if( empty( $_POST['billing_first_name'] ) ) {
-		$validation_errors->add(
-			'billing_first_name_error', __( 'Please provide a first name.', 'woocommerce' )
-		);
-	}
-
-	if( empty( $_POST['billing_last_name'] ) ) {
-		$validation_errors->add(
-			'billing_last_name_error', __( 'Please provide a last name.', 'woocommerce' )
-		);
-	}
-
-	if( empty( $_POST['billing_country'] ) ) {
-		$validation_errors->add(
-			'billing_country_error', __( 'Please select a country.', 'woocommerce' )
-		);
-	}
-
-	if( empty( $_POST['billing_address_1'] ) ) {
-		$validation_errors->add(
-			'billing_address_1_error', __( 'Please provide a street address.', 'woocommerce' )
-		);
-	}
-
-	if( empty( $_POST['billing_city'] ) ) {
-		$validation_errors->add(
-			'billing_city_error', __( 'Please provide a city or region.', 'woocommerce' )
-		);
-	}
-
-	if( empty( $_POST['billing_state'] ) ) {
-		$validation_errors->add(
-			'billing_state_error', __( 'Please select a state or province.', 'woocommerce' )
-		);
-	}
-
-	if( empty( $_POST['billing_postcode'] ) ) {
-		$validation_errors->add(
-			'billing_postcode_error', __( 'Please provide a postal code.', 'woocommerce' )
-		);
-	} */
-
-	if( empty( $_POST['billing_phone'] ) ) {
-		$validation_errors->add(
-			'billing_phone_error', __( 'Please provide a phone number.', 'woocommerce' )
-		);
-	}
-
-	return $validation_errors;
-
-}, 10, 3 );
 
 // Save Billing Fields At Registration
 add_action( 'woocommerce_created_customer', function( $customer_id ) {
-
-	/* if( isset( $_POST['billing_first_name'] ) ) {
-		update_user_meta(
-			$customer_id, 'first_name', sanitize_text_field( $_POST['billing_first_name'] )
-		);
-		update_user_meta(
-			$customer_id, 'billing_first_name', sanitize_text_field( $_POST['billing_first_name'] )
-		);
-	}
-
-	if( isset( $_POST['billing_last_name'] ) ) {
-		update_user_meta(
-			$customer_id, 'last_name', sanitize_text_field( $_POST['billing_last_name'] )
-		);
-		update_user_meta(
-			$customer_id, 'billing_last_name', sanitize_text_field( $_POST['billing_last_name'] )
-		);
-	}
-
-	if( isset( $_POST['billing_company'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_company', sanitize_text_field( $_POST['billing_company'] )
-		);
-	}
-
-	if( isset( $_POST['billing_country'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_country', sanitize_text_field( $_POST['billing_country'] )
-		);
-	}
-
-	if( isset( $_POST['billing_address_1'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_address_1', sanitize_text_field( $_POST['billing_address_1'] )
-		);
-	}
-
-	if( isset( $_POST['billing_address_2'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_address_2', sanitize_text_field( $_POST['billing_address_2'] )
-		);
-	}
-
-	if( isset( $_POST['billing_city'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_city', sanitize_text_field( $_POST['billing_city'] )
-		);
-	}
-
-	if( isset( $_POST['billing_state'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_state', sanitize_text_field( $_POST['billing_state'] )
-		);
-	}
-
-	if( isset( $_POST['billing_postcode'] ) ) {
-		update_user_meta(
-			$customer_id, 'billing_postcode', sanitize_text_field( $_POST['billing_postcode'] )
-		);
-	} */
 
 	if( isset( $_POST['billing_phone'] ) ) {
 		update_user_meta(

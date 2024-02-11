@@ -69,6 +69,7 @@ class Password_Field extends Base_Profile_Field {
 					placeholder=" "
 				>
 				<label><?php echo $this->get_label() ?></label>
+				<span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
 				<?php if ( $desc = $this->get_description() ): ?>
 					<p><?php echo $desc ?></p>
 				<?php endif ?>

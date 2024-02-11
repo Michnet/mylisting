@@ -21,6 +21,7 @@ if ( ! defined('ABSPATH') ) {
 	<div class="form-group">
 		<input required type="password" name="password" id="password" placeholder=" ">
 		<label for="password"><?php _ex( 'Password', 'Login form', 'my-listing' ) ?></label>
+		<span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
 	</div>
 
 	<?php do_action( 'woocommerce_login_form' ); ?>
