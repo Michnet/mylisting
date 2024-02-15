@@ -30,7 +30,7 @@ body.edit-listing-form.woocommerce-account .i-section .container {
     padding-bottom: 20px;
 }
 
-.edit-listing-form .edit_row > .elementor-container {padding-top: 80px;position: relative;}
+.edit-listing-form .edit_row > .elementor-container {padding-top: 60px;position: relative;}
 
 .edit-listing-form .mlduo-account-menu {position: absolute;top: 0;right: 0;left: 0;}
 
@@ -308,7 +308,7 @@ section#listing_tab_page-home>.container .element.content-block {
 .profile-header>.container {
     width: 100%
 }
-.quick-listing-actions .cts-next, .quick-listing-actions .cts-prev, .cts-next, .cts-prev{display: none}
+.quick-listing-actions .cts-next, .quick-listing-actions .cts-prev, .cts-next, .cts-prev{/* display: none; */}
 .stickyObj {
     position: sticky;
     top: 80px;
@@ -4132,7 +4132,7 @@ span.label_meta {
 
 #item_products .acff-edit-button.edit-button {
     position: fixed;
-    left: 28px;
+    left: 15px;
     bottom: 30px;
     color: #fff;
 }
@@ -4787,6 +4787,12 @@ form .listing-form-submit-btn button[type=submit] {
 
 
 @media screen and (max-width: 768px) {
+    .woocommerce-account .woocommerce .i-section > .container{
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
     .select2-container .select2-dropdown{}
     #wcfm_menu .wcfm_menu_items a.wcfm_menu_item{
 }
@@ -4997,7 +5003,7 @@ form .listing-form-submit-btn button[type=submit] {
 }
 
 @media screen and (max-width: 600px) {
-    .edit-listing-form.woocommerce-account .woocommerce-MyAccount-content{margin: 0 -15px;width: auto;}
+    .edit-listing-form.woocommerce-account .woocommerce-MyAccount-content{margin: 0;width: auto;}
 
 .select2-container .select2-dropdown{
     position: fixed;
@@ -5047,7 +5053,12 @@ form .listing-form-submit-btn button[type=submit] {
 
 @media screen and (max-width: 414px) {
 body.edit-listing-form.woocommerce-account .i-section .container .col-md-12{
-    padding: 0;
+    padding: 0 5px;
+}
+
+body.edit-listing-form.woocommerce-account .i-section .container .col-md-12 .row {
+    margin-left: 0;
+    margin-right: 0;
 }
     
     #wcfm-main-contentainer div.wcfm-content {
@@ -5306,4 +5317,10 @@ form .listing-form-submit-btn .preview-btn{
 
 .select2-container--default .select2-results__option[aria-selected=true]:after {
     right: 12px;
+}
+
+.section-title {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }
