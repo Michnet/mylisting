@@ -30,7 +30,12 @@ body.edit-listing-form.woocommerce-account .i-section .container {
     padding-bottom: 20px;
 }
 
-.edit-listing-form .edit_row > .elementor-container {padding-top: 60px;position: relative;}
+body.edit-listing-form.woocommerce-account .i-section .container .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.edit-listing-form .edit_row > .elementor-container {padding-top: 80px;position: relative;}
 
 .edit-listing-form .mlduo-account-menu {position: absolute;top: 0;right: 0;left: 0;}
 
@@ -4060,6 +4065,7 @@ input.acff-submit-button.acf-button:hover {
     width: 200px;
     background: #fff;
     box-shadow: #00000073 0px 2px 16px 1px;
+    display: none;
 }
 
 #form-section-submit.form-section-wrapper {/* z-index: 9999999999; */position: fixed;bottom: 0;right: 0;/* height: 0; */width: 100%;}
@@ -4366,7 +4372,7 @@ ol {
 form .listing-form-submit-btn button[type=submit] {
   box-shadow: #00000075 0px 0px 8px 1px;
   height: 40px;
-  margin-bottom: 33px;
+  margin-bottom: 25px;
 }
 
 
@@ -4774,6 +4780,9 @@ form .listing-form-submit-btn button[type=submit] {
 }
 
 @media screen and (min-width: 769px) {
+    .edit-listing-form.woocommerce-account .woocommerce-MyAccount-content{
+    display: flex;
+}
     #wcfm_menu{
     /* position: sticky; */
     /* top: 70px; */
