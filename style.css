@@ -3289,8 +3289,13 @@ li.product-category.product .count {
     padding-bottom: 0;
     position: relative;
     height: 40px;
-    border-width: 0 0 1px 0;
-    background: 0 0!important
+    border-width: 0;
+    background: 0 0!important;
+    border-bottom: none;
+}
+
+#submit-job-form .social-networks-repeater .select2-container--default .select2-selection--single, #submit-job-form .work-hours-repeater .select2-container--default .select2-selection--single {
+    border-bottom: none;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice~.select2-search--inline,li.select2-search.select2-search--inline.ui-sortable-handle {
@@ -3300,7 +3305,7 @@ li.product-category.product .count {
 }
 
 #submit-job-form .form-group.field-type-date,#submit-job-form .form-group.field-type-email,#submit-job-form .form-group.field-type-number,#submit-job-form .form-group.field-type-password,#submit-job-form .form-group.field-type-related-listing,#submit-job-form .form-group.field-type-select,#submit-job-form .form-group.field-type-select-product,#submit-job-form .form-group.field-type-select-products,#submit-job-form .form-group.field-type-term-multiselect,#submit-job-form .form-group.field-type-term-select,#submit-job-form .form-group.field-type-text,#submit-job-form .form-group.field-type-textarea,#submit-job-form .form-group.field-type-texteditor,#submit-job-form .form-group.field-type-url,#submit-job-form .form-group.field-type-work-hours {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     border-top: none
 }
 
@@ -3332,6 +3337,14 @@ li.product-category.product .count {
     padding: 10px 12px;
     background: #f8f8f8;
     cursor: pointer;
+}
+
+#submit-job-form .open_field .element .pf-head {
+    background: #2e2e2e;
+}
+
+#submit-job-form .open_field .element .pf-head h5 {
+    color: #fff;
 }
 
 #submit-job-form .form-section-wrapper .element .pf-body {
@@ -3959,6 +3972,21 @@ td.child {
 #submit-job-form .small, #submit-job-form small, .field-head .description {
     color: var(--wc-secondary-text);
     font-size: 12px !important;
+}
+
+.social-networks-repeater div div button[type=button], .work-hours-repeater li.day button[type=button] {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.social-networks-repeater div div, .work-hours-repeater li.day {
+    position: relative;
+}
+
+button[data-repeater-delete] {
+    position: absolute;
+    bottom: 0;
 }
 
 button.delete-repeater-item {
@@ -4787,6 +4815,9 @@ form .listing-form-submit-btn button[type=submit] {
 
 
 @media screen and (max-width: 768px) {
+    .social-networks-repeater div div button[type=button], .work-hours-repeater li.day button[type=button]{
+    top: auto !important;
+}
     .woocommerce-account .woocommerce .i-section > .container{
     padding-left: 0;
     padding-right: 0;
