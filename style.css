@@ -27,7 +27,7 @@ body.edit-listing-form.woocommerce-account .mlduo-account-menu .container
 {width : 100%;box-sizing: border-box;}
 
 body.edit-listing-form.woocommerce-account .i-section .container {
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .edit-listing-form .edit_row > .elementor-container {padding-top: 80px;position: relative;}
@@ -46,7 +46,7 @@ body:not(.edit-listing-form) .edit_row .mylisting_col {width: 100% !important;}
 
 .add-listing-nav>ul {margin-top: 65px;}
 
-.edit-listing-form.woocommerce-account .woocommerce-MyAccount-content {width: 100%;max-width: 1024px;margin: 0 auto;grid-template-columns: 200px calc(100% - 220px);}
+.edit-listing-form.woocommerce-account .woocommerce-MyAccount-content {width: 100%;max-width: 1024px;margin: 0 auto;grid-template-columns: 100%;grid-template-rows: auto auto;}
 
 .edit-listing-form .elementor-section .elementor-element .i-section {display: block;/* max-width: 100%; *//* width: 100%; */}
 
@@ -3330,11 +3330,18 @@ li.product-category.product .count {
 
 #submit-job-form .element .pf-head {
     padding: 10px 12px;
-    background: #f8f8f8
+    background: #f8f8f8;
+    cursor: pointer;
 }
 
-#submit-job-form .element .pf-body {
-    padding-top: 0
+#submit-job-form .form-section-wrapper .element .pf-body {
+    padding-top: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+#submit-job-form .form-section-wrapper.open_field .element .pf-body {
+    height: auto;
 }
 
 .pac-container .pac-item, .select2-results__option, .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -4033,7 +4040,11 @@ input.acff-submit-button.acf-button:hover {
     overflow: visible;
 }
 #submit-job-form.c27-submit-listing-form .form-section-wrapper{
-   
+   margin-bottom: 10px;
+}
+
+#submit-job-form.c27-submit-listing-form .form-section-wrapper.form-footer {
+    margin-bottom: 0;
 }
 #submit-job-form.c27-submit-listing-form .active.form-section-wrapper {}
 
@@ -4439,7 +4450,7 @@ form .listing-form-submit-btn button[type=submit] {
 }
 
     .header-right .user-profile-dropdown{display: block !important;}
-    .add-listing-nav{display: block !important}
+    .add-listing-nav{/* display: block !important; */}
     .finder-listings {
         position:relative
     }
@@ -4787,13 +4798,13 @@ form .listing-form-submit-btn button[type=submit] {
     white-space: nowrap;
 }
     form .listing-form-submit-btn button[type=submit]{
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
     #form-section-submit.form-section-wrapper{
-    bottom: 60px;
+    bottom: 25px;
 }
     #item_products .acff-edit-button.edit-button, .add-listing-step .job-manager-error, .edit-listing-form .job-manager-error, .edit-listing-form .job-manager-info, .edit-listing-form .job-manager-message {
-    bottom: 70px;
+    bottom: 25px;
 }
     #wcfm_menu .wcfm_menu_items, #wcfm_menu .wcfm_menu_items a.wcfm_menu_item{
     height: 44px;

@@ -5,6 +5,10 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_style( 'child-style', get_stylesheet_uri() );
     wp_enqueue_script( 'child-script', get_stylesheet_directory_uri() . '/assets/script.js'/*,  ['c27-main'], \MyListing\get_assets_version(), true  */);
 
+    wp_deregister_script( 'mylisting-listing-form' );
+    wp_register_script( 'mylisting-listing-form', get_stylesheet_directory_uri() . '/assets/add-listing.js');
+
+
     if ( is_rtl() ) {
     	wp_enqueue_style( 'mylisting-rtl', get_template_directory_uri() . '/rtl.css', [], wp_get_theme()->get('Version') );
     }
@@ -4490,3 +4494,20 @@ add_action( 'woocommerce_created_customer', function( $customer_id ) {
       return;
     }
   }, 10, 3 );
+
+
+  /* Put this in the functions.php of your child theme */
+
+add_action( 'wp_enqueue_scripts', 'wpshout_dequeue_and_then_enqueue', 100 );
+
+function wpshout_dequeue_and_then_enqueue() {
+    // Dequeue (remove) parent theme script
+    wp_dequeue_script( 'mylisting-listing-form' );
+
+    // Enqueue replacement child theme script
+  /*   wp_enqueue_script(
+        'modified-child-script',
+        get_stylesheet_directory_uri() . '/js/modified-child-script.js',
+        array( 'jquery' )
+    ); */
+}
