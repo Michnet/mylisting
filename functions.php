@@ -4494,20 +4494,3 @@ add_action( 'woocommerce_created_customer', function( $customer_id ) {
       return;
     }
   }, 10, 3 );
-
-
-  /* Put this in the functions.php of your child theme */
-
-add_action( 'wp_enqueue_scripts', 'wpshout_dequeue_and_then_enqueue', 100 );
-
-function wpshout_dequeue_and_then_enqueue() {
-    // Dequeue (remove) parent theme script
-    wp_dequeue_script( 'mylisting-listing-form' );
-
-    // Enqueue replacement child theme script
-  /*   wp_enqueue_script(
-        'modified-child-script',
-        get_stylesheet_directory_uri() . '/js/modified-child-script.js',
-        array( 'jquery' )
-    ); */
-}
