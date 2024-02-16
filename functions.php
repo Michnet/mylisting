@@ -1106,6 +1106,9 @@ function get_user_rest( WP_REST_Request $request ) {
     
     if($params['with_meta'] == true){
       $user_meta = [];
+      if(function_exists('groups_get_user_groups')){
+        $user_meta['communities'] = groups_get_user_groups($user_obj-> ID);
+      }
       $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
       $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
       $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
