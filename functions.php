@@ -821,9 +821,11 @@ function get_google_calendar_link($listing, $start_date, $end_date = '') {
     if ( ! empty( $description ) ) {
         $description .= ' ';
     }
-
+    
+    $list_type = get_post_meta( $listing->get_id(), '_case27_listing_type', true);
+    $list_slug = get_post_field('post_name', $listing->get_id());
     // append listing link to the description
-    $description .= $listing->get_link();
+    $description .= 'https://lyvecity.com/'.$list_type.'/'.$list_slug;
 
     // generate date string
     $dates = date( 'Ymd\THis', strtotime( $start_date ) );
@@ -865,12 +867,25 @@ function get_event_dates($request){
         return $dates;
     }
 
+    $list_type = get_post_meta( $listing->get_id(), '_case27_listing_type', true);
+    $list_desc = get_post_meta( $listing->get_id(), '_short-description', true);
+    $list_slug = get_post_field('post_name', $listing->get_id());
+    $list_location = get_post_field('_job_location', $listing->get_id());
+    $l_title = $listing->get_name();
+    $l_tz = c27()->get_timezone_string();
+    $l_link = 'https://lyvecity.com/'.$list_type.'/'.$list_slug;
+
     if ( $field->get_type() === 'date' ) {
         $date = $field->get_value();
         if ( ! empty( $date ) && strtotime( $date ) ) {
             $dates[] = [
                 'start' => $date,
                 'end' => '',
+                'title' => $l_title,
+                'time_zone' => $l_tz,
+                'location' => $list_location,
+                'desc' => $list_desc,
+                'url' => $l_link,
                 'gcal_link' => get_google_calendar_link($listing, $date, '' ),
                 'is_over' => $now->getTimestamp() > strtotime( $date, $now->getTimestamp() ),
             ];
@@ -884,6 +899,11 @@ function get_event_dates($request){
         );
 
         foreach ( $dates as $key => $date ) {
+            $dates[$key]['title'] = $l_title;
+            $dates[$key]['time_zone'] = $l_tz;
+            $dates[$key]['location'] = $list_location;
+            $dates[$key]['desc'] = $list_desc;
+            $dates[$key]['url'] = $l_link;
             $dates[$key]['gcal_link'] = get_google_calendar_link($listing, $date['start'], $date['end']);
             $dates[$key]['is_over'] = $now->getTimestamp() > strtotime( $date['end'], $now->getTimestamp() );
         }
