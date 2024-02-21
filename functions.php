@@ -1050,9 +1050,11 @@ add_action('rest_api_init', function () {
             'permission_callback' => '__return_true'
         ),
     ));
-
-    $controller = new Bookings_REST_Booking_Controller();
-		$controller->register_routes();
+    
+    if(class_exists('Bookings_REST_Booking_Controller')){
+      $controller = new Bookings_REST_Booking_Controller();
+      $controller->register_routes();
+    }
 });
 
 //create 4-digit number
