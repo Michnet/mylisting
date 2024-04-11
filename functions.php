@@ -3976,7 +3976,7 @@ function get_listings_query($request) {
 		];
 
     if (isset( $include_ids ) ) {
-			$args['post__in'] = array($include_ids);
+			$args['post__in'] = explode(',', $include_ids);;
 		}
 
     if(isset($sort)){
