@@ -3948,6 +3948,7 @@ function get_listings_query($request) {
     $params = $request->get_params();
 
     $sort = $params['sort'] ?? null;
+    $include_ids = $params['include_ids'] ?? null;
     $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
     $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
     $page = absint( isset($params['page']) ? $params['page'] - 1 : 0 );
@@ -3970,6 +3971,10 @@ function get_listings_query($request) {
 			//'recurring_dates' => $params['event-date'] ?? [],
       'recurring_dates' => []
 		];
+
+    if (isset( $include_ids ) ) {
+			$args['post__in'] = $include_ids;
+		}
 
     if(isset($sort)){
       if($sort === 'top-rated'){
