@@ -2540,6 +2540,7 @@ function directory_query_args( $args, $request ) {
         'update_post_meta_cache' => false,
         'cache_results'          => false,
         //'fields'                 => $args['fields'],
+        //'post__in'                =>  $args['post__in'],
         'author'                 => $args['author'],
         'mylisting_orderby_rating' => $args['mylisting_orderby_rating'],
         'mylisting_ignore_priority' => $args['mylisting_ignore_priority'],
@@ -2559,6 +2560,8 @@ function directory_query_args( $args, $request ) {
     if (!empty($args['post__in'])) {
         $query_args['post__in'] = $args['post__in'];
     }
+
+    //$query_args['post__in'] = array('2089');
 
     if (!empty($args['post__not_in'])) {
         $query_args['post__not_in'] = $args['post__not_in'];
@@ -4084,7 +4087,7 @@ function get_listings_query($request) {
 		} else {
             if($type){
 			foreach ( (array) $type->get_advanced_filters() as $filter ) {
-				$args = $filter->apply_to_query( $args, $params );
+				//$args = $filter->apply_to_query( $args, $params );
 			}
         }
 		}
@@ -4100,8 +4103,8 @@ function get_listings_query($request) {
 		 */
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
-   if(isset($params['fields'])){
-    $params['_fields'] = $params['fields'];
+   if(isset($params['_fields'])){
+    $params['_fields'] = $params['_fields'];
     $request->set_query_params($params);
    }
 
