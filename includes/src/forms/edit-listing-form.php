@@ -169,11 +169,12 @@ class Edit_Listing_Form extends Add_Listing_Form {
 		$listing = \MyListing\Src\Listing::force_get( $this->job_id );
 
 		// add success message
-		$save_message = _x( 'Changes saved. Go to the publishing page for the last step', 'Edit listing form', 'my-listing' );
+		$save_message = _x( 'Changes saved', 'Edit listing form', 'my-listing' );
 		$post_status = get_post_status( $listing->get_id() );
 
 		if ( 'publish' === $post_status ) {
-			$save_message = $save_message . ' <a href="' . $listing->get_link() . '">' . _x( 'Complete page &rarr;', 'Edit listing form', 'my-listing' ) . '</a>';
+			//$nextLink = '<a href="' . $listing->get_link() . '">' . _x( 'Complete page &rarr;', 'Edit listing form', 'my-listing' ) . '</a>';
+			//$save_message = $save_message;
 		} elseif ( 'publish' === $original_status && 'pending' === $post_status ) {
 			$save_message = _x( 'Your changes have been submitted and your listing will be visible again once approved.', 'Edit listing form', 'my-listing' );
 		}

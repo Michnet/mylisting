@@ -3971,8 +3971,8 @@ function get_listings_query($request) {
       'search_keywords' => $params['search_keywords'] ?? '',
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       //'fields' =>  'ids',
-			//'recurring_dates' => $params['event-date'] ?? [],
-      'recurring_dates' => []
+			//'event-date' => isset($params['event-date']) ? $params['event-date'] : 'any-day',
+      //'recurring_dates' => []
 		];
 
     if (isset( $include_ids ) ) {
@@ -4087,7 +4087,7 @@ function get_listings_query($request) {
 		} else {
             if($type){
 			foreach ( (array) $type->get_advanced_filters() as $filter ) {
-				//$args = $filter->apply_to_query( $args, $params );
+				$args = $filter->apply_to_query( $args, $params );
 			}
         }
 		}
@@ -4105,7 +4105,7 @@ function get_listings_query($request) {
 
    if(isset($params['_fields'])){
     $params['_fields'] = $params['_fields'];
-    $request->set_query_params($params);
+    //$request->set_query_params($params);
    }
 
     $listings = directory_query_args($args, $request);
