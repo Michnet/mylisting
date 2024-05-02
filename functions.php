@@ -501,6 +501,15 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
  return $response;
 }, 10, 2);
 
+
+add_action('simple_jwt_login_response_auth_user', function($response, $user){
+ if($user){
+  $response['auth_user'] = $user;
+ }
+ return $response;
+}, 10, 2);
+
+
 add_action('simple_jwt_login_generate_payload', function(array $payload, $user){
   if($user){
     $payload['picture'] = get_avatar_url( $user->ID);
@@ -3596,6 +3605,7 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
       
       $meta_arr['id'] = intval($post_id);
       $meta_arr['title'] = get_the_title($post_id);
+      $meta_arr['slug'] = get_post_field( 'post_name', $post_id );
       $meta_arr['phone'] = $listing_meta['_job_phone'][0];
       $meta_arr['cover'] = $listing_meta['listing_cover'][0];
       $meta_arr['logo'] = $listing_meta['listing_logo'][0];
