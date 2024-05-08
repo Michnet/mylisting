@@ -482,21 +482,27 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
  if($request['name']){
    $user_name = $request['name'];
    $user_obj = get_user_by('login', $user_name);
-   $user_meta = [];
+   /* $user_meta = [];
    $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
    $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
-   $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
+   $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false; */
+
    //$avatar = get_avatar_url($user_obj->ID);
    //$user_obj->avatar = $avatar;
-   $request['id'] = $user_obj->ID;
+
+   /* $request['id'] = $user_obj->ID;
    $request['context'] = 'edit';
    $rest_request = new WP_REST_Request();
     $rest_request->set_query_params($request);
    $local_controller = new WP_REST_Users_Controller();
-   //var_dump($rest_request);
    $returnable_user = $local_controller->get_item($rest_request);
-   $response['user'] = $returnable_user->data;
-   $response['user']['user_meta'] = $user_meta;
+   $response['user'] = $returnable_user->data; */
+
+   $response['user']['id'] = $user_obj->ID;
+   $response['user']['name'] = $user_obj->display_name;
+   
+
+   //$response['user']['user_meta'] = $user_meta;
  }
  return $response;
 }, 10, 2);
@@ -504,7 +510,42 @@ add_action('simple_jwt_login_no_redirect_message', function($response, $request)
 
 add_action('simple_jwt_login_response_auth_user', function($response, $user){
  if($user){
-  $response['auth_user'] = $user;
+  $user_id = $user->ID;
+
+
+  $user_obj = get_user_by('id', $user_id);
+  $inner_req = array();
+
+    //$avatar = get_avatar_url($user_obj->ID);
+    //$user_obj->avatar = $avatar;
+    $inner_req['id'] = $user_obj->ID;
+    $inner_req['context'] = 'edit';
+    $rest_request = new WP_REST_Request();
+    $rest_request->set_query_params($inner_req);
+    $local_controller = new WP_REST_Users_Controller();
+    $returnable_user = $local_controller->get_item($rest_request);
+    $resp_user = $returnable_user->data;
+
+
+    foreach($resp_user as $p_key => $p_val){
+      if(!in_array($p_key, array('avatar_urls', 'description', 'name', 'registered_date', 'yoast_head_json', 'email', 'id'))){
+        unset($resp_user[$p_key]);
+      }
+    }
+    
+    //if($params['with_meta'] == true){
+      $user_meta = [];
+      if(function_exists('groups_get_user_groups')){
+        $user_meta['communities'] = groups_get_user_groups($user_obj-> ID);
+      }
+      $user_meta['likes'] = get_user_meta( $user_obj-> ID, 'likes', true ) ?? false;
+      $user_meta['following'] = get_user_meta( $user_obj-> ID, 'following', true ) ?? false;
+      $user_meta['reviewed'] = get_user_meta( $user_obj-> ID, 'reviewed_list', true ) ?? false;
+      $resp_user['user_meta'] = $user_meta; 
+    //}
+
+
+  $response['auth_user'] = $resp_user;
  }
  return $response;
 }, 10, 2);
