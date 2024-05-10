@@ -4003,6 +4003,7 @@ function get_listings_query($request) {
 
     $sort = $params['sort'] ?? null;
     $include_ids = $params['include_ids'] ?? null;
+    $exclude_ids = $params['exclude'] ?? null;
     $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
     $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
     $page = absint( isset($params['page']) ? $params['page'] - 1 : 0 );
@@ -4027,7 +4028,10 @@ function get_listings_query($request) {
 		];
 
     if (isset( $include_ids ) ) {
-			$args['post__in'] = explode(',', $include_ids);;
+			$args['post__in'] = explode(',', $include_ids);
+		}
+    if ($exclude_ids ) {
+			$args['post__not_in'] = explode(',', $exclude_ids);;
 		}
 
     if(isset($sort)){
