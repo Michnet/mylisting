@@ -2596,6 +2596,7 @@ function directory_query_args( $args, $request ) {
         'mylisting_ignore_priority' => $args['mylisting_ignore_priority'],
         'mylisting_prevent_duplicates' => true,
     );
+    
 
     if ( $args['posts_per_page'] < 0 ) {
         $query_args['no_found_rows'] = true;
@@ -2689,6 +2690,7 @@ function directory_query_args( $args, $request ) {
     } */
 
     // return results
+    var_dump($query_args);
     return new WP_REST_Response($posts, 200);
     /* 
     $args_for_ids = $query_args;
@@ -4011,16 +4013,18 @@ function get_listings_query($request) {
     //$meta_q = [];
 		$per_page = absint( isset($params['per_page']) ? $params['per_page'] : c27()->get_setting('general_explore_listings_per_page', 9));
 		$orderby = sanitize_text_field( isset($params['orderby']) ? $params['orderby'] : 'date' );
+    $order = sanitize_text_field(isset($params['order']) ? $params['order'] : 'DESC');
 		$context = sanitize_text_field( isset( $params['context'] ) ? $params['context'] : 'advanced-search' );
 
 		$args = [
-			'order' => sanitize_text_field( isset($params['order']) ? $params['order'] : 'DESC' ),
+			'order' => $order,
 			'offset' => $page * $per_page,
-			'orderby' => $orderby,
+			'orderby' => array( $orderby => $order),
 			'posts_per_page' => $per_page,
 			'tax_query' => [],
 			'meta_query' => [],
       'search_keywords' => $params['search_keywords'] ?? '',
+      'mylisting_ignore_priority' => $params['ignore_priority'] ?? false
 			//'fields' =>  $params['ids'] ? 'ids' : 'all',
       //'fields' =>  'ids',
 			//'event-date' => isset($params['event-date']) ? $params['event-date'] : 'any-day',
@@ -4156,6 +4160,7 @@ function get_listings_query($request) {
 		 *
 		 * @since 1.7.0
 		 */
+    var_dump($args);
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
    if(isset($params['_fields'])){
