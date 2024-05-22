@@ -2690,7 +2690,7 @@ function directory_query_args( $args, $request ) {
     } */
 
     // return results
-    var_dump($query_args);
+    //var_dump($query_args);
     return new WP_REST_Response($posts, 200);
     /* 
     $args_for_ids = $query_args;
@@ -3750,7 +3750,7 @@ function woo_calc_my_discount( $product_id ) {
 
     $sale = (float) $_product->get_sale_price();
     
-    var_dump($sale, $regular);
+    //var_dump($sale, $regular);
     if($sale > 0 ){
         if($regular > 0){
              $discount = round( 100 - ( $sale / $regular * 100));
@@ -4160,7 +4160,7 @@ function get_listings_query($request) {
 		 *
 		 * @since 1.7.0
 		 */
-    var_dump($args);
+    //var_dump($args);
 		do_action_ref_array( 'mylisting/get-listings/before-query', [ &$args, $type, $result ] );
 
    if(isset($params['_fields'])){
