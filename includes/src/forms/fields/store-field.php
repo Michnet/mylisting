@@ -36,10 +36,13 @@ class Store_Field extends Base_Field {
 
 	public function field_props() {
 		$this->props['type'] = 'store';
+		$this->props['acf_field_keys'] = '';
 	}
+	
 
 	public function get_editor_options() {
 		$this->getLabelField();
+		$this->fieldKey();
 		$this->getKeyField();
 		$this->getPlaceholderField();
 		$this->getDescriptionField();
@@ -49,6 +52,14 @@ class Store_Field extends Base_Field {
 		$this->getShowInAdminField();
 		$this->getShowInCompareField();
 		$this->getContentLockField();
+	}
+
+	public function fieldKey() { ?>
+		<div class="form-group w50">
+			<label>Field Key</label>
+			<input type="text" v-model="field.acf_field_keys"/>
+		</div>
+		<?php
 	}
 
 	protected function getContentLockField() { ?>

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php 
 	$edit_post = array(
 		'post_id'            => $_GET["job_id"], // Get the post ID
-		'field_groups'       => array(24), // Create post field group ID(s)
+	'fields'        		 => array($field['acf_field_keys']), // Create post field group ID(s)
 		'form'               => false,
 		//'return'             => '%post_url%',
 		'submit_value'       => 'Save Changes',
