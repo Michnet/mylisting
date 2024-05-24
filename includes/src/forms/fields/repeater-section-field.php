@@ -74,6 +74,7 @@ class Repeater_Section_Field extends Base_Field {
 	public function field_props() {
 		// for backwards compatibility
 		$this->props['type'] = 'repeater-section';
+		$this->props['allow_title'] = true;
 		$this->props['allow_sub_title'] = true;
 		$this->props['allow_description'] = true;
 		$this->props['singular_label'] = '';
@@ -96,6 +97,7 @@ class Repeater_Section_Field extends Base_Field {
 		$this->getPlaceholderField();
 		$this->getDescriptionField();
 		$this->allowLabels();
+		$this->allowTitle();
 		$this->allowSubTitle();
 		$this->allowDescription();
 		$this->getRequiredField();
@@ -122,6 +124,16 @@ class Repeater_Section_Field extends Base_Field {
 		<?php
 	}
 
+	public function allowTitle() { ?>
+		<div class="form-group w50">
+			<label>Enable title?</label>
+			<label class="form-switch mb0">
+				<input type="checkbox" v-model="field.allow_title">
+				<span class="switch-slider"></span>
+			</label>
+		</div>
+		<?php
+	}
 	public function allowSubTitle() { ?>
 		<div class="form-group w50">
 			<label>Enable subtitle?</label>

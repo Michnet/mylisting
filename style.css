@@ -4127,7 +4127,7 @@ input.acff-submit-button.acf-button:hover {
 .repeater-list {
     display: flex;
     flex-wrap: nowrap;
-    flex-direction: row;
+    flex-direction: row-reverse;
     grid-column-gap: 10px;
     overflow: hidden;
     overflow-x: auto;

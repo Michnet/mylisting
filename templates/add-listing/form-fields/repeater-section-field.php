@@ -33,21 +33,23 @@ if ( $uploaded_files ) {
 ?>
 
 	<div class="section-form-group">
-		<label>Section Heading
-			<span>The heading for <?php esc_attr_e( !empty($field['plural_label']) ? 'the '.$field['plural_label'] : 'this', 'my-listing' ) ?> section on the page</span>
-		</label>
-		<input type="text" 
+		<?php if ( isset( $field['allow_title'] ) && $field['allow_title'] === true ): ?>
+			<label>Section Heading
+				<span>The heading for <?php esc_attr_e( !empty($field['plural_label']) ? 'the '.$field['plural_label'] : 'this', 'my-listing' ) ?> section on the page</span>
+			</label>
+			<input type="text" 
 			name="<?php echo esc_attr( $key.'_title' ); ?>" 
 			placeholder="<?php esc_attr_e( 'Section Heading', 'my-listing' ) ?>"
 			value="<?php echo isset( $field['value'][0]['title'] ) ? esc_attr( $field['value'][0]['title'] ) : ''; ?>"
-			>
+			/>
+		<?php endif ?>
 	
 		<?php if ( isset( $field['allow_sub_title'] ) && $field['allow_sub_title'] === true ): ?>
 			<input type="text" 
 				name="<?php echo esc_attr( $key.'_sub_title' ); ?>" 
 				placeholder="<?php esc_attr_e( 'Section Sub-heading', 'my-listing' ) ?>"
 				value="<?php echo isset( $field['value'][0]['sub_title'] ) ? esc_attr( $field['value'][0]['sub_title'] ) : ''; ?>"
-				>
+				/>
 		<?php endif ?>
 
 		<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
@@ -85,6 +87,7 @@ if ( $uploaded_files ) {
 							</div>
 						<?php else : ?>
 							<div class="file-upload-field single-upload form-group-review-gallery ajax-upload">
+								<label>Item Image </label>
 								<input
 								type="file"
 								class="input-text review-gallery-input wp-job-manager-file-upload"
@@ -114,8 +117,6 @@ if ( $uploaded_files ) {
 
 
 			<div class="fields-box row mx-0">
-
-				
 				<label><?php esc_attr_e( !empty($field['singular_label']) ? ''.$field['singular_label'].' ' : '', 'my-listing' ) ?>Title </label>
 				<input required type="text" 
 				name="item_title">
@@ -126,7 +127,7 @@ if ( $uploaded_files ) {
 					name="item_sub_title" placeholder="<?php esc_attr_e( 'Item sub-title', 'my-listing' ) ?>">
 				<?php endif ?>
 
-				<?php if ( isset( $field['allow_description'] ) && $field['allow_description'] === true ): ?>
+				<?php if ( isset( $field['allow_item_description'] ) && $field['allow_item_description'] === true ): ?>
 					<label>Item description </label>
 					<textarea
 					cols="20" rows="2" class="input-text"
