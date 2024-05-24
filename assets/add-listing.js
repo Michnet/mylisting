@@ -13,7 +13,7 @@
                 if(active){
                     active.classList.remove('open_field');
                 }
-            fil.classList.add("open_field");
+            fil.classList.toggle("open_field");
             });
         }
     })
