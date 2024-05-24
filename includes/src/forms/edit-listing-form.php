@@ -97,7 +97,7 @@ class Edit_Listing_Form extends Add_Listing_Form {
 
 		$save_button_text = __( 'Save changes', 'my-listing' );
 		if ( 'publish' === get_post_status( $this->job_id ) && mylisting_get_setting( 'user_can_edit_published_submissions' ) === 'yes_moderated' ) {
-			$save_button_text = __( 'Submit changes for approval', 'my-listing' );
+			$save_button_text = __( 'Submit for approval', 'my-listing' );
 		}
 
 		$save_button_text = apply_filters( 'update_job_form_submit_button_text', $save_button_text );
