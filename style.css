@@ -3241,7 +3241,7 @@ li.product-category.product .count {
 .acf-fields>.acf-field {
     position: relative;
     margin: 0;
-    padding: 15px 12px!important
+    padding: 0px!important;
 }
 
 .acf-fields>.acf-field.acf-field-acfe-column[data-endpoint="1"] {
@@ -4122,12 +4122,14 @@ input.acff-submit-button.acf-button:hover {
 
 #submit-job-form .field-head label {
     margin-bottom: 0;
+    font-size: 16px;
+    color: var(--accent);
 }
 
 .repeater-list {
     display: flex;
     flex-wrap: nowrap;
-    flex-direction: row-reverse;
+    flex-direction: row;
     grid-column-gap: 10px;
     overflow: hidden;
     overflow-x: auto;
@@ -5363,4 +5365,14 @@ form .listing-form-submit-btn .preview-btn{
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
+}
+
+h2:empty {
+    display: none;
+}
+
+.mce-flow-layout {
+    white-space: nowrap;
+    overflow: hidden;
+    overflow-x: auto;
 }
