@@ -3271,7 +3271,7 @@ li.product-category.product .count {
 }
 
 #submit-job-form .form-section {
-    opacity: 1;
+    opacity: 1 !important;
     border-radius: 10px;
     margin-bottom: 0 !important;
 }
