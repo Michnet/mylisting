@@ -3946,7 +3946,7 @@ td.child {
 }
 
 .select2-container {
-    z-index: 9
+    z-index: 100000;
 }
 
 .wcfm-action-icon span {
@@ -5458,4 +5458,8 @@ h2:empty {
 
 .media-frame.hide-menu .media-frame-router {
     margin-bottom: 10px;
+}
+
+.select2-container--default .select2-results>.select2-results__options {
+    padding: 0 0;
 }
