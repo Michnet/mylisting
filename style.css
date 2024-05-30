@@ -1833,7 +1833,7 @@ span.acf-rel-item {
     position: absolute;
     top: 4px;
     right: 7px;
-    display: none
+    display: none;
 }
 
 .acf-icon.-small,.acf-icon.small {
@@ -1909,7 +1909,7 @@ span.acf-rel-item {
 }
 
 .acf-relationship .selection .values .acf-rel-item:hover .acf-icon {
-    display: block
+    display: block;
 }
 
 .acf-repeater .acf-row-handle .acf-icon {
@@ -1920,7 +1920,7 @@ span.acf-rel-item {
 }
 
 .acf-relationship .selection .choices,.acf-relationship .selection .values {
-    float: left
+    float: left;
 }
 
 .acf-relationship .selection .values {
@@ -1928,13 +1928,15 @@ span.acf-rel-item {
 }
 
 .acf-relationship .selection .choices, .acf-relationship .selection .values {
-    border-radius: 10px;
+    border-radius: 0;
     width: 50%;
 }
 
 .acf-relationship .list {
     height: 240px !important;
     border: none !important;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 a.acf-icon {
@@ -1962,6 +1964,10 @@ a.acf-icon {
     color: #fff
 }
 
+.acf-relationship .selection .values .acf-rel-item {
+    cursor: pointer;
+}
+
 .acf-relationship .list .acf-rel-item.disabled {
     opacity: .5;
     background: #c6c6c6;
@@ -1970,8 +1976,10 @@ a.acf-icon {
 .acf-relationship .list .acf-rel-item {
     padding: 5px;
     position: relative;
-    display: flex !important;
+    display: grid !important;
     font-size: 12px;
+    grid-template-columns: auto auto;
+    justify-content: start;
 }
 
 .filters.-f1 {
@@ -4375,6 +4383,7 @@ form .listing-form-submit-btn button[type=submit] {
   box-shadow: #00000075 0px 0px 8px 1px;
   height: 40px;
   margin-bottom: 25px;
+  flex-basis: auto !important;
 }
 
 
@@ -5187,8 +5196,6 @@ body.edit-listing-form.woocommerce-account .i-section .container .col-md-12 .row
     justify-content: flex-start;
 }
 
-:before {}
-
 .form-group.row:before {
     display: none;
 }
@@ -5375,4 +5382,80 @@ h2:empty {
     white-space: nowrap;
     overflow: hidden;
     overflow-x: auto;
+}
+#wcfm_products_manage_form_product-booking_head {
+    display: none;
+}
+
+#wcfm_products_manage_form_product-booking_head.booking {
+    display: block;
+}
+
+#wcfm_products_manage_form_yoast_head {
+    display: none;
+}
+
+.form-section-wrapper .heading-content:empty {
+    display: none;
+}
+
+#submit-job-form .heading-content {
+    display: none;
+}
+
+.values-list.ui-sortable li:hover .acf-rel-item {
+    background: var(--accent);
+    color: #fff;
+}
+
+.values-list.ui-sortable li:hover .acf-rel-item .acf-icon {
+    display: block;
+    background: orange;
+}
+
+.quicktags-toolbar input.button.button-small {
+    width: auto;
+    border-radius: 5px;
+}
+
+.quicktags-toolbar {
+    display: flex;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.acf-label .acf-required {
+    position: relative;
+    width: auto;
+    right: 0;
+    margin-bottom: 0;
+}
+
+.acf-field .acf-label label {
+    width: fit-content;
+    display: flex;
+}
+
+.acf-fields.acf-form-fields .acf-field {
+    margin-bottom: 12px;
+}
+
+.edit-listing-form a.acf-button.button {
+    border: 1px solid #8080802e;
+}
+
+.acf-editor-wrap .wp-editor-tabs {
+    display: none;
+}
+
+.media-modal.wp-core-ui.acf-media-modal h2.media-attachments-filter-heading {
+    display: none;
+}
+
+.media-modal-content  .media-router .active {
+    background: var(--accent);
+}
+
+.media-frame.hide-menu .media-frame-router {
+    margin-bottom: 10px;
 }
