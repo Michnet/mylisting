@@ -28,6 +28,7 @@ add_action( 'admin_init', 'edit_theme_caps');
 //Define Constants
 
 $frontend_link = 'https://lyvecity.com';
+$backend_link = 'https://lyvecityclub.com';
 
 function lc_disable_admin_bar() {
   if (current_user_can('administrator') ) {
