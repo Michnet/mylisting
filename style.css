@@ -1833,7 +1833,9 @@ span.acf-rel-item {
     position: absolute;
     top: 4px;
     right: 7px;
-    display: none;
+    display: block;
+    background: white;
+    box-shadow: #00000080 0px 1px 7px 1px;
 }
 
 .acf-icon.-small,.acf-icon.small {
