@@ -31,8 +31,8 @@ if ( $uploaded_files ) {
 }
 
 ?>
-
 	<div class="section-form-group">
+	
 		<?php if ( isset( $field['allow_title'] ) && $field['allow_title'] === true ): ?>
 			<label>Section Heading
 				<span>The heading for <?php esc_attr_e( !empty($field['plural_label']) ? 'the '.$field['plural_label'] : 'this', 'my-listing' ) ?> section on the page</span>
@@ -65,8 +65,8 @@ if ( $uploaded_files ) {
     
 <div class="resturant-menu-repeater" data-uploaded-list="<?php echo htmlspecialchars(json_encode(! empty( $files ) ? $files : []), ENT_QUOTES, 'UTF-8') ?>" data-list="<?php echo htmlspecialchars(json_encode( isset( $field['value'] ) ? $uploaded_files : []), ENT_QUOTES, 'UTF-8') ?>">
 	<div class="repeater-list" data-repeater-list="<?php echo esc_attr( (isset($field['name']) ? $field['name'] : $key) ) ?>">
+	
 		<div data-repeater-item class="repeater-field-wrapper">
-
 			<?php if ( isset( $field['allow_item_images'] ) && $field['allow_item_images'] === true ): ?>
 				<div class="field-type-file form-group">
 					<div class="field ">
@@ -87,7 +87,7 @@ if ( $uploaded_files ) {
 							</div>
 						<?php else : ?>
 							<div class="file-upload-field single-upload form-group-review-gallery ajax-upload">
-								<label>Item Image </label>
+								<label><?php esc_attr_e( !empty($field['singular_label']) ? ''.$field['singular_label'].' ' : 'Item ', 'my-listing' ) ?>Image </label>
 								<input
 								type="file"
 								class="input-text review-gallery-input wp-job-manager-file-upload"
@@ -97,7 +97,8 @@ if ( $uploaded_files ) {
 								style="display: none;"
 								>
 								<div class="uploaded-files-list review-gallery-images">
-									<label class="upload-file review-gallery-add" for="mylisting_accordion_photo">
+								
+									<label class="upload-file review-gallery-add" for="mylisting_accordion_photo" >
 										<i class="mi file_upload"></i>
 										<div class="content"></div>
 									</label>
@@ -105,6 +106,7 @@ if ( $uploaded_files ) {
 									<div class="job-manager-uploaded-files">
 									</div>
 								</div>
+								
 
 								<small class="description">
 									<?php printf( _x( 'Maximum file size: %s.', 'Add listing form', 'my-listing' ), size_format( wp_max_upload_size() ) ); ?>
@@ -122,13 +124,13 @@ if ( $uploaded_files ) {
 				name="item_title">
 
 				<?php if ( isset( $field['allow_item_sub_title'] ) && $field['allow_item_sub_title'] === true ): ?>
-					<label>Sub-title </label>
+					<label><?php esc_attr_e( !empty($field['singular_label']) ? ''.$field['singular_label'].' ' : 'Item ', 'my-listing' ) ?>Sub-title </label>
 					<input type="text" 
 					name="item_sub_title" placeholder="<?php esc_attr_e( 'Item sub-title', 'my-listing' ) ?>">
 				<?php endif ?>
 
 				<?php if ( isset( $field['allow_item_description'] ) && $field['allow_item_description'] === true ): ?>
-					<label>Item description </label>
+					<label><?php esc_attr_e( !empty($field['singular_label']) ? ''.$field['singular_label'].' ' : 'Item ', 'my-listing' ) ?>Description</label>
 					<textarea
 					cols="20" rows="2" class="input-text"
 					name="item_description"

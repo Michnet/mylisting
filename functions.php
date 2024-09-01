@@ -408,6 +408,17 @@ function add_listing_fields($post_id) {
    $excer = get_post_meta($post_id, '_short-description', true);
    $featImg = get_post_meta($post_id, '_featured-image', true)[0];
    $existing_grp = get_post_meta($post_id, 'community_id', true) ?? false;
+   $initialCoverImg = get_post_meta($post_id, '_job_cover', true);
+   $coverImg = is_array($initialCoverImg) ? $initialCoverImg[0] : $initialCoverImg;
+   $imgs = get_post_meta($post_id, '_job_gallery', true) ?? false;
+   //$imgs = is_array($initialImgs) ? $initialImgs[0] : $initialImgs;
+   $imgs_arr = array();
+
+   if(is_array($imgs)){
+      foreach ($imgs as $img) {
+        $imgs_arr[] = is_string($img) && str_contains($img, 'http')  ? $img : wp_get_attachment_image_url($img, 'full');
+      }
+   }
 
    $imId = attachment_url_to_postid( $featImg);
 
@@ -437,7 +448,8 @@ function add_listing_fields($post_id) {
       set_post_thumbnail( $post_id, $imId );
       wp_update_post( $my_args );
       update_post_meta( $post_id, 'listing_logo', $listing->get_logo());
-      update_post_meta( $post_id, 'listing_cover', $listing->get_cover_image());
+      update_post_meta( $post_id, 'listing_cover', is_string($coverImg) && str_contains($coverImg, 'http') ? $coverImg : wp_get_attachment_image_url($coverImg, 'full'));
+      update_post_meta( $post_id, 'listing_gallery', $imgs_arr);
       if(!$existing_grp){
         if($group_id){
           add_post_meta( $post_id, 'community_id', $group_id);
@@ -465,7 +477,7 @@ function add_product_fields($post_id) {
   
       $meta_arr['slug'] = get_post_field( 'post_name', intval($listingId) );
       $meta_arr['phone'] = $listing_meta['_job_phone'][0] ?? null;
-      $meta_arr['cover'] = $listing_meta['listing_cover'][0] ?? null;
+      $meta_arr['cover'] = $listing_meta['listing_cover'] ?? null;
       $meta_arr['logo'] = $listing_meta['listing_logo'][0] ?? null;
       $meta_arr['whatsapp'] = $listing_meta['_whatsapp-number'][0] ?? null;
   
@@ -657,6 +669,16 @@ add_filter( 'register_taxonomy_args', function( $args, $taxonomy ) {
   return $args;
 
 }, 10, 2 );
+
+//ACF image field 
+/* 
+add_filter('acf/update_value/key=field_66b0fba20063b', function ($value, $post_id, $field, $original){
+  if( is_int($value)) {
+      $value =  wp_get_attachment_image_url($value, 'full');
+  }
+  return $value;
+
+}, 11, 4); */
 
 //ACF Rest image
 add_filter('acf/rest/format_value_for_rest/type=image', function ($value_formatted, $post_id, $field, $value, $format){
@@ -1685,9 +1707,9 @@ function get_pdt_attribute_tax($request){
 
 function listing_user_actions( $request ) {
     $parameters = $request->get_params();
-    $postId = $parameters['liked_id'] ? $parameters['liked_id'] : '';
-    $removeId = $parameters['unliked_id'] ? $parameters['unliked_id'] : '';
-    $userId = $parameters['user_id'] ? $parameters['user_id'] : '';
+    $postId = isset($parameters['liked_id']) ? intval($parameters['liked_id']) : '';
+    $removeId = isset($parameters['unliked_id']) ? intval($parameters['unliked_id']) : '';
+    $userId = isset($parameters['user_id']) ? $parameters['user_id'] : '';
 
     
     $baseArr = array();
@@ -1847,7 +1869,8 @@ function process_field($field, &$_data, $post_id, $meta){
       break;
 
   case 'gallery':
-      $gallery = get_post_meta($post_id, '_job_gallery', true);
+      //$gallery = get_post_meta($post_id, '_job_gallery', true);
+      $gallery = get_post_meta($post_id, 'listing_gallery', true);
       $_data['gallery'] = $gallery ?? null;
       break;
 
@@ -1893,8 +1916,10 @@ function process_field($field, &$_data, $post_id, $meta){
       break;
       
   case 'cover':
-      $cover = get_post_meta($post_id, '_job_cover', true);
-      $_data['cover'] = $cover  ? $cover[0] : null;
+      //$cover = get_post_meta($post_id, '_job_cover', true);
+      $cover = get_post_meta($post_id, 'listing_cover', true);
+      //$_data['cover'] = $cover  ? $cover[0] : null;
+      $_data['cover'] = $cover  ? $cover : null;
   break;
 
   case 'latitude':
@@ -2008,7 +2033,7 @@ function my_rest_prepare_listing( $data, $post, $request ) {
  
       $_data['item_min_price'] = $meta['item_min_price'] ??  null;
       $_data['item_min_price_html'] = $meta['item_min_price_html'] ??  null;
-      $_data['rating'] = $meta['user_rating'] ? intval($meta['user_rating']) : null;
+      $_data['rating'] = array_key_exists('user_rating', $meta) ? intval($meta['user_rating']) : null;
       $_data['food_menu'] = $meta['_food-drinks-menu']   ?? null;
       $_data['about_us']['our_history'] = $meta['_our-history']   ?? null; 
       $_data['about_us']['our_vision'] = $meta['_our-vision']   ?? null;
@@ -2041,8 +2066,10 @@ function my_rest_prepare_listing( $data, $post, $request ) {
       $_data['venue'] = $meta['_venue']  ?? null;
       $_data['event_type'] = $meta['_event-type'] ?? null;
       $_data['greeting'] = $meta['_greeting']  ?? null;
-      $_data['cover'] = $meta['_job_cover'][0] ??  null;
-      $_data['gallery'] = $meta['_job_gallery'] ?? null;
+      //$_data['cover'] = $meta['_job_cover'][0] ??  null;
+      $_data['cover'] = $meta['listing_cover'] ??  null;
+      //$_data['gallery'] = $meta['_job_gallery'] ?? null;
+      $_data['gallery'] = $meta['listing_gallery'] ?? null;
       $_data['logo'] = $meta['_job_logo'][0] ?? null;
       $_data['website'] = $meta['_job_website']  ?? null;
       $_data['type'] = $meta['_case27_listing_type']  ?? null;
@@ -2433,8 +2460,8 @@ add_action( 'rest_api_init', 'add_term_meta_rest' );
     function term_meta_callback( $term, $field_name, $request) {
         $meta_0bj = new stdClass();
         $meta = get_term_meta( $term['id'] );
-        $meta_0bj->icon_image_url = $meta['icon_image'][0] ? wp_get_attachment_url(number_format($meta['icon_image'][0])) : null;
-        $meta_0bj->image_url = $meta['image'][0] ? wp_get_attachment_url(intval($meta['image'][0])) : null;
+        $meta_0bj->icon_image_url = array_key_exists('icon_image', $meta) ? wp_get_attachment_url(number_format($meta['icon_image'][0])) : null;
+        $meta_0bj->image_url = array_key_exists('image', $meta) ? wp_get_attachment_url(intval($meta['image'][0])) : null;
         $meta_0bj->color = $meta['color'][0]  ?? null;
       	$meta_0bj->icon = $meta['icon'][0]  ?? null;
         $meta_0bj->rl_awesome = $meta['rl_awesome'][0]  ?? null;
@@ -3622,8 +3649,34 @@ add_filter( 'wp_rest_cache/allowed_endpoints', 'custom_api_cache', 10, 1);
 
 //listing products
 
-function listing_pdts_edit( $value, $post_id, $field  ) {
+function acf_pdt_edit( $value, $post_id, $field  ) {
+	// vars
+	$field_name = $field['name'];
+	$global_name = 'is_updating_' . $field_name;
 	
+	// - this prevents an inifinte loop
+	if( !empty($GLOBALS[ $global_name ]) ) return $value;
+	
+	// set global variable to avoid inifite loop
+	$GLOBALS[ $global_name ] = 1;
+	
+	update_post_meta( $post_id, '_'.$field_name, $value);
+	
+	// reset global varibale to allow this filter to function as per normal
+	$GLOBALS[ $global_name ] = 0;
+	
+	// return
+    return $value;
+    
+}
+
+$acf_pdt_fields = array('regular_price','price','stock');
+foreach ($acf_pdt_fields as  $field) {
+   add_filter('acf/update_value/name='.$field, 'acf_pdt_edit', 10, 3);
+}
+
+
+function listing_pdts_edit( $value, $post_id, $field  ) {
 	// vars
 	$field_name = $field['name'];
 	$field_key = $field['key'];
@@ -3634,6 +3687,19 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
 	
 	// set global variable to avoid inifite loop
 	$GLOBALS[ $global_name ] = 1;
+  $meta_arr = array(); 
+
+  //$listingId = intval(get_post_meta($post_id, 'listing', true)[0]);
+  $listing_meta = get_post_meta($post_id);
+  
+  $meta_arr['id'] = intval($post_id);
+  $meta_arr['title'] = get_the_title($post_id);
+  $meta_arr['slug'] = get_post_field( 'post_name', $post_id );
+  $meta_arr['phone'] = $listing_meta['_job_phone'][0];
+  $meta_arr['cover'] = $listing_meta['listing_cover'];
+  $meta_arr['logo'] = $listing_meta['listing_logo'][0];
+  $meta_arr['whatsapp'] = $listing_meta['_whatsapp-number'][0];
+  $meta_arr['type'] = $listing_meta['_case27_listing_type'][0]; 
 	
 	// loop over selected posts and add this $post_id
 	if( is_array($value) ) {
@@ -3641,21 +3707,6 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
     foreach($value as $pdt_id) {
 
     //$pdt_id = $value[0];
-    
-     $meta_arr = array(); 
-
-      //$listingId = intval(get_post_meta($post_id, 'listing', true)[0]);
-      $listing_meta = get_post_meta($post_id);
-      
-      $meta_arr['id'] = intval($post_id);
-      $meta_arr['title'] = get_the_title($post_id);
-      $meta_arr['slug'] = get_post_field( 'post_name', $post_id );
-      $meta_arr['phone'] = $listing_meta['_job_phone'][0];
-      $meta_arr['cover'] = $listing_meta['listing_cover'][0];
-      $meta_arr['logo'] = $listing_meta['listing_logo'][0];
-      $meta_arr['whatsapp'] = $listing_meta['_whatsapp-number'][0];
-      $meta_arr['type'] = $listing_meta['_case27_listing_type'][0]; 
-  
       update_post_meta( $pdt_id, 'listing_data', $meta_arr);
     }
 	
@@ -3705,12 +3756,12 @@ function listing_pdts_edit( $value, $post_id, $field  ) {
 add_filter('acf/update_value/key=field_64cbdd20462a9', 'listing_pdts_edit', 10, 3);
 add_filter('acf/update_value/key=field_64cbcdca213b0', 'listing_pdts_edit', 10, 3);
 
-/* add_filter( 'mylisting\links-list', function( $links ) {
+add_filter( 'mylisting\links-list', function( $links ) {
   // Add new link
-  $links['WhatsApp'] = [
-      'name' => 'WhatsApp',
-      'key' => 'WhatsApp',
-      'icon' => 'fa fa-whatsapp',
+  $links['Ticktok'] = [
+      'name' => 'Ticktok',
+      'key' => 'Ticktok',
+      'icon' => 'fab fa-tiktok',
       'color' => '#128c7e',
   ];
   
@@ -3718,7 +3769,7 @@ add_filter('acf/update_value/key=field_64cbcdca213b0', 'listing_pdts_edit', 10, 
   unset( $links['Pinterest'] );
   unset( $links['DeviantArt'] );
   return $links;
-} ); */
+} );
 
 
 add_filter( 'mylisting/listing-types/register-fields', function( $fields ) {
@@ -3729,9 +3780,10 @@ add_filter( 'mylisting/listing-types/register-fields', function( $fields ) {
   $fields[] = \MyListing\Src\Forms\Fields\Features_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Repeater_Text_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Statistics_Field::class;
-  $fields[] = \MyListing\Src\Forms\Fields\Store_Field::class;
+  $fields[] = \MyListing\Src\Forms\Fields\Acf_Field_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Repeater_Section_Field::class;
   $fields[] = \MyListing\Src\Forms\Fields\Faqs_Field::class;
+  $fields[] = \MyListing\Src\Forms\Fields\Color_Select_Field::class;
   $fields[] = \MyListing\Src\Listing_Types\Content_Blocks\General_Repeater_Block::class;
   
   return $fields;
@@ -4006,9 +4058,10 @@ function get_listings_query($request) {
     $params = $request->get_params();
 
     $sort = $params['sort'] ?? null;
+    $author = isset($params['author']) ? $params['author'] : null;
     $include_ids = $params['include_ids'] ?? null;
     $exclude_ids = $params['exclude'] ?? null;
-    $listing_type_obj = $params['listing_type'] ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
+    $listing_type_obj = array_key_exists('listing_type', $params)  ? ( get_page_by_path( $params['listing_type'], OBJECT, 'case27_listing_type' ) ) : null;
     $type = $listing_type_obj ? new \MyListing\Src\Listing_Type( $listing_type_obj ) : null;
     $page = absint( isset($params['page']) ? $params['page'] - 1 : 0 );
 
@@ -4033,6 +4086,9 @@ function get_listings_query($request) {
       //'recurring_dates' => []
 		];
 
+    if (isset( $author ) ) {
+			$args['author'] = intval($author);
+		}
     if (isset( $include_ids ) ) {
 			$args['post__in'] = explode(',', $include_ids);
 		}
@@ -4589,3 +4645,87 @@ add_action( 'woocommerce_created_customer', function( $customer_id ) {
       return;
     }
   }, 10, 3 );
+
+  //Rename attachments
+  // The filter runs when resizing an image to make a thumbnail or intermediate size.
+add_filter( 'image_make_intermediate_size', 'wpse_123240_rename_intermediates' );
+function wpse_123240_rename_intermediates( $image ) {
+    // Split the $image path into directory/extension/name
+    $info = pathinfo($image);
+    $dir = $info['dirname'] . '/';
+    $ext = '.' . $info['extension'];
+    $name = wp_basename( $image, "$ext" );
+
+    // Get image information 
+    // Image edtor is used for this
+    $img = wp_get_image_editor( $image );
+    // Get image size, width and height
+    $img_size = $img->get_size();
+
+    // Image prefix for builtin sizes
+    // Note: beware possible conflict with custom images sizes with the same width
+    $widths = [];
+    $size_based_img_name_suffix = '';
+    foreach ( get_intermediate_image_sizes() as $_size ) {
+        if ( in_array( $_size, [ 'thumbnail', 'medium', 'medium_large', 'large', 'big_thumb' ] ) ) {
+            $width = get_option( "{$_size}_size_w" );
+            if ( ! isset( $widths[ $width ] ) ) {
+                $widths[ $width ]  = $_size;
+            }
+        }
+    }
+    if ( array_key_exists( $img_size[ 'width' ], $widths ) ) {
+        $size_based_img_name_suffix = '-' . $widths[ $img_size['width'] ];
+        $name_prefix = substr( $name, 0, strrpos( $name, '-' ) );
+    } else {
+        $name_prefix = $name;
+    }
+
+    // Build our new image name
+    $new_name = $dir  . $name_prefix . $size_based_img_name_suffix . $ext;
+
+    // Rename the intermediate size
+    $did_it = rename( $image, $new_name );
+
+    // Renaming successful, return new name
+    if( $did_it )
+        return $new_name;
+
+    return $image;
+}
+
+//Modifies ajax requests from our select2 dropdown, $args = WP_Term_Query arguments
+function custom_acf_taxonomy_hierarchy( $args, $field, $post_id ){
+  //default to 0 (top-level terms only) unless we get a different parent with the request
+  $args['parent'] = isset($_POST['parent']) ? intval($_POST['parent']) : 0;
+  //$args['parent'] = 701;
+  
+  //To allow multiple top-level selections, we can go back to the top of the taxonomy tree after we reach the end of a branch
+  /*
+  if(!empty($args['parent'])){
+      $child_terms = get_term_children($args['parent'],'YOUR_TAXONOMY_SLUG'); //change to your taxonomy slug
+      if(empty($child_terms) || is_wp_error($child_terms)) $args['parent'] = 0;
+  }
+  */
+  //var_dump($_POST["parent"]);
+  return $args;
+}
+add_filter('acf/fields/related_terms/query/key=field_6658b886e5430', 'custom_acf_taxonomy_hierarchy',10,3);
+
+
+//Make the javascript available in the admin when editing a post with ACF
+function custom_admin_enqueue_scripts(){        
+  wp_enqueue_script('custom-acf-admin-js', get_stylesheet_directory_uri() . '/assets/custom-acf-admin.js',['jquery']);
+}
+add_action('acf/input/admin_enqueue_scripts','custom_admin_enqueue_scripts');
+
+//Remove dokan redirect
+remove_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect', 1, 2 );
+
+function add_media_upload_scripts() {
+  if ( is_admin() ) {
+       return;
+     }
+  wp_enqueue_media();
+}
+add_action('wp_enqueue_scripts', 'add_media_upload_scripts');

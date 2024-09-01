@@ -27,7 +27,7 @@ body.edit-listing-form.woocommerce-account .mlduo-account-menu .container
 {width : 100%;box-sizing: border-box;}
 
 body.edit-listing-form.woocommerce-account .i-section .container {
-    padding-bottom: 20px;
+    padding-bottom: 0;
 }
 
 body.edit-listing-form.woocommerce-account .i-section .container .row {
@@ -39,7 +39,7 @@ body.edit-listing-form.woocommerce-account .i-section .container .row {
 
 .edit-listing-form .mlduo-account-menu {position: absolute;top: 0;right: 0;left: 0;}
 
-.edit-listing-form .elementor-widget-wrap, .edit-listing-form .elementor-widget, .edit-listing-form .elementor-column {position: initial;}
+.edit-listing-form .elementor-widget-wrap, .edit-listing-form .elementor-widget, .edit-listing-form .elementor-column {position: initial;justify-content: center;}
 
 .edit-listing-form .elementor-widget .modal-content {
     margin: 0 auto !important;
@@ -153,15 +153,17 @@ div#wcfm_products_manage_form_costs_head,
 div#wcfm_products_manage_form_costs_expander,
 div#wcfm_products_manage_form_availability_expander,
 div#wcfm_products_manage_form_availability_head,
-div#wcfm_products_manage_form_booking_options_head,
-::-webkit-scrollbar, p.catalog_visibility.wcfm_title.wcfm_full_ele.catalog_visibility_ele, input#_wc_booking_has_persons, #wcfm-main-contentainer p.has_person_ele_title, input#_wc_booking_has_resources, #wcfm-main-contentainer p.has_resource_ele_title, select#catalog_visibility {
+div#wcfm_products_manage_form_booking_options_head, p.catalog_visibility.wcfm_title.wcfm_full_ele.catalog_visibility_ele, input#_wc_booking_has_persons, #wcfm-main-contentainer p.has_person_ele_title, input#_wc_booking_has_resources, #wcfm-main-contentainer p.has_resource_ele_title, select#catalog_visibility {
     display: none !important;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
 
 * {
     -ms-overflow-style: none;
-    scrollbar-width: none
+    scrollbar-width: none;
 }
 
 .page_collapsible, .wcfm-collapse a.page_collapsible_dummy {
@@ -184,7 +186,8 @@ div#wcfm_products_manage_form_booking_options_head,
 }
 
 .header,.header.header-style-alternate,.header.header-style-alternate:not(.header-scroll),.header.header-style-default {
-    height: 60px!important
+    height: 60px!important;
+    z-index: 999999;
 }
 
 header.hide-until-load {
@@ -1464,7 +1467,7 @@ section.i-section.similar-listings .grid-item {
 }
 
 .c27-top-content-margin {
-    height: 60px
+    height: 60px !important;
 }
 
 body.single.single-job_listing .c27-top-content-margin {
@@ -1833,7 +1836,7 @@ span.acf-rel-item {
     position: absolute;
     top: 4px;
     right: 7px;
-    display: block;
+    display: block !important;
     background: white;
     box-shadow: #00000080 0px 1px 7px 1px;
 }
@@ -1850,13 +1853,18 @@ span.acf-rel-item {
     display: none;
     top: 0;
     right: 0;
-    padding: 5px
+    padding: 5px;
+    opacity: 0.8;
 }
 
 .acf-icon.dark {
     border-color: transparent!important;
-    background: #23282d;
-    color: #eee
+    background: #9d9d9d;
+    color: black !important;
+}
+
+.acf-actions .acf-icon[data-name=edit] {
+    display: none;
 }
 
 .acf-icon:before {
@@ -1935,10 +1943,28 @@ span.acf-rel-item {
 }
 
 .acf-relationship .list {
-    height: 240px !important;
+    height: calc(100vh - 300px) !important;
     border: none !important;
     overflow: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
+    -ms-overflow-style: initial;
+    scrollbar-width: 40px !important;
+}
+
+.acf-relationship .list.values-list::-webkit-scrollbar {
+    display: block !important;
+    width: 40px;
+    height: 60px;
+    background: red;
+}
+
+.acf-relationship .list.values-list::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: red;
+}
+.acf-relationship .list.values-list::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #c8c8c8;
 }
 
 a.acf-icon {
@@ -1967,7 +1993,7 @@ a.acf-icon {
 }
 
 .acf-relationship .selection .values .acf-rel-item {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .acf-relationship .list .acf-rel-item.disabled {
@@ -1989,8 +2015,9 @@ a.acf-icon {
 }
 
 .acf-relationship .filters {
-    border: #ccd0d4 solid 1px;
-    border-radius: 5px;
+    border-bottom: #ccd0d4 solid 1px;
+    border-width: 0 0 1px 0;
+    border-radius: 0;
 }
 
 .has-value .hide-if-value {
@@ -2027,7 +2054,6 @@ a.acf-icon {
 
 .modal.edit-modal {
     overflow: hidden;
-    overflow-y: auto;
     background: rgb(0 0 0 / 41%);
     visibility: visible
 }
@@ -2692,8 +2718,14 @@ ul#product_cats_checklist {
 }
 
 .acf-form-submit {
-    margin-bottom: 30px;
-    float: none!important
+    margin-bottom: 0;
+    float: none!important;
+    position: fixed;
+    bottom: 0;
+    margin: 0 auto;
+    padding: 0 15px;
+    right: 0;
+    z-index: 9;
 }
 
 input.acfef-submit-button.acf-button.button.button-primary {
@@ -3307,6 +3339,10 @@ li.product-category.product .count {
     border-width: 0;
     background: 0 0!important;
     border-bottom: none;
+}
+
+.select2-search.select2-search--inline.ui-sortable-handle {
+    flex-basis: 100%;
 }
 
 #submit-job-form .social-networks-repeater .select2-container--default .select2-selection--single, #submit-job-form .work-hours-repeater .select2-container--default .select2-selection--single {
@@ -3948,7 +3984,12 @@ td.child {
 }
 
 .select2-container {
-    z-index: 100000;
+    z-index: 999999;
+}
+
+.acf-gallery-toolbar 
+ .select2.select2-container.select2-container--default.ui-sortable {
+    display: none;
 }
 
 .wcfm-action-icon span {
@@ -4023,11 +4064,12 @@ button.delete-repeater-item {
 .acf-field.acf-field-message {
     border: 1px solid #e8e8e8 !important;
     background: #e8e8e8;
-    margin: 0 10px;
+    padding: 10px !important;
+    /* border-left: 5px solid var(--e-a-color-warning) !important; */
 }
 
-.acf-field textarea, .acf-field input[type=text] {
-    padding-left: 0;
+.acf-field input[type=text] {
+    padding-left: 8px;
 }
 
 .acf-field textarea {height: fit-content;}
@@ -4037,12 +4079,14 @@ button.delete-repeater-item {
     /* color: #fff; */
     min-width: 120px;
     box-shadow: #0000003b 1px 2px 9px 3px;
-    margin-top: 15px;
+    margin-top: 0;
     font-weight: bold;
     position: fixed;
     bottom: 21px;
     z-index: 10;
     right: 70px;
+    padding: 10px 20px;
+    margin-bottom: 0;
 }
 
 input.acff-submit-button.acf-button:hover {
@@ -4060,11 +4104,17 @@ input.acff-submit-button.acf-button:hover {
 
 .acf-relationship {
     border: none !important;
+    float: none !important;
 }
 
 .acf-image-uploader .image-wrap img {
     object-fit: cover;
     min-width: 100%;
+}
+
+.acf-field[data-name=fea_featured_image] img {
+    max-height: 200px;
+    object-fit: contain;
 }
 
 .add-listing-nav {
@@ -4082,6 +4132,8 @@ input.acff-submit-button.acf-button:hover {
 
 #form-section-submit.form-section-wrapper .form-section {
     overflow: visible;
+    width: fit-content;
+    margin-right: 0;
 }
 #submit-job-form.c27-submit-listing-form .form-section-wrapper{
    margin-bottom: 10px;
@@ -4089,6 +4141,7 @@ input.acff-submit-button.acf-button:hover {
 
 #submit-job-form.c27-submit-listing-form .form-section-wrapper.form-footer {
     margin-bottom: 0;
+    width: fit-content;
 }
 #submit-job-form.c27-submit-listing-form .active.form-section-wrapper {}
 
@@ -4380,6 +4433,7 @@ ol {
     justify-content: flex-end;
     /* position: fixed; */
     padding-right: 20px;
+    width: fit-content;
 }
 form .listing-form-submit-btn button[type=submit] {
   box-shadow: #00000075 0px 0px 8px 1px;
@@ -4392,9 +4446,13 @@ form .listing-form-submit-btn button[type=submit] {
 /*media qs start*/
 
 @media screen and (min-width: 1201px) {
+    .c27-top-content-margin {
+        height: 60px !important;
+    }
+
     #c27-explore-listings .finder-map {
     width: 400px;
-}
+    }
     #c27-single-listing {
         background:#fdfdfd;
         flex-wrap: wrap
@@ -5248,6 +5306,11 @@ input[name="password"] {
     line-height: 40px;
     bottom: 10px;
     z-index: 2;
+    display: none;
+}
+
+.woocommerce-page form .show-toggle-password, .woocommerce form .show-toggle-password{
+    top: 40px;
 }
 
 .password-toggle-icon i {
@@ -5435,7 +5498,20 @@ h2:empty {
 
 .acf-field .acf-label label {
     width: fit-content;
-    display: flex;
+    display: flex !important;
+}
+
+.fea-modal-content .acf-field .acf-label label {
+    color: var(--accent);
+}
+
+.fea-modal-content .acf-fields.acf-form-fields .acf-field {
+    margin-bottom: 20px;
+}
+
+.acf-accordion .acf-accordion-title label {
+    color: var(--accent);
+    font-size: 15px;
 }
 
 .acf-fields.acf-form-fields .acf-field {
@@ -5445,6 +5521,10 @@ h2:empty {
 
 .edit-listing-form a.acf-button.button {
     border: 1px solid #8080802e;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px !important;
+    margin-right: 10px;
 }
 
 .acf-editor-wrap .wp-editor-tabs {
@@ -5455,14 +5535,164 @@ h2:empty {
     display: none;
 }
 
-.media-modal-content  .media-router .active {
+.media-modal-content .media-router .media-menu-item {
     background: var(--accent);
+    color: #fff;
+}
+.media-modal-content  .media-router .active {
+    background: #c5c5c5;
+    color: #4e4e4e;
 }
 
 .media-frame.hide-menu .media-frame-router {
     margin-bottom: 10px;
+    top: 40px;
 }
 
 .select2-container--default .select2-results>.select2-results__options {
     padding: 0 0;
+}
+
+button.editor_view {padding: 10px 20px;background-color: var(--e-a-bg-secondary);border-color: var(--e-a-bg-secondary);}
+
+button.editor_view._active {
+    background: var(--e-a-btn-bg-warning);
+    border-color: var(--e-a-btn-bg-warning);
+}
+
+#editor_selectors .elementor-widget-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.acf-field.acf-accordion .acf-input.acf-accordion-content>.acf-fields {
+    padding: 0;
+}
+
+.acff-form .acf-field.acf-field-relationship .acf-label label {
+    display: none;
+}
+
+.media-modal-content .media-router .media-menu-item {
+    float: none;
+    margin-right: 10px;
+}
+
+
+.modal.edit-modal .modal-content {
+    max-width: 700px !important;
+    width: calc(100vw - 20px) !important;
+    overflow: hidden;
+    overflow-y: auto;
+    height: calc(100vh - 50px);
+    margin: 3% auto !important;
+}
+
+.media-modal-close {
+    top: 8px;
+    right: 8px;
+}
+
+.acf-relationship .selection .ui-sortable-handle {
+    display: contents;
+}
+
+.fea-modal-content {
+    max-width: 95%;
+    padding: 0 !important;
+    max-height: 94vh;
+    margin-top: 3vh !important;
+}
+
+.fea-modal-inner{
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 20px 15px 70px;
+}
+
+.fea-modal-content .fea-submit-buttons {
+    position: fixed;
+    bottom: 40px;
+    z-index: 5;
+}
+
+button.fea-submit-button.button {
+    padding: 8px 12px;
+}
+
+.acf-hl>li.acf-fr {
+    float: left;
+}
+
+.acf-hl>li {
+    float: none;
+}
+
+.fea-uploads .fea-uploads-side {
+    display: none !important;
+}
+
+.fea-modal {overflow: hidden;z-index: 999999 !important;}
+
+.fea-modal-inner .acf-icon.-cancel.fea-close {
+    position: absolute;
+    top: 10px;
+    right: 9px;
+    z-index: 2;
+    box-shadow: #0000007d 0px 2px 6px 1px;
+}
+
+.edit-listing-form .for_listing_edit {
+    display: block !important;
+}
+
+.acf-label.acf-accordion-title {
+    border: 1px solid #bababa;
+    background: #bababa;
+}
+
+.acf-field-accordion.acf-accordion.-open .acf-label.acf-accordion-title {
+    background: transparent;
+}
+
+select.acf-gallery-sort.mlduo-select {
+    display: none;
+}
+
+.acf-image-uploader[data-preview_element=featured_img_prev] img {
+    max-height: 180px;
+}
+
+form#registerform {
+    padding: 28px 25px;
+}
+
+.forgot-password {
+    margin-top: 20px;
+}
+
+ul.login-tabs h3 {
+    margin: 0;
+}
+
+.job-manager-message button {
+    display: block;
+    margin: 12px 0 0 0;
+    padding: 9px 11px;
+}
+
+.job-manager-message button:hover {
+    color: #d0d0d0 !important;
+    background: #1e1e1e;
+}
+
+.acf-frontend-blocks-popup {
+    z-index: 999999;
+}
+.uploaded-image-preview {
+    width: 120px;
+    height: 120px;
+    display: block;
+    background-size: cover;
 }

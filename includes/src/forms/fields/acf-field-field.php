@@ -6,7 +6,7 @@ if ( ! defined('ABSPATH') ) {
 	exit;
 }
 
-class Store_Field extends Base_Field {
+class Acf_Field_Field extends Base_Field {
 
 	public function init() {
 		if ( $this->get_key() === 'job_phone' && $this->props['content_lock'] ) {
@@ -35,14 +35,16 @@ class Store_Field extends Base_Field {
 	}
 
 	public function field_props() {
-		$this->props['type'] = 'store';
+		$this->props['type'] = 'acf-field';
 		$this->props['acf_field_keys'] = '';
+		$this->props['acf_field_group_keys'] = '';
 	}
 	
 
 	public function get_editor_options() {
 		$this->getLabelField();
 		$this->fieldKey();
+		$this->fieldGroupKey();
 		$this->getKeyField();
 		$this->getPlaceholderField();
 		$this->getDescriptionField();
@@ -58,6 +60,13 @@ class Store_Field extends Base_Field {
 		<div class="form-group w50">
 			<label>Field Key</label>
 			<input type="text" v-model="field.acf_field_keys"/>
+		</div>
+		<?php
+	}
+	public function fieldGroupKey() { ?>
+		<div class="form-group w50">
+			<label>Field Group Key</label>
+			<input type="text" v-model="field.acf_field_group_keys"/>
 		</div>
 		<?php
 	}

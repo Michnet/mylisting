@@ -41,7 +41,7 @@ class Edit_Listing_Form extends Add_Listing_Form {
 		if ( ! empty( $this->errors ) ) {
 			$this->show_errors();
 		} elseif ( ! empty( $this->save_message ) ) {
-			echo '<div class="job-manager-message">' . wp_kses_post( $this->save_message ) . '</div>';
+			echo '<div class="submit_confirm"><div class="job-manager-message">' . wp_kses_post( $this->save_message ) . '<button onClick="window.location.href=window.location.href;">Continue Editing</button></div><div>';
 		}
 
 		$this->submit();
